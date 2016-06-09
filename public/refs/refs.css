@@ -1,0 +1,50 @@
+refs .ref-list {
+  padding: 20px 40px;
+}
+
+refs label {
+  width: 80px;
+}
+
+refs .add-ref-manual {
+  float: left;
+  border: solid 1px green;
+  width: 300px;
+}
+
+refs .form-separator {
+  float: left;
+  border: solid 1px green;
+  width: 80px;
+  padding: 10px;
+  text-align: center;
+}
+
+refs .vertical-line {
+  height: 160px;
+  width: 0px;
+  border: solid 1px blue;
+  margin: auto;
+  text-align: center;
+}
+
+refs .or {
+  background: white;
+  width: 24px;
+  text-align: center;
+  margin: auto;
+  position: relative;
+  top: 70px;
+  left: -12px;
+}
+
+refs .add-ref-bibtex {
+  float: left;
+  border: solid 1px green;
+  width: 300px;
+}
+
+refs .bibtex-textarea {
+  height: 160px;
+  width: 280px;
+}

@@ -1,0 +1,63 @@
+ref {
+  margin: 10px;
+  float: left;
+}
+
+ref .title {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+ref .notes {
+  width: calc(100% + 12px);
+  margin: -6px;
+  height: 100px;
+  padding: 10px;
+}
+
+.refs-ref {
+  margin: 10px;
+  width: 450px;
+  border: solid 1px black;
+  border-radius: 4px;
+}
+
+.ref-top {
+  padding: 10px;
+  border-bottom: solid 1px black;
+}
+
+.ref-middle {
+  padding: 10px;
+  border-bottom: solid 1px black;
+}
+
+.ref-bottom {
+  padding: 10px;
+}
+
+ref .label {
+  display: inline-block;
+}
+
+.refs-ref label {
+  min-width: 80px;
+}
+
+.fade {
+  opacity:1;
+  color: rgb(80,80,255);
+}
+
+.fade.ng-leave {
+  transition:0.5s linear all;
+  opacity:1;
+}
+
+.fade.ng-leave.ng-leave-active {
+  opacity:0;
+}
+
+refs .label {
+  margin-right: 4px;
+}

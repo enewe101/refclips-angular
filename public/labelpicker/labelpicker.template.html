@@ -1,0 +1,30 @@
+<div class="labelpicker">
+
+  <div class="dropdown">
+    <a ng-click="$ctrl.refresh_labels()" class="pointer dropdown-toggle" id="dropdown.{{$ctrl.pickerid}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+      labels
+      <span class="caret"></span>
+    </a>
+
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+      <li><input ng-keypress="$ctrl.check_key($event)" class="text-input" ng-model="$ctrl.label_filter"></li>
+
+      <li role="separator" class="divider"></li>
+
+      <div class="label-option-list">
+        <li ng-repeat="label in $ctrl.labels | filter:{name:$ctrl.label_filter}">
+          <label for="{{label.name}}.{{$ctrl.pickerid}}">
+            <input ng-model="$ctrl.activelabels[label._id]" ng-change="$ctrl.label_clicked(label)" class="checkbox" type="checkbox" id="{{label.name}}.{{$ctrl.pickerid}}">{{label.name}}
+            <span ng-click="$ctrl.delete_label($event, label)" class="remove small glyphicon glyphicon-remove"></span>
+          </label>
+        </li>
+      </div>
+
+      <li role="separator" class="divider"></li>
+
+      <li><a ng-click="$ctrl.add_new_label()" href="#">Add as new label</a></li>
+    </ul>
+
+  </div>
+
+</div>

@@ -1,0 +1,46 @@
+labelpicker {
+  display: inline-block;
+}
+
+labelpicker .dropdown-menu li {
+}
+
+labelpicker .text-input {
+  width: calc(100% - 20px);
+  margin-left: 10px;
+}
+
+labelpicker label {
+  width: 100%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+labelpicker .remove {
+  float: right;
+  color: rgb(220,220,220);
+  margin: 2px 6px 0 0;
+  padding: 4px;
+}
+
+labelpicker .remove:hover {
+  color: rgb(180,180,180);
+}
+
+labelpicker label:hover {
+  background: rgb(240, 240, 240);
+}
+
+
+labelpicker .checkbox {
+  float: left;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+labelpicker .label-option-list {
+  max-height: 250px;
+  overflow-x: scroll;
+}

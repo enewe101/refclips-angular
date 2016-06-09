@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" ng-app="refclips">
+<head>
+	<meta charset="UTF-8">
+	<base href="/">
+
+	<title>Starter Node and Angular</title>
+
+	<!-- Font -->
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="refs/refs.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="refs/ref/ref.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="labelpicker/labelpicker.css"> <!-- custom styles -->
+
+	<!-- JS -->
+	<script src="libs/jquery/dist/jquery.min.js"></script>
+	<script src="libs/bootstrap/js/dropdown.js"></script>
+	<script src="libs/angular/angular.min.js"></script>
+	<script src="libs/angular-animate/angular-animate.min.js"></script>
+	<script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+	<!-- ANGULAR CUSTOM -->
+	<script src="refclips.module.js"></script>
+	<script src="refs/refs.module.js"></script>
+	<script src="refs/refs.component.js"></script>
+	<script src="refs/ref/ref.component.js"></script>
+
+	<script src="labelpicker/labelpicker.module.js"></script>
+	<script src="labelpicker/labelpicker.component.js"></script>
+
+</head>
+<body>
+
+	<div>
+		<a ui-sref="home">Home</a>
+		<a ui-sref="about">About</a>
+	</div>
+
+	<div class="refs-wrapper"></div>
+		<refs></refs>
+		<div class="clearfix"></div>
+	</div>
+
+	<div>
+		<div ui-view></div>
+	</div>
+
+</body>
+</html>
