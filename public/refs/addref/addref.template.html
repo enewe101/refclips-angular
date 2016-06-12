@@ -1,0 +1,20 @@
+<div ng-click="$ctrl.prevent_click_default($event)" class="add-ref">
+
+  <form class="add-ref-manual">
+    <div><label>Title: </label><input ng-paste="$ctrl.check_manual_add_enabled_delay()" ng-keyup="$ctrl.check_manual_add_enabled()" type="text" ng-model="$ctrl.ref_to_add.title"></div>
+    <div><label>Authors: </label><input type="text" ng-model="$ctrl.ref_to_add.authors"></div>
+    <div><label>Date: </label><input type="text" ng-model="$ctrl.ref_to_add.date"></div>
+    <div><label>Url: </label><input type="text" ng-model="$ctrl.ref_to_add.url"></div>
+    <div><label>Notes: </label><textarea ng-model="$ctrl.ref_to_add.notes"></textarea></div>
+    <button ng-disabled="!$ctrl.manual_add_enabled" class="btn btn-sm btn-default centered" ng-click="$ctrl.manual_add_clicked()">add</button>
+  </form>
+  <div class="form-separator">
+    <div class="vertical-line"><div class="or">OR</div></div>
+  </div>
+  <form class="add-ref-bibtex">
+    <div><textarea ng-paste="$ctrl.check_bibtex_add_enabled_delay()" ng-keyup="$ctrl.check_bibtex_add_enabled()" class="bibtex-textarea" ng-model="$ctrl.ref_to_add_bibtex" placeholder="paste bibtex here"></textarea></div>
+    <button ng-disabled="!$ctrl.bibtex_add_enabled" class="btn btn-sm btn-default centered" ng-click="$ctrl.bibtex_add_clicked()">add</button>
+  </form>
+  <div class="clearfix"></div>
+
+</div>

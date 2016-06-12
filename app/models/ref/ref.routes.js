@@ -6,109 +6,98 @@ module.exports = function(app) {
   // Route to get all refs
   app.get('/api/refs', function(req, res){
     Ref.find(function(err, refs){
-      if (err) {
-        res.send(err);
-      }
+      if (err) {res.status(500).send(err);}
       res.json(refs);
     });
   });
 
+  // Add a new reference
   app.post('/api/refs', function(req, res){
     var ref = new Ref(req.body);
     ref.save(function(err, ref){
-      if(err){
-        res.send(err);
-        console.log('error!')
-      }
-      console.log(req.body);
-      res.json(201, ref);
+      if(err){res.status(400).send(err); console.log(err);}
+      res.json(ref);
     });
   });
 
-  app.delete('/api/refs', function(req, res){
-    console.log('deleting ' + req.query._id);
-    Ref.remove({'_id': req.query._id}, function(err, doc){
-      if(err){
-        res.send(err);
-        console.log('error!')
-      }
-      console.log('deleted ' + req.query._id);
-      res.send(201);
-    });
-  });
-
-  app.put('/api/refs', function(req, res){
-    console.log('updating ' + req.body._id);
-    Ref.findOne({'_id': req.body._id}, function(err, doc){
-      if(err){
-        res.send(err);
-        console.log('error!')
-      }
-      _.merge(doc, req.body);
-      doc.save(function(err, ref){
-        if(err){
-          res.send(err);
-          console.log('error!')
+  // Add severall new references at once
+  app.post('/api/refs/add-many', function(req, res){
+    let refs = req.body;
+    let created_refs = [];
+    let errors = [];
+    for (let i = 0; i < refs.length; i++) {
+      let ref = refs[i];
+      let created_ref = new Ref(ref);
+      created_refs.push(created_ref);
+      created_ref.validate(function(err){
+        if(err) {
+          errors.push({index: i, error: err});
         }
-        console.log(req.body);
-        res.json(201, ref);
-      });
-    });
-  });
-
-  // Updates a reference by adding or removing a label
-  app.put('/api/refs/labels', function(req, res){
-
-    // Pull out the needed data from the request
-    let _id = req.body._id;
-    let state = req.body.state
-    let label = req.body.label;
-
-    // Make sure we got the data
-    console.log('updating ' + _id + ' ' + state + ' ' + label);
-
-    if (state) {
-
-      // If state is false, unset label.name
-      Ref.findByIdAndUpdate(_id, {$push:{labels:label}} , function(err, doc){
-        // notify client in case of error
-        if(err){
-          res.send(err);
-          console.log('error!')
+        // If we've validated them all, proceed to the next step
+        if (i == refs.length - 1) {
+          continue_add_many(created_refs, errors, res);
         }
-
-        console.log('the updated doc: ' + doc);
-        res.send(201, doc);
-      })
-
-    } else {
-
-      Ref.findByIdAndUpdate(_id, {$pull: {labels: label }}, function(err, doc){
-
-        // notify client in case of error
-        if(err){
-          res.send(err);
-          console.log('error!')
-        }
-
-        console.log('the updated doc: ' + doc);
-        res.send(201, doc);
       });
     }
+  });
+  function continue_add_many(created_refs, errors, res) {
+    console.log('num errors:' + errors.length);
+    var first_error = errors[0].error.errors;
+    var err_field = Object.keys(first_error)[0];
+    var err_type = first_error[err_field].kind
+    var err_index = errors[0].index;
+    err = {index: err_index, type: err_type, field: err_field};
+    res.status(400).json(err);
+  }
 
+
+
+  // Deletes the specified reference
+  app.delete('/api/refs', function(req, res){
+    Ref.remove({'_id': req.query._id}, function(err, doc){
+      if(err){res.status(400).send(err); console.log(err);}
+      res.send(req.query._id);
+    });
   });
 
-  // Updates all references by removing a label from all references.
+  // Udates a reference
+  app.put('/api/refs', function(req, res){
+    Ref.findOne({'_id': req.body._id}, function(err, doc){
+      if(err){res.status(400).send(err); console.log(err);}
+      _.merge(doc, req.body);
+      doc.save(function(err, ref){
+        if(err){res.status(400).send(err); console.log(err)}
+        res.json(ref);
+      });
+    });
+  });
+
+  // Updates a reference by adding a label to its labels list
+  app.put('/api/refs/add-label', function(req, res){
+    let _id = req.body._id;
+    let label = req.body.label;
+    Ref.findByIdAndUpdate(_id, {$push:{labels:label}} , function(err, doc){
+      if(err){res.status(400).send(err); console.log(err);}
+      res.send(doc);
+    })
+  });
+
+  // Updates a reference by removing a label to its labels list
+  app.put('/api/refs/remove-label', function(req, res){
+    let _id = req.body._id;
+    let label = req.body.label;
+    Ref.findByIdAndUpdate(_id, {$pull: {labels: label }}, function(err, doc){
+      if(err){res.status(400).send(err);console.log('error!');}
+      res.send(doc);
+    });
+  });
+
+  // Updates *all* references by removing the specified label
   app.put('/api/refs/labels/remove-all', function(req, res){
     let label = req.body;
-    console.log('removing label ' + label.name + ' from all refs.')
     Ref.update({}, {$pull: {labels: label }}, {multi:true}, function(err, raw){
-      // notify client whether the operation was successful
-      if(err){
-        console.log('on "remove-all", the raw response from mongo: ' + raw)
-        res.send(raw);
-      }
-      res.send(201);
+      if(err){res.status(400).send(err),console.log(raw);}
+      res.send(label._id);
     });
   });
 

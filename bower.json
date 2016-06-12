@@ -9,5 +9,10 @@
     "angular-animate": "^1.5.6",
     "jquery": "^2.2.4",
     "lodash": "^4.13.1"
+  },
+  "resolutions": {
+    "jquery": "^2.2.4",
+    "masonry": "^4.1.0",
+    "outlayer": "^2.1.0"
   }
 }

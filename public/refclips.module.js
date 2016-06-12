@@ -1,23 +1,24 @@
 'use strict';
 
-angular.module('refclips',['ngAnimate', 'ui.router', 'refs', 'labelpicker']);
+var app = angular.module('refclips',[
+  'ngAnimate', 'ui.router', 'refs', 'labelpicker', 'header', 'notify',
+  'signin'
+]);
 
-angular.module('refclips').config(function($stateProvider, $urlRouterProvider) {
-
-    $urlRouterProvider.otherwise('/home');
-
-    $stateProvider
-
-        // HOME STATES AND NESTED VIEWS ========================================
-        .state('home', {
-            url: '/home',
-            template: 'Home!'
-        })
-
-        // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
-        .state('about', {
-            url: '/about',
-            template: 'About!'
-        });
-
+app.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+    .state('signedout', {templateUrl: '/signed-out.template.html'})
+    .state('signedin', {templateUrl: '/signed-in.template.html'});
 });
+
+app.controller('refclipscontroller', function($scope, $state){
+  $scope.$on('signedout', function(event, next){
+    console.log('caught signed out event');
+    $state.go('signedout');
+  });
+});
+
+// Ensure the default state is signed out.
+app.run(['$state', function($state) {
+  $state.go('signedout');
+}]);

@@ -2,11 +2,11 @@
   "name": "starter-node-angular",
   "main": "server.js",
   "dependencies": {
-    "bibtex-parser-js": "0.0.2",
     "body-parser": "~1.4.2",
     "express": "~4.5.1",
     "lodash": "^4.13.1",
     "method-override": "~2.0.2",
-    "mongoose": "~3.8.0"
+    "mongoose": "~4.4",
+    "rfr": "^1.2.3"
   }
 }

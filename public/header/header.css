@@ -1,0 +1,39 @@
+.navbar {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+signin {
+  padding: 20px;
+}
+
+header {
+  background: rgb(80,80,80);
+  color: white;
+}
+
+header .submenu {
+  color: black;
+  padding: 20px;
+}
+
+header .dropdown-menu {
+  padding: 0;
+  color: black;
+}
+
+header .menu-item {
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 10px;
+  float: left;
+}
+
+header .menu-item:hover {
+  text-decoration: underline;
+}
+
+header .menu-item.active {
+  background: rgb(240,240,240);
+  color: black;
+}

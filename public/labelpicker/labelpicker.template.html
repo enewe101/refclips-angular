@@ -7,7 +7,7 @@
     </a>
 
     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-      <li><input ng-keypress="$ctrl.check_key($event)" class="text-input" ng-model="$ctrl.label_filter"></li>
+      <li><input ng-keyup="$ctrl.check_add_label_enabled($event)" ng-keypress="$ctrl.check_key($event)" class="text-input" ng-model="$ctrl.label_filter"></li>
 
       <li role="separator" class="divider"></li>
 
@@ -22,7 +22,7 @@
 
       <li role="separator" class="divider"></li>
 
-      <li><a ng-click="$ctrl.add_new_label()" href="#">Add as new label</a></li>
+      <li><a ng-class="$ctrl.add_enabled" ng-click="$ctrl.add_new_label()" href="#">Add as new label</a></li>
     </ul>
 
   </div>

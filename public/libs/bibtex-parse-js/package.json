@@ -1,0 +1,88 @@
+{
+  "_args": [
+    [
+      {
+        "name": "bibtex-parse-js",
+        "raw": "bibtex-parse-js",
+        "rawSpec": "",
+        "scope": null,
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/enewel3/projects/mean-tut"
+    ]
+  ],
+  "_from": "bibtex-parse-js@latest",
+  "_id": "bibtex-parse-js@0.0.22",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/bibtex-parse-js",
+  "_nodeVersion": "0.12.4",
+  "_npmUser": {
+    "email": "info@rcpeters.com",
+    "name": "rcpeters"
+  },
+  "_npmVersion": "2.11.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "bibtex-parse-js",
+    "raw": "bibtex-parse-js",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/bibtex-parse-js/-/bibtex-parse-js-0.0.22.tgz",
+  "_shasum": "6ee8ee7a6ee0faac125adaa1e55769ba99bc00d4",
+  "_shrinkwrap": null,
+  "_spec": "bibtex-parse-js",
+  "_where": "/Users/enewel3/projects/mean-tut",
+  "author": {
+    "name": "rcpeters"
+  },
+  "bugs": {
+    "url": "https://github.com/ORCID/bibtexParseJs/issues"
+  },
+  "dependencies": {
+    "xml2js": "*"
+  },
+  "description": "A JavaScript library that parses BibTeX to JSON",
+  "devDependencies": {},
+  "directories": {
+    "test": "test"
+  },
+  "dist": {
+    "shasum": "6ee8ee7a6ee0faac125adaa1e55769ba99bc00d4",
+    "tarball": "https://registry.npmjs.org/bibtex-parse-js/-/bibtex-parse-js-0.0.22.tgz"
+  },
+  "gitHead": "478a356baacac332c2c8dce147f36e93e802eae4",
+  "homepage": "https://github.com/ORCID/bibtexParseJs#readme",
+  "keywords": [
+    "bibtex",
+    "json",
+    "javascript",
+    "parser"
+  ],
+  "license": "MIT",
+  "main": "bibtexParse.js",
+  "maintainers": [
+    {
+      "email": "info@rcpeters.com",
+      "name": "rcpeters"
+    }
+  ],
+  "name": "bibtex-parse-js",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ORCID/bibtexParseJs.git"
+  },
+  "scripts": {
+    "test": "node test/runTest.js"
+  },
+  "version": "0.0.22"
+}

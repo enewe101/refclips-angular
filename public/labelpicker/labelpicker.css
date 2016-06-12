@@ -18,6 +18,13 @@ labelpicker label {
   cursor: pointer;
 }
 
+labelpicker a.enabled {
+  color: black;
+}
+labelpicker a.disabled {
+  color: rgb(200, 200, 200);
+}
+
 labelpicker .remove {
   float: right;
   color: rgb(220,220,220);

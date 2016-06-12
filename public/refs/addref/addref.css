@@ -1,0 +1,61 @@
+addref .add-ref {
+  width: 740px;
+  padding: 20px;
+  cursor: default;
+}
+
+addref .add-ref-manual {
+  float: left;
+  width: 300px;
+}
+
+addref .add-ref-manual input[type=text] {
+  width: 218px;
+}
+addref .add-ref-manual textarea {
+  width: 218px;
+}
+
+addref label {
+  width: 80px;
+}
+
+addref .centered {
+  display: block;
+  margin: auto;
+}
+
+addref .form-separator {
+  float: left;
+  width: 80px;
+  padding: 10px;
+  text-align: center;
+}
+
+addref .vertical-line {
+  height: 160px;
+  width: 0px;
+  margin: auto;
+  text-align: center;
+  border: solid 1px black;
+}
+
+addref .or {
+  background: white;
+  width: 24px;
+  text-align: center;
+  margin: auto;
+  position: relative;
+  top: 70px;
+  left: -12px;
+}
+
+addref .add-ref-bibtex {
+  float: left;
+  width: 300px;
+}
+
+addref .bibtex-textarea {
+  height: 160px;
+  width: 280px;
+}

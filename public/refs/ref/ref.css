@@ -1,6 +1,8 @@
 ref {
-  margin: 10px;
-  float: left;
+  display: block;
+  width: 400px;
+  border: solid 1px black;
+  border-radius: 4px;
 }
 
 ref .title {
@@ -13,13 +15,15 @@ ref .notes {
   margin: -6px;
   height: 100px;
   padding: 10px;
+  border: none;
 }
 
-.refs-ref {
-  margin: 10px;
-  width: 450px;
+ref .notes:hover {
   border: solid 1px black;
-  border-radius: 4px;
+}
+
+ref .notes:focus {
+  border: solid 1px black;
 }
 
 .ref-top {
@@ -38,13 +42,14 @@ ref .notes {
 
 ref .label {
   display: inline-block;
+  margin-right: 4px;
 }
 
 .refs-ref label {
   min-width: 80px;
 }
 
-.fade {
+ref .fade {
   opacity:1;
   color: rgb(80,80,255);
 }
@@ -56,8 +61,4 @@ ref .label {
 
 .fade.ng-leave.ng-leave-active {
   opacity:0;
-}
-
-refs .label {
-  margin-right: 4px;
 }

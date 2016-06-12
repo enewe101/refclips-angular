@@ -1,6 +1,24 @@
 body {
-  padding-top:30px;
+  padding: 51px 0 0 0;
   font-family: 'Open Sans', sans-serif;
+}
+
+.login_wrapper {
+  border: solid 1px red;
+  height: 200px;
+  width: 200px;
+}
+
+.view-selector {
+  z-index: 9999;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  background: blue;
+  color: white;
+}
+.view-selector a{
+  color: white;
 }
 
 .mg-right {

@@ -1,0 +1,45 @@
+notifycomponent {
+  position: fixed;;
+  top: 60px;
+  width: 100%;
+  z-index: 1000;
+}
+
+notifycomponent .notify-container {
+  text-align: center;
+}
+
+notifycomponent .notification.fade {
+  opacity:1;
+}
+notifycomponent .notification.fade.ng-leave {
+  transition:0.5s linear all;
+  opacity:1;
+}
+notifycomponent .notification.fade.ng-leave.ng-leave-active {
+  opacity:0;
+}
+
+notifycomponent .notification {
+  position: relative;
+  max-width: 800px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 90px;
+  margin: auto;
+  text-align: left;
+}
+
+notifycomponent .remove {
+  cursor: pointer;
+  width: 90px;
+  position: absolute;
+  height: 9px;
+  top: calc(50% - 9px);
+  right: 0;
+  text-align: center;
+}
+
+notifycomponent .remove:hover {
+  text-decoration: underline;
+}

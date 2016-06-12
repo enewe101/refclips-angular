@@ -11,6 +11,9 @@ angular.module('labelpicker').controller('LabelPickerController', ['$scope', '$h
     // unique references via html id's in the template
     this._id = this._id || 1;
 
+    this.label_filter = '';
+    this.add_enabled = 'disabled';
+
     this.refresh_labels = function() {
       this.labels = labelservice.labels;
     }
@@ -49,7 +52,7 @@ angular.module('labelpicker').controller('LabelPickerController', ['$scope', '$h
 
       // Request the removal of the label from all references in the db.
       $http.put('/api/refs/labels/remove-all', label).then(
-        function(response){console.log('label removed from all references: ' + label.name);},
+        function(response){},
         function(response){console.log(response);}
       );
 
@@ -60,26 +63,49 @@ angular.module('labelpicker').controller('LabelPickerController', ['$scope', '$h
         params: {_id: label._id}
       }).then(
         function(response){
-
           // Reflect the removal of the label from the db in all the labelpickers through labelservice
           labelservice.refresh();
-          console.log('label deleted: ' + label.name);
         },
         function(response){console.log(response);}
       )
     }
 
 
+    // check if the enter key was hit, in which case we want to add a new
+    // label.
     this.check_key = function($event) {
       if ($event.keyCode === 13) {
-        this.add_new_label();
+        that.add_new_label();
       }
     };
 
+    // change the styling of the 'Add as new label' element (to show if it's
+    // enabled)
+    this.check_add_label_enabled = function() {
+      if ($.trim(that.label_filter.length)>0) {
+        that.add_enabled = 'enabled';
+      } else {
+        that.add_enabled = 'disabled';
+      }
+    }
+
     this.add_new_label = function() {
+      // First check if we already have a label with that name.  If so, just
+      // activate it.
+      for (i in labelservice.labels) {
+        if (labelservice.labels[i].name == this.label_filter) {
+          let label_to_activate = labelservice.labels[i];
+          // Mark the label checked in the picker
+          this.activelabels[label_to_activate._id] = true;
+          // Add the label to the ref
+          this.labelchanged()(label_to_activate, this.activelabels[label_to_activate._id]);
+          // Clear the text in the label picker's input
+          this.label_filter = '';
+          return;
+        }
+      }
 
-      console.log('adding new label');
-
+      // Otherwise, proceed with creating the new label.
       let new_label = this.label_filter;
       $http.post('/api/labels', {name:new_label}).then(
 
@@ -87,23 +113,27 @@ angular.module('labelpicker').controller('LabelPickerController', ['$scope', '$h
         function(response){
           label = response.data;
           that.labelchanged()(label, true);
+
+          // Notify all labelpickers to include the label in their options
           labelservice.refresh(function() {
-            console.log('call backaroo');
             that.refresh_labels();
           });
+
+          // Clear the label filter and mark that label active in the picker
           that.label_filter = '';
           that.activelabels[label._id] = true;
         },
         function(response){console.log(response)}
-
       );
     }
 
+    // On clicking an option in the label picker, send a signal to update the
+    // label using the labelchanged callback.  Whether it was changed to be
+    // active or inactive is determined by the state in this.activelabels.
     this.label_clicked = function(label) {
-      console.log('clicked ' + label);
-      console.log(this.activelabels);
       this.labelchanged()(label, this.activelabels[label._id]);
     };
+
   }]
 );
 

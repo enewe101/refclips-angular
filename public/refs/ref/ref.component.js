@@ -17,7 +17,6 @@ angular.module('refs').component('ref', {
     // from the db was handled elsewhere.  We just need to remove it locally.
     $scope.$on('removeLabelNow', function(event, data) {
       let label = data;
-      console.log('received removeLabelNow signal.');
       that.remove_label_locally(label);
     });
 
@@ -25,11 +24,9 @@ angular.module('refs').component('ref', {
     // Works out what labels are initially active in this ref.
     this.activelabels = {}
     for (let i in this.ref.labels) {
-      console.log('loggin all labels: ' + this.ref.labels[i].toSource());
       let _id = this.ref.labels[i]._id;
       this.activelabels[_id] = true;
     }
-    console.log('activelabels: ' + this.activelabels.toSource());
 
     // Responsible for responding to the event that notes were changed.
     // After a timeout, initiates updating of notes in db.
@@ -45,7 +42,7 @@ angular.module('refs').component('ref', {
     // Send updated notes for the reference
     this.update_notes = function() {
       $http.put('/api/refs', this.ref).then(
-        function(response){console.log('updated notes'); that.flash_notes_saved()},
+        function(response){that.flash_notes_saved()},
         function(response){console.log('error updating notes')}
       )
     }
@@ -73,8 +70,6 @@ angular.module('refs').component('ref', {
     this.confirm_delete = function() {
       if(confirm('delete "' + this.ref.title + '"?')) {
         this.deleteCallback()(this.ref._id);
-      } else {
-        console.log('cancelled');
       }
     };
 
@@ -91,7 +86,6 @@ angular.module('refs').component('ref', {
     this.save_edit = function() {
       $http.put('/api/refs', this.edited_ref).then(
         function(response){
-          console.log('updated notes');
           that.flash_details_saved();
           that.ref = that.edited_ref;
           that.editing = false;
@@ -112,9 +106,9 @@ angular.module('refs').component('ref', {
     }
     this.remove_label_remotely = function(label) {
       $http.put(
-        '/api/refs/labels', {"_id":that.ref._id, "label":label, "state":false}
+        '/api/refs/remove-label', {"_id":that.ref._id, "label":label}
       ).then(
-        function(response) {console.log('label removed remotely: ' + label.toSource())},
+        function(response) {},
         function(response) {console.log('there was an error: ' + error.toSource());}
       );
     }
@@ -125,10 +119,10 @@ angular.module('refs').component('ref', {
     }
     this.add_label_remotely = function(label) {
       $http.put(
-        '/api/refs/labels',{"_id":that.ref._id, "label":label, "state":true}
+        '/api/refs/add-label',{"_id":that.ref._id, "label":label}
       ).then(
-        function(response) {console.log('label added remotely to: ' + response.data._id);},
-        function(response) {console.log('there was an error: ' + error.toSource());}
+        function(response) {},
+        function(response) {console.log('Error adding label to ref: ' + error.toSource());}
       );
     }
     this.add_label_locally = function(label) {

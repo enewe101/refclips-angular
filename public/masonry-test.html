@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" ng-app="refclips">
+<head>
+	<meta charset="UTF-8">
+	<base href="/">
+
+	<title>Test</title>
+	<script src="libs/jquery/dist/jquery.min.js"></script>
+  <script src="libs/masonry/dist/masonry.pkgd.min.js"></script>
+  <script type="text/javascript">
+    $('document').ready(function() {
+      $('.grid').masonry({
+        itemSelector: '.grid-item',
+        columnWidth: 200
+      });
+
+      $('#add').on('click', function(){
+        let new_item = $('<div class="grid-item"></div>');
+        $('.grid').append(new_item).masonry('appended', new_item);
+      });
+
+      $('#remove').on('click', function(event){
+        let index = Math.floor(Math.random() * $('.grid-item').length);
+        console.log(index);
+        let item = $('.grid-item')[index];
+        item.remove()
+        $('.grid').masonry('remove', item).masonry();
+      });
+    })
+  </script>
+  <style type="text/css">
+    .grid-item {
+      background: blue;
+      border: solid red 1px;
+      width: 198px;
+      height: 200px;
+    }
+    .red {
+      color: blue;
+    }
+  </style>
+
+</head>
+<body>
+<div class="grid">
+  <div><div class="grid-item"></div></div>
+  <div><div class="grid-item"></div></div>
+  <div><div class="grid-item"></div></div>
+  <div><div class="grid-item"></div></div>
+  <div><div class="grid-item"></div></div>
+  <div><div class="grid-item"></div></div>
+  <div><div class="grid-item"></div></div>
+</div>
+<button id="add">add</button>
+<button id="remove">remove</button>
+
+</body>
+</html>

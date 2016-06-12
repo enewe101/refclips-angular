@@ -1,1 +1,1 @@
-angular.module('refs', []);
+angular.module('refs', ['notify']);

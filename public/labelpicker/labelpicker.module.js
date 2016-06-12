@@ -13,9 +13,7 @@ labelpicker.factory('labelservice', ['$http', function($http){
       function(response){console.log(response)}
     );
   };
-  console.log(service.labels)
   service.refresh();
-  setTimeout(function(){console.log(service.labels)}, 3000);
   return service;
 }]);
 

@@ -7,50 +7,38 @@ module.exports = function(app) {
   app.get('/api/labels', function(req, res){
     Label.find(function(err, labels){
       if (err) {
-        res.send(err);
+        res.status(500).send(err);
       }
       res.json(labels);
     });
   });
 
+  // Creates a new label defined in req.body
   app.post('/api/labels', function(req, res){
+    console.log(req.body);
     var label = new Label(req.body);
     label.save(function(err, label){
-      if(err){
-        res.send(err);
-        console.log('error!')
-      }
-      console.log(req.body);
-      res.json(201, label);
+      if(err){res.status(400).send(err); console.log(err)}
+      res.json(label);
     });
   });
 
+  // Deletes the label identified by req.query._id
   app.delete('/api/labels', function(req, res){
-    console.log('req.query:');
-    console.log(req.query);
-    console.log('deleting ' + req.query._id);
     Label.remove({'_id': req.query._id}, function(err, doc){
-      if(err){res.send(err); console.log(err);}
-      console.log('deleted ' + req.query._id);
-      res.send(201);
+      if(err){res.status(400).send(err); console.log(err);}
+      res.send(req.query._id);
     });
   });
 
+  // Updates a label defined in req.body based on it's supplied _id
   app.put('/api/labels', function(req, res){
-    console.log('updating ' + req.body._id);
     Label.findOne({'_id': req.body._id}, function(err, doc){
-      if(err){
-        res.send(err);
-        console.log('error!')
-      }
+      if(err){res.status(400).send(err); console.log(err);}
       _.merge(doc, req.body);
       doc.save(function(err, label){
-        if(err){
-          res.send(err);
-          console.log('error!')
-        }
-        console.log(req.body);
-        res.json(201, label);
+        if(err){res.status(400).send(err);console.log(err);}
+        res.json(label);
       });
     });
   });

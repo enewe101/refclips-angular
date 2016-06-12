@@ -1,0 +1,6 @@
+<div class="notify-container">
+  <div class="notification fade alert alert-{{notification.type}}" ng-repeat="notification in $ctrl.notifyservice.notifications">
+    <span class="message">{{notification.message}}</span>
+    <div ng-click="$ctrl.notifyservice.remove(notification._id)" class="remove">(dismiss)</div>
+  </div>
+</div>

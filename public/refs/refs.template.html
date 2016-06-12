@@ -1,27 +1,11 @@
-<div class="ref">
-
-  <div class="add-ref">
-    <form class="add-ref-manual">
-      <div><label>Title: </label><input ng-model="$ctrl.ref_to_add.title"></div>
-      <div><label>Authors: </label><input ng-model="$ctrl.ref_to_add.authors"></div>
-      <div><label>Date: </label><input ng-model="$ctrl.ref_to_add.date"></div>
-      <div><label>Url: </label><input ng-model="$ctrl.ref_to_add.url"></div>
-      <div><label>Notes: </label><textarea ng-model="$ctrl.ref_to_add.notes"></textarea></div>
-      <button ng-click="$ctrl.add()">add</button>
-    </form>
-    <div class="form-separator">
-      <div class="vertical-line"><div class="or">OR</div></div>
-    </div>
-    <form class="add-ref-bibtex">
-      <div><textarea class="bibtex-textarea" ng-model="$ctrl.ref_to_add_bibtex" placeholder="paste bibtex here"></textarea></div>
-      <button ng-click="$ctrl.add()">add</button>
-    </form>
-    <div class="clearfix"></div>
+<div ng-cloak>
+<div class="ref-list" masonry>
+  <div class="masonry-brick" prepend="true" ng-repeat="ref in $ctrl.reflistservice.recently_added_refs">
+      <ref delete-callback="$ctrl.delete" ref='ref' id="{{ref._id}}"></ref>
   </div>
-
-  <div class="ref-list">
-    <ref ng-repeat="ref in $ctrl.recently_added_refs" delete-callback="$ctrl.delete" ref='ref'></ref>
-    <ref ng-repeat="ref in $ctrl.refs" delete-callback="$ctrl.delete" ref='ref'></ref>
+  <div ng-repeat="ref in $ctrl.reflistservice.refs" class="masonry-brick">
+    <ref delete-callback="$ctrl.delete" ref='ref' id="{{ref._id}}"></ref>
   </div>
-
+  <div class="clearfix"></div>
+</div>
 </div>
