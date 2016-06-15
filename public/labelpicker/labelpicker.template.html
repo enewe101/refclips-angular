@@ -1,29 +1,36 @@
 <div class="labelpicker">
 
-  <div class="dropdown">
-    <a ng-click="$ctrl.refresh_labels()" class="pointer dropdown-toggle" id="dropdown.{{$ctrl.pickerid}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-      labels
-      <span class="caret"></span>
-    </a>
+  <div ng-click="click_toggler()"
+    class="pointer drop-toggle"
+    data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="true">
+    labels &#x25BF;
+  </div>
 
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-      <li><input ng-keyup="$ctrl.check_add_label_enabled($event)" ng-keypress="$ctrl.check_key($event)" class="text-input" ng-model="$ctrl.label_filter"></li>
+  <div class="drop">
 
-      <li role="separator" class="divider"></li>
+    <div class="drop-item-entry" ><input ng-keyup="check_add_label_enabled($event)"
+      ng-keypress="check_key($event)"
+      class="text-input" ng-model="label_filter">
+    </div>
 
-      <div class="label-option-list">
-        <li ng-repeat="label in $ctrl.labels | filter:{name:$ctrl.label_filter}">
-          <label for="{{label.name}}.{{$ctrl.pickerid}}">
-            <input ng-model="$ctrl.activelabels[label._id]" ng-change="$ctrl.label_clicked(label)" class="checkbox" type="checkbox" id="{{label.name}}.{{$ctrl.pickerid}}">{{label.name}}
-            <span ng-click="$ctrl.delete_label($event, label)" class="remove small glyphicon glyphicon-remove"></span>
-          </label>
-        </li>
-      </div>
+    <div class="drop-item-separator"></div>
 
-      <li role="separator" class="divider"></li>
+    <div ng-if="!labels.length" class="message">
+      No labels yet! Create new labels using the text input.
+    </div>
 
-      <li><a ng-class="$ctrl.add_enabled" ng-click="$ctrl.add_new_label()" href="#">Add as new label</a></li>
-    </ul>
+    <div class="drop-item"
+      ng-repeat="label in labels | filter:{name:label_filter}">
+      <label for="{{label.name}}.{{pickerid}}">
+        <input ng-model="activelabels[label._id]" ng-change="label_clicked(label)" class="checkbox" type="checkbox" id="{{label.name}}.{{pickerid}}">{{label.name}}
+        <span ng-click="delete_label($event, label)" class="remove small glyphicon glyphicon-remove"></span>
+      </label>
+    </div>
+
+    <div class="drop-item-separator"></div>
+
+    <div ng-class="add_enabled" class="centering drop-item" ng-click="add_new_label()">Add as new label</div>
 
   </div>
 

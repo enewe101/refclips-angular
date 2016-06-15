@@ -4,6 +4,20 @@ var Ref = require('./Ref');
 module.exports = function(app) {
 
   // Route to get all refs
+  app.post('/api/search-refs', function(req, res){
+    if(req.body) {
+      query = req.body;
+    } else {
+      query = {};
+    }
+    console.log(query);
+    Ref.find(query, function(err, refs){
+      if (err) {res.status(500).send(err);}
+      res.json(refs);
+    });
+  });
+
+  // Route to get all refs
   app.get('/api/refs', function(req, res){
     Ref.find(function(err, refs){
       if (err) {res.status(500).send(err);}
@@ -42,12 +56,27 @@ module.exports = function(app) {
   });
   function continue_add_many(created_refs, errors, res) {
     console.log('num errors:' + errors.length);
-    var first_error = errors[0].error.errors;
-    var err_field = Object.keys(first_error)[0];
-    var err_type = first_error[err_field].kind
-    var err_index = errors[0].index;
-    err = {index: err_index, type: err_type, field: err_field};
-    res.status(400).json(err);
+    if (errors.length) {
+      var first_error = errors[0].error.errors;
+      var err_field = Object.keys(first_error)[0];
+      var err_type = first_error[err_field].kind
+      var err_index = errors[0].index;
+      err = {index: err_index, type: err_type, field: err_field};
+      res.status(400).json(err);
+    } else {
+      let saved_refs = [];
+      for (let i = 0; i< created_refs.length; i++) {
+        created_refs[i].save(function(err, ref) {
+          if(err) {
+            res.status(400).json(err);
+          }
+          saved_refs.push(ref);
+          if (i == created_refs.length - 1) {
+            res.json(saved_refs);
+          }
+        })
+      }
+    }
   }
 
 

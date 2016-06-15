@@ -2,11 +2,19 @@
   "name": "starter-node-angular",
   "main": "server.js",
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "~1.4.2",
+    "connect-busboy": "0.0.2",
     "express": "~4.5.1",
+    "express-session": "^1.13.0",
+    "fs": "0.0.2",
+    "handlebars": "^4.0.5",
     "lodash": "^4.13.1",
     "method-override": "~2.0.2",
     "mongoose": "~4.4",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "randomstring": "^1.1.5",
     "rfr": "^1.2.3"
   }
 }

@@ -3,6 +3,10 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
+.bold {
+  font-weight: bold;
+}
+
 .login_wrapper {
   border: solid 1px red;
   height: 200px;

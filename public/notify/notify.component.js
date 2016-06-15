@@ -21,8 +21,5 @@ notify.factory('notifyservice', function($timeout){
     console.log('deleting');
     delete service.notifications[_id];
   };
-  $timeout(function(){
-    service.add('warning', "@IsabelHM For many reasons, a lot of us recommend against iterating over objects in an ngRepeat.");
-  }, 1000);
   return service;
 });

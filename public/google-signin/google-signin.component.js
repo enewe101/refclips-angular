@@ -25,20 +25,20 @@ signin.controller('signincontroller', ['$state', '$http', function($state, $http
 // id within the link function so multiple signing buttons can coexist on a
 // page without colliding ids, and without ids needing to be set manually.
 let link = function ($scope, element, attrs, controller, transcludefn) {
-  let options  = {
-    'immediate': false,
-    'scope': 'email',
-    'width': 200,
-    'height': 50,
-    'longtitle': true,
-    'theme': 'dark',
-    'onsuccess': controller.success,
-    'onfailure': function(){console.log('failure');}
-  };
-  console.log(controller);
-  let signin_element_id = random_chars(8);
-  $(element.context).attr('id',signin_element_id);
-  gapi.signin2.render(signin_element_id, options);
+  //let options  = {
+  //  'immediate': false,
+  //  'scope': 'email',
+  //  'width': 200,
+  //  'height': 50,
+  //  'longtitle': true,
+  //  'theme': 'dark',
+  //  'onsuccess': controller.success,
+  //  'onfailure': function(){console.log('failure');}
+  //};
+  //console.log(controller);
+  //let signin_element_id = random_chars(8);
+  //$(element.context).attr('id',signin_element_id);
+  //gapi.signin2.render(signin_element_id, options);
 }
 
 // The signin directive.

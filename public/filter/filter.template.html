@@ -1,0 +1,4 @@
+<labelpicker labelchanged="$ctrl.update_label" pickerid="filter" activelabels="$ctrl.activelabels"></labelpicker>
+<div class="labels-wrapper">
+  <span class="label label-default" ng-repeat="label in $ctrl.labels track by label._id">{{label.name}}</span>
+</div>

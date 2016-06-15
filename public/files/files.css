@@ -1,0 +1,14 @@
+filebunch {
+  display: block;
+}
+filebunch .file_upload_wrapper {
+  width: 180px;
+  display: inline-block;
+}
+filebunch uploadbutton {
+  display: inline-block;
+  margin-left: -5px;
+}
+filebunch .file_upload_wrapper uploadbutton.filebunch label {
+  width: auto;
+}

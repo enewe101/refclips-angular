@@ -1,70 +1,94 @@
-<div class="grid-item refs-ref">
+<div class="refs-ref">
+  <div ng-class="{retained:$ctrl.retained}" class="retainer">
 
-  <div ng-show="!$ctrl.editing">
+    <div ng-show="!$ctrl.editing">
 
-    <div class="ref-top">
-      <!-- Delete and edit buttons -->
-      <div class="centering pull-right right-buttons">
-        <button ng-click="$ctrl.start_edit()" class="mg-right btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> edit</button>
-        <button ng-click="$ctrl.confirm_delete()" class="btn btn-default btn-sm pull-right">
-          <span class="glyphicon glyphicon-fire"></span> delete
-        </button>
+      <div class="ref-top">
+        <!-- Delete and edit buttons -->
+        <div class="centering pull-right right-buttons">
+          <button ng-click="$ctrl.start_edit()" class="mg-right btn btn-default btn-sm"><span class="glyphicon glyphicon-edit"></span> edit</button>
+          <button ng-click="$ctrl.confirm_delete()" class="btn btn-default btn-sm pull-right">
+            <span class="glyphicon glyphicon-fire"></span> delete
+          </button>
+          <div class="clearfix"></div>
+          <span class="fade" ng-if="$ctrl.show_details_saved">saved</span>
+        </div>
+
+        <!-- Title -->
+        <span class="title">{{$ctrl.ref.title}}</span>
+        <span class="ref_type">{{$ctrl.ref.ref_type}}</span>
         <div class="clearfix"></div>
-        <span class="fade" ng-if="$ctrl.show_details_saved">saved</span>
       </div>
 
-      <!-- Title -->
-      <span class="title">{{$ctrl.ref.title}}</span>
-      <div class="clearfix"></div>
+      <div class="ref-middle">
+
+        <!-- Most other details -->
+        <span class="author">{{$ctrl.ref.author}}</span>
+        <span class="booktitle">{{$ctrl.ref.booktitle}}</span>
+        <span class="year">{{$ctrl.ref.year}}</span>
+        <span class="citation_key">{{$ctrl.ref.citation_key}}</span>
+        <span class="url"><a target="_blank" href="{{$ctrl.ref.url}}">{{$ctrl.ref.url}}</a></span>
+        <!--div upload-button
+          class="btn btn-primary btn-upload"
+          data="$ctrl.upload_data"
+          on-success="$ctrl.onSuccess(response)"
+          on-error="$ctrl.onError(response)"
+          on-complete="$ctrl.onComplete(response)"
+          on-upload="$ctrl.onUpload(files)"
+          url="/upload"></div-->
+          <!--form method="post" enctype="multipart/form-data" action="/upload">
+              <input type="file" name="thumbnail">
+              <input type="submit">
+          </form-->
+
+
+        <!-- Labels -->
+        <div class="labels-wrapper">
+          <span class="label label-default" ng-repeat="label in $ctrl.ref.labels track by label._id">{{label.name}}</span>
+          <labelpicker labelchanged="$ctrl.update_label" pickerid="$ctrl.ref._id" activelabels="$ctrl.activelabels"></labelpicker>
+        </div>
+        <filebunch files="$ctrl.ref.files" class="files" formdata="{ref_id:$ctrl.ref._id}"></filebunch>
+        <div class="clearfix"></div>
+
+      </div>
     </div>
 
-    <div class="ref-middle">
+    <div ng-show="$ctrl.editing">
+      <div class="ref-top">
+        <div class="pull-right right-buttons">
+          <button ng-click="$ctrl.cancel_edit()" class="mg-right btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-left"></span> cancel</button>
+          <button ng-click="$ctrl.save_edit()" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-save"></span> save</button>
+          <div class="clearfix"></div>
+          <span class="fade" ng-if="$ctrl.show_details_saved">saved</span>
+        </div>
+        <div><label class="form">title: </label><input ng-model="$ctrl.edited_ref.title"></div>
+        <div><label class="form">ref_type: </label><input ng-model="$ctrl.edited_ref.ref_type"></div>
+        <div class="clearfix"></div>
+      </div>
 
-      <!-- Most other details -->
-      <span class="authors">{{$ctrl.ref.authors}}</span>
-      <span class="date">{{$ctrl.ref.date}}</span>
-      <span class="url"><a>{{$ctrl.ref.url}}</a></span>
+      <div class="ref-middle">
+
+        <div><label class="form">author: </label><input ng-model="$ctrl.edited_ref.author"></div>
+        <div><label class="form">booktitle: </label><input ng-model="$ctrl.edited_ref.booktitle"></div>
+        <div><label class="form">year: </label><input ng-model="$ctrl.edited_ref.year"></div>
+        <div><label class="form">citation_key: </label><input ng-model="$ctrl.edited_ref.citation_key"></div>
+        <div><label class="form">url: </label><input ng-model="$ctrl.edited_ref.url"></div>
 
       <!-- Labels -->
-      <div class="labels-wrapper">
         <span class="label label-default" ng-repeat="label in $ctrl.ref.labels track by label._id">{{label.name}}</span>
         <labelpicker labelchanged="$ctrl.update_label" pickerid="$ctrl.ref._id" activelabels="$ctrl.activelabels"></labelpicker>
       </div>
-      <div class="clearfix"></div>
 
     </div>
-  </div>
 
-  <div ng-show="$ctrl.editing">
-    <div class="ref-top">
-      <div class="pull-right right-buttons">
-        <button ng-click="$ctrl.cancel_edit()" class="mg-right btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-left"></span> cancel</button>
-        <button ng-click="$ctrl.save_edit()" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-save"></span> save</button>
-        <div class="clearfix"></div>
-        <span class="fade" ng-if="$ctrl.show_details_saved">saved</span>
-      </div>
-      <div><label>title: </label><input ng-model="$ctrl.edited_ref.title"></div>
-      <div class="clearfix"></div>
+
+    <div class="ref-bottom">
+      <span class="pull-right fade" ng-if="$ctrl.show_notes_saved">saved</span>
+      <textarea class="notes" ng-keypress="$ctrl.notes_changed()" ng-model="$ctrl.ref.notes" placeholder="your notes"></textarea>
     </div>
 
-    <div class="ref-middle">
-
-      <div><label>authors: </label><input ng-model="$ctrl.edited_ref.authors"></div>
-      <div><label>date: </label><input ng-model="$ctrl.edited_ref.date"></div>
-      <div><label>url: </label><a><input ng-model="$ctrl.edited_ref.url"></a></div>
-
-    <!-- Labels -->
-      <span class="label label-default" ng-repeat="label in $ctrl.ref.labels track by label._id">{{label.name}}</span>
-      <labelpicker labelchanged="$ctrl.update_label" pickerid="$ctrl.ref._id" activelabels="$ctrl.activelabels"></labelpicker>
-    </div>
-
+  <div ng-click="$ctrl.toggle_retained()" class="expand">
+    <span ng-class="{flipped:!$ctrl.retained}">&#x25BF;</span>
   </div>
-
-
-  <div class="ref-bottom">
-    <span class="pull-right fade" ng-if="$ctrl.show_notes_saved">saved</span>
-    <textarea class="notes" ng-keypress="$ctrl.notes_changed()" ng-model="$ctrl.ref.notes" placeholder="your notes"></textarea>
   </div>
-
-
 </div>

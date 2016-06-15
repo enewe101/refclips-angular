@@ -1,0 +1,15 @@
+file {
+  display: inline-block;
+  height: 28px;
+  width: 180px;
+}
+file .file_icon {
+  display: inline-block;
+  background: url('/images/file-small.png');
+  width: 18px;
+  height: 24px;
+  vertical-align: middle;
+}
+file .file_icon.pdf {
+  background: url('/images/pdf-small.png');
+}

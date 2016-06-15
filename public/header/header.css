@@ -7,6 +7,24 @@ signin {
   padding: 20px;
 }
 
+header .username {
+  font-weight: bold;
+  color: white;
+}
+
+header #filter-wrapper {
+  margin-top: 15px;
+}
+header labelpicker .drop-toggle:hover {
+  color: white;
+}
+header labelpicker .drop-toggle {
+  color: rgb(140,140,140);
+}
+header labelpicker .drop {
+  width: 180px;
+}
+
 header {
   background: rgb(80,80,80);
   color: white;

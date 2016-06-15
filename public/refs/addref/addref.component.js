@@ -37,19 +37,25 @@ angular.module('refs').component('addref', {
       };
 
       this.add_bibtex = function() {
-        let parsed = bibtexParse.toJSON(this.ref_to_add_bibtex);
-        console.log(parsed);
+        try {
+          var parsed = bibtexParse.toJSON(this.ref_to_add_bibtex);
+        } catch (e) {
+          notifyservice.add('danger', e);
+          console.log(e);
+        }
         let refs_to_add = [];
         for (let i in parsed) {
-          let ref = parsed[i].entryTags;
-          ref.ref_type = parsed[i].entryType;
+          let ref = {}
+          for (let j in parsed[i].entryTags) {
+            ref[j.toLowerCase()] = parsed[i].entryTags[j];
+          }
+          ref.ref_type = parsed[i].entryType.toLowerCase();
           if(parsed[i].citationKey) {
             ref.citation_key = parsed[i].citationKey;
           }
+          console.log(ref);
           refs_to_add.push(ref);
         }
-        console.log('refs_to_add:');
-        console.log(refs_to_add);
         this.ref_to_add_bibtex = '';
         reflistservice.add_many(refs_to_add);
       };
@@ -85,7 +91,7 @@ angular.module('refs').component('addref', {
         $event.stopPropagation();
       }
   }
-}).factory('reflistservice', function($http) {
+}).factory('reflistservice', function($rootScope, $state, $http, notifyservice) {
 
   let service = {
     refs: [],
@@ -93,9 +99,22 @@ angular.module('refs').component('addref', {
     ref_lookup: {},
   };
 
+  var adjust_padding = function() {
+    let container_width = $('.ref-list').outerWidth();
+    let margin = 28;``
+    let refs = $('.ref-list').children();
+    if (refs.length) {
+      var item_width = $(refs[0]).outerWidth();
+    }
+    let num_in_row = Math.floor(container_width / (item_width + margin));
+    let space_left = container_width - (num_in_row * (item_width + margin));
+    $('.ref-list').css({'padding-left':space_left/2-1});
+  };
+
   // Gets the references from the db
-  service.get_refs = function() {
-    $http.get('/api/refs').then(
+  service.get_refs = function(query) {
+    query = query || {};
+    $http.post('/api/search-refs', query).then(
       function(response) {
         service.refs = response.data;
         for(let i=0; i < service.refs.length; i++) {
@@ -103,9 +122,16 @@ angular.module('refs').component('addref', {
           // Note where this ref is stored for reverse lookup of by its _id
           service.ref_lookup[ref._id] = {list: service.refs, idx: i}
         }
+        setTimeout(adjust_padding, 10);
       },
-      function(response) {console.log(response)}
+      function(response) {$state.go('signedout');}
     );
+  }
+
+  service.flush_refs = function() {
+    service.refs = [];
+    service.recently_added_refs = [];
+    service.ref_lookup = {};
   }
 
   // Creates a new reference.
@@ -121,11 +147,17 @@ angular.module('refs').component('addref', {
 
   // Adds a reference to the model locally
   service.add_locally = function(ref) {
-    service.recently_added_refs.push(ref);
+    service.recently_added_refs.unshift(ref);
     console.log($('#' + ref._id).length);
+    for (let i in service.ref_lookup) {
+      let entry = service.ref_lookup[i];
+      if (entry.list == service.recently_added_refs) {
+        entry.idx++;
+      }
+    }
     service.ref_lookup[ref._id] = {
       list: service.recently_added_refs,
-      idx: service.recently_added_refs.length-1
+      idx: 0
     };
   },
 
@@ -137,22 +169,45 @@ angular.module('refs').component('addref', {
         // Then add it locally
         function(response){
           let refs = response.data;
-          for (let i = 0; i < refs.length; i++) {
+
+          for (let i in service.ref_lookup) {
+            let entry = service.ref_lookup[i];
+            if (entry.list == service.recently_added_refs) {
+              entry.idx += refs.length;
+            }
+          }
+
+          for (let i = refs.length - 1; i >= 0; i--) {
             let ref = refs[i] ;
-            service.recently_added_refs.push(ref);
             // Keep track of refs are stored for easy reverse-lookup by its _id.
+            service.recently_added_refs.unshift(ref);
             service.ref_lookup[ref._id] = {
               list: service.recently_added_refs,
-              idx: service.recently_added_refs.length-1
+              idx: i
             };
           }
+
+          setTimeout(adjust_padding, 10);
+          if (refs.length > 1) {
+            notifyservice.add('success', 'Added ' + refs.length + ' references.');
+          } else {
+            notifyservice.add('success', 'Added ' + refs.length + ' reference.');
+          }
+
         },
         function(response){
           console.log(response);
           if (response.status == 400) {
-            notifyservice.notify('danger', 'you made a mistake.');
+            let error_idx = response.data.index + 1;
+            notifyservice.add('danger',
+              'There was a problem with reference '
+              + error_idx + ': ' + response.data.field + ': '
+              + response.data.type
+            );
           } else if (response.status == 500) {
-            notifyservice.notify('danger', 'we fucked up.');
+            notifyservice.add('danger',
+             'Something went wrong.  The reference(s) could not be added.'
+          );
           }
         }
       );
@@ -170,11 +225,20 @@ angular.module('refs').component('addref', {
   service.remove_ref = function(_id) {
     let reflist = service.ref_lookup[_id].list;
     let ref_idx = service.ref_lookup[_id].idx;
+    console.log('removing idx: ' + ref_idx);
     reflist.splice(ref_idx, 1);
+    for(let i in service.ref_lookup) {
+      let entry = service.ref_lookup[i];
+      if(entry.list == reflist) {
+        if (entry.idx > ref_idx) {
+          entry.idx--;
+        }
+      }
+    }
   };
 
   // Initialize by getting all the references
-  service.get_refs();
+  //service.get_refs();
 
   return service;
 

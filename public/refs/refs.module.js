@@ -1,1 +1,1 @@
-angular.module('refs', ['notify']);
+angular.module('refs', ['notify', 'myupload', 'files']);

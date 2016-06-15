@@ -1,11 +1,7 @@
-<div ng-cloak>
-<div class="ref-list" masonry>
-  <div class="masonry-brick" prepend="true" ng-repeat="ref in $ctrl.reflistservice.recently_added_refs">
-      <ref delete-callback="$ctrl.delete" ref='ref' id="{{ref._id}}"></ref>
-  </div>
-  <div ng-repeat="ref in $ctrl.reflistservice.refs" class="masonry-brick">
-    <ref delete-callback="$ctrl.delete" ref='ref' id="{{ref._id}}"></ref>
-  </div>
+<div class="ref-list">
+  <ref ng-repeat="ref in $ctrl.reflistservice.recently_added_refs"
+      delete-callback="$ctrl.delete" ref='ref' id="{{ref._id}}"></ref>
+  <ref ng-repeat="ref in $ctrl.reflistservice.refs"
+    delete-callback="$ctrl.delete" ref='ref' id="{{ref._id}}"></ref>
   <div class="clearfix"></div>
-</div>
 </div>

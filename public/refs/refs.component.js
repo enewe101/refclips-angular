@@ -4,6 +4,24 @@ angular.module('refs').controller('RefsController', function RefsController($htt
   // Use 'that' to pull this context into callbacks
   let that = this;
 
+  //var resizeId;
+  //$(window).resize(function() {
+  //    clearTimeout(resizeId);
+  //    resizeId = setTimeout(doneResizing, 500);
+  //});
+
+  this.adjust_padding = function() {
+    let container_width = $('.ref-list').outerWidth();
+    let margin = 28;``
+    let refs = $('.ref-list').children();
+    if (refs.length) {
+      var item_width = $(refs[0]).outerWidth();
+    }
+    let num_in_row = Math.floor(container_width / (item_width + margin));
+    let space_left = container_width - (num_in_row * (item_width + margin));
+    $('.ref-list').css({'padding-left':space_left/2-1});
+  };
+  $(window).resize(that.adjust_padding);
 
   // These get bound to two lists of references that are displayed
   this.reflistservice = reflistservice;

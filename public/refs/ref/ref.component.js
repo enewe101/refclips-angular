@@ -10,7 +10,29 @@ angular.module('refs').component('ref', {
     let that = this;
 
     // Temporary model for holding edits.  It's bound to the edit form.
-    this.edited_ref = this.ref;
+    this.edited_ref = $.extend({},this.ref);
+
+    this.upload_data = [{refid: this.ref}];
+
+    this.onUpload = function(){
+      console.log('upload started');
+    }
+    this.onComplete = function() {
+      console.log('upload complete');
+    }
+    this.onError = function() {
+      console.log('upload error');
+    }
+    this.onSuccess = function() {
+      console.log('upload success');
+    }
+
+    // used to constrain the height of the refs
+    this.retained = true;
+    this.toggle_retained = function() {
+      this.retained = !this.retained;
+      console.log('retained: ' + this.retained);
+    }
 
     // Listen for the signal to remove given labels when the the label is
     // being deleted outright.  Note that for this event, deleting the label
@@ -81,6 +103,7 @@ angular.module('refs').component('ref', {
     };
     this.cancel_edit = function(){
       this.editing = false;
+      this.edited_ref = $.extend({}, this.ref);
     };
 
     this.save_edit = function() {
