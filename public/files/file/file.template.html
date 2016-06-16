@@ -1,4 +1,17 @@
-<a href="/uploads/refs?fid={{$ctrl.file._id}}" target="{{$ctrl.target}}">
-<div class="file_icon {{$ctrl.file.type}}"></div>
+
+<dropmenu class='drop-button-wrapper'>
+  <button type="button" class="btn btn-default btn-xs drop-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div class="file_icon {{$ctrl.file.type}}"></div>
+  </button>
+  <div class="drop">
+    <a class="drop-item" href="/uploads/refs?fid={{$ctrl.file._id}}&mode=dl"><span class="glyphicon glyphicon-download"></span>download</a>
+    <div class="drop-item" ng-click="$ctrl.start_editing()"><span class="glyphicon glyphicon-edit"></span>rename</div>
+    <div class="drop-item-separator"></div>
+    <div class="drop-item" ng-click="$ctrl.delete()"><span class="glyphicon glyphicon-fire"></span>delete</div>
+  </div>
+</dropmenu>
+
+<a ng-if="!$ctrl.editing" href="/uploads/refs?fid={{$ctrl.file._id}}" target="{{$ctrl.target}}">
 {{$ctrl.screen($ctrl.file.sent_name)}}
 </a>
+<input ng-if="$ctrl.editing" ng-keydown="$ctrl.watch_for_escape($event)" ng-blur="$ctrl.on_blur()" class="edit-filename" ng-model="$ctrl.edit_fname">

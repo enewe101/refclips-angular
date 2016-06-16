@@ -24,68 +24,6 @@ module.exports = function(app) {
     res.json({authenticated: true, user:req.session});
 	});
 
-	// First we upload the file.  Then we make an entry in the files collection.
-	// Finally, we update the ref to which this file belongs, updating its files
-	// property.
-	app.post('/upload', function(req, res, next) {
-		// Start reading the data from busboy
-		req.pipe(req.busboy);
-
-		// When formData fields are seen, add them to the req.body (in this case
-		// ref_id is being passed).
-	  req.busboy.on('field', function(fieldname, val) {
-	    req.body[fieldname] = val;
-	  });
-
-		// Handle saving the file
-    req.busboy.on('file', function(fieldname, file, filename) {
-				// Separate out and lower-case the file extension
-				let split_filename = filename.split('.');
-				req.extension = split_filename.pop().toLowerCase();
-				req.sent_name = split_filename.join('.') + '.' + req.extension
-
-				let d = new Date();
-				req.fpath = 'uploads/refs/';
-				req.stored_name = (
-					d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate()
-					+ '-' + req.user.username + '-' + randomstring.generate(8)
-					+ '.' + req.extension
-				);
-        var fstream = fs.createWriteStream(req.fpath + req.stored_name);
-        file.pipe(fstream);
-    });
-
-		// Make an entry in the files collection about this file
-	  req.busboy.on('finish', function(){
-			fobj = {
-				ref_id : req.body.ref_id,
-				username : req.user.username,
-				user_id : req.user._id,
-				stored_name: req.stored_name,
-				type: req.extension,
-				sent_name: req.sent_name
-			};
-			let f = new File(fobj);
-			f.save(function(err, f){
-				if(err) {
-					console.log(err);
-					res.status(500).send('There was a problem saving the file.');
-				}
-				req.f = f;
-				next();
-			})
-	  });
-	},
-
-	// Finally, update the reference by adding the file description to its files list.
-	function(req, res){
-		Ref.findByIdAndUpdate(req.body.ref_id, {$push:{files:req.f}}, function(err, ref){
-			if(err) {
-					res.status(500).send('There was a problem saving the file.');
-			}
-			res.json(req.f);
-		});
-	});
 
 	// Route for logout
 	app.get('/logout', function(req,res){
@@ -122,8 +60,13 @@ module.exports = function(app) {
 		}
 	}
 
+	// Handles requests to download previously uploaded files attached to references
 	app.get('/uploads/refs', function(req, res){
 		let fid = req.query.fid;
+		let mode = req.query.mode || 'auto';
+		if (mode !== 'auto' && mode !== 'dl') {
+			res.status(400).send('Illegal access mode');
+		}
 		File.findById(req.query.fid, function(err, f){
 			if(err) {
 				res.status(500).send('There was a problem reading the file');
@@ -131,8 +74,7 @@ module.exports = function(app) {
 			if (f.stored_name.indexOf('/') > -1) {
 				res.status(404).send('File Not Found');
 			}
-			console.log(f.type);
-			if(f.type == 'pdf') {
+			if(f.type == 'pdf' && mode === 'auto') {
 				fs.readFile('./uploads/refs/' + f.stored_name, function (err,data){
 					if(err) {
 						res.status(500).send('There was a problem reading the file');

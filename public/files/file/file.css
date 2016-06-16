@@ -13,3 +13,26 @@ file .file_icon {
 file .file_icon.pdf {
   background: url('/images/pdf-small.png');
 }
+
+file .edit-filename {
+  width: 128px;
+}
+
+file .drop-button-wrapper {
+  display: inline-block;
+}
+
+file dropmenu a.drop-item {
+  text-decoration: none;
+  color: black;
+}
+
+file .glyphicon {
+  margin-right: 8px;
+}
+
+file ul.dropdown-menu {
+  background: yellow;
+  position: absolute;
+  z-index: 99999;
+}

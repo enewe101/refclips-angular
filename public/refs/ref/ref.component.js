@@ -27,11 +27,18 @@ angular.module('refs').component('ref', {
       console.log('upload success');
     }
 
+    this.save_ref = function() {
+      console.log(that.ref);
+      $http.put('/api/refs', that.ref).then(
+        function(response){console.log(response);},
+        function(response){console.log(response);}
+      )
+    }
+
     // used to constrain the height of the refs
     this.retained = true;
     this.toggle_retained = function() {
       this.retained = !this.retained;
-      console.log('retained: ' + this.retained);
     }
 
     // Listen for the signal to remove given labels when the the label is

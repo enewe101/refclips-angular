@@ -1,12 +1,14 @@
 addref .add-ref {
-  width: 740px;
-  padding: 20px;
+  width: 770px;
+  padding: 30px 50px;
   cursor: default;
+
 }
 
 addref .add-ref-manual {
   float: left;
   width: 300px;
+
 }
 
 addref .add-ref-manual input[type=text] {
@@ -14,6 +16,21 @@ addref .add-ref-manual input[type=text] {
 }
 addref .add-ref-manual textarea {
   width: 218px;
+}
+
+addref input[type=file] {
+  width: 216px;
+  display: inline-block;
+}
+
+addref .add-ref-bibtex button.bibtex-add-btn {
+  margin-top: 14px;
+}
+
+addref .manual-add-btn {
+  display: inline-block;
+  margin-left: 150px;
+  margin-top: 14px;
 }
 
 addref label {
@@ -27,7 +44,7 @@ addref .centered {
 
 addref .form-separator {
   float: left;
-  width: 80px;
+  width: 120px;
   padding: 10px;
   text-align: center;
 }
@@ -36,6 +53,7 @@ addref .vertical-line {
   height: 160px;
   width: 0px;
   margin: auto;
+  margin-top: 16px;
   text-align: center;
   border: solid 1px black;
 }
@@ -50,12 +68,18 @@ addref .or {
   left: -12px;
 }
 
+addref select {
+  margin-left: 20px;
+}
+
 addref .add-ref-bibtex {
   float: left;
-  width: 300px;
+  width: 246px;
 }
 
 addref .bibtex-textarea {
   height: 160px;
-  width: 280px;
+  width: 240px;
+  margin-top: 26px;
+  margin-left: 2px;
 }

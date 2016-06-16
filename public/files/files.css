@@ -7,8 +7,27 @@ filebunch .file_upload_wrapper {
 }
 filebunch uploadbutton {
   display: inline-block;
-  margin-left: -5px;
+  width: 30px;
 }
+filebunch uploadbutton .glyphicon {
+  height: 20px;
+}
+filebunch uploadbutton label.btn-xs {
+  padding-left: 3px;
+  padding-top: 3px;
+}
+
+filebunch file {
+  margin-bottom: 3px;
+}
+
 filebunch .file_upload_wrapper uploadbutton.filebunch label {
   width: auto;
+}
+
+filebunch .shim {
+  height: 18px;
+  width: 1px;
+  margin-right: -8px;
+  display: inline-block;
 }

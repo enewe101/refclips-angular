@@ -1,97 +1,117 @@
 
-angular.module('refs').component('addref', {
-  templateUrl: 'refs/addref/addref.template.html',
-  bindings: {
-    'onaddmanual': '&',
-    'onaddbibtex': '&',
-  },
-  controller: function RefsController($http, $timeout, $scope, reflistservice, notifyservice) {
+let refs = angular.module('refs').directive('addref', function($parse) {
+  return {
+    templateUrl: 'refs/addref/addref.template.html',
+    scope: {
+      'onaddmanual': '&',
+      'onaddbibtex': '&',
+    },
+    controller: 'refscontroller'
+  };
+});
 
-      // Use "that" to refer to "this" in callbacks
-      let that = this;
+refs.controller('refscontroller', function($http, $timeout, $scope, reflistservice, notifyservice) {
 
-      this.ref_to_add = {};
-      this.bibtex_add_clicked = function() {
-        // Add the new reference
-        this.add_bibtex();
-        // After adding, the form is cleared.  Ask it to notice that the add
-        // button should now be disabled.
-        this.check_bibtex_add_enabled();
-        // Fire the onaddbibtex callback.
-        this.onaddbibtex();
-      }
-
-      this.manual_add_clicked = function() {
-        // Add the new reference
-        this.add_manual();
-        // After adding, the form is cleared.  Ask it to notice that the add
-        // button should now be disabled.
-        this.check_manual_add_enabled();
-        // Fire the onaddmanual callback.
-        this.onaddmanual();
-      }
-
-      this.add_manual = function() {
-        reflistservice.add(this.ref_to_add);
-        this.ref_to_add = {};
-      };
-
-      this.add_bibtex = function() {
-        try {
-          var parsed = bibtexParse.toJSON(this.ref_to_add_bibtex);
-        } catch (e) {
-          notifyservice.add('danger', e);
-          console.log(e);
-        }
-        let refs_to_add = [];
-        for (let i in parsed) {
-          let ref = {}
-          for (let j in parsed[i].entryTags) {
-            ref[j.toLowerCase()] = parsed[i].entryTags[j];
-          }
-          ref.ref_type = parsed[i].entryType.toLowerCase();
-          if(parsed[i].citationKey) {
-            ref.citation_key = parsed[i].citationKey;
-          }
-          console.log(ref);
-          refs_to_add.push(ref);
-        }
-        this.ref_to_add_bibtex = '';
-        reflistservice.add_many(refs_to_add);
-      };
-
-      this.bibtex_add_enabled = false;
-      this.check_bibtex_add_enabled_delay = function() {
-        $timeout(function(){
-          that.check_bibtex_add_enabled();
-        }, 10);
-      };
-      this.check_bibtex_add_enabled = function() {
-        if ($.trim(this.ref_to_add_bibtex) == 0) {
-          this.bibtex_add_enabled = false;
-        } else {
-          this.bibtex_add_enabled = true;
-        }
-      }
-
-      this.manual_add_enabled = false;
-      this.check_manual_add_enabled_delay = function() {
-        $timeout(function(){
-          that.check_manual_add_enabled();
-        }, 10);
-      };
-      this.check_manual_add_enabled = function() {
-        if ($.trim(this.ref_to_add.title) == 0) {
-          this.manual_add_enabled = false;
-        } else {
-          this.manual_add_enabled = true;
-        }
-      }
-      this.prevent_click_default = function($event) {
-        $event.stopPropagation();
-      }
+  $scope.ref_to_add = {ref_type: 'article'};
+  $scope.bibtex_add_clicked = function() {
+    // Add the new reference
+    $scope.add_bibtex();
+    // After adding, the form is cleared.  Ask it to notice that the add
+    // button should now be disabled.
+    $scope.check_bibtex_add_enabled();
+    // Fire the onaddbibtex callback.
+    $scope.onaddbibtex();
   }
-}).factory('reflistservice', function($rootScope, $state, $http, notifyservice) {
+
+  $scope.manual_add_clicked = function() {
+    // Add the new reference
+    $scope.add_manual();
+    // After adding, the form is cleared.  Ask it to notice that the add
+    // button should now be disabled.
+    $scope.check_manual_add_enabled();
+    // Fire the onaddmanual callback.
+    $scope.onaddmanual();
+  }
+
+  $scope.add_manual = function() {
+    //reflistservice.add($scope.ref_to_add);
+
+    var fd = new FormData();
+    for (let fieldname in $scope.ref_to_add) {
+      fd.append(fieldname, $scope.ref_to_add[fieldname]);
+    }
+
+    fd.append('file', $scope.myFile[0]);
+
+    $http.post('/api/refs', fd, {
+        transformRequest: angular.identity,
+        headers: {'Content-Type': undefined}
+    }).then(
+      function(response){reflistservice.add_locally(response.data);},
+      function(response){console.log(response)}
+    );
+
+    $scope.ref_to_add = {ref_type: 'article'};
+    $scope.$broadcast('clearfiles');
+  };
+
+  $scope.add_bibtex = function() {
+    try {
+      var parsed = bibtexParse.toJSON($scope.ref_to_add_bibtex);
+    } catch (e) {
+      notifyservice.add('danger', e);
+      console.log(e);
+    }
+    let refs_to_add = [];
+    for (let i in parsed) {
+      let ref = {}
+      for (let j in parsed[i].entryTags) {
+        ref[j.toLowerCase()] = parsed[i].entryTags[j];
+      }
+      ref.ref_type = parsed[i].entryType.toLowerCase();
+      if(parsed[i].citationKey) {
+        ref.citation_key = parsed[i].citationKey;
+      }
+      console.log(ref);
+      refs_to_add.push(ref);
+    }
+    $scope.ref_to_add_bibtex = '';
+    reflistservice.add_many(refs_to_add);
+  };
+
+  $scope.bibtex_add_enabled = false;
+  $scope.check_bibtex_add_enabled_delay = function() {
+    $timeout(function(){
+      that.check_bibtex_add_enabled();
+    }, 10);
+  };
+  $scope.check_bibtex_add_enabled = function() {
+    if ($.trim($scope.ref_to_add_bibtex) == 0) {
+      $scope.bibtex_add_enabled = false;
+    } else {
+      $scope.bibtex_add_enabled = true;
+    }
+  }
+
+  $scope.manual_add_enabled = false;
+  $scope.check_manual_add_enabled_delay = function() {
+    $timeout(function(){
+      that.check_manual_add_enabled();
+    }, 10);
+  };
+  $scope.check_manual_add_enabled = function() {
+    if ($.trim($scope.ref_to_add.title) == 0) {
+      $scope.manual_add_enabled = false;
+    } else {
+      $scope.manual_add_enabled = true;
+    }
+  }
+  $scope.prevent_click_default = function($event) {
+    $event.stopPropagation();
+  }
+});
+
+refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice) {
 
   let service = {
     refs: [],
@@ -136,13 +156,6 @@ angular.module('refs').component('addref', {
 
   // Creates a new reference.
   service.add = function(ref) {
-      // Create the ref in the database
-      console.log('adding');
-      $http.post('/api/refs', ref).then(
-        // Then add it locally
-        function(response){service.add_locally(response.data);},
-        function(response){console.log(response)}
-      );
     }
 
   // Adds a reference to the model locally

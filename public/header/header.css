@@ -11,6 +11,12 @@ header .username {
   font-weight: bold;
   color: white;
 }
+header filter .labels-wrapper {
+  display: inline-block;
+}
+header filter .labels-wrapper .label {
+  margin-left: 4px;
+}
 
 header #filter-wrapper {
   margin-top: 15px;
@@ -47,7 +53,7 @@ header .menu-item {
   float: left;
 }
 
-header .menu-item:hover {
+header .menu-item-hover:hover {
   text-decoration: underline;
 }
 

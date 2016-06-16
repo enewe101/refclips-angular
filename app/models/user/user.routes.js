@@ -20,7 +20,6 @@ module.exports = function(app) {
 
 				let user = User.findOne({sub:sub}, function(err, doc){
 					if(err) {respond.status(400).json(err);}
-					console.log(doc)
 					if (doc) {
 						var return_response = {action:'logged-in', user:doc};
 					} else {
@@ -30,7 +29,7 @@ module.exports = function(app) {
 				});
 			});
 		}).on('error', function(err){
-			console.log('error: ' + err);
+			console.log(err);
 			respond.status(400).json(err);
 		});
 	});
@@ -88,7 +87,7 @@ module.exports = function(app) {
     let _id = req.body._id;
     let label = req.body.label;
     User.findByIdAndUpdate(_id, {$pull: {labels: label }}, function(err, doc){
-      if(err){res.status(400).send(err);console.log('error!');}
+      if(err){res.status(400).send(err);console.log(err);}
       res.send(doc);
     });
   });
@@ -97,7 +96,7 @@ module.exports = function(app) {
   app.put('/api/users/labels/remove-all', function(req, res){
     let label = req.body;
     User.update({}, {$pull: {labels: label }}, {multi:true}, function(err, raw){
-      if(err){res.status(400).send(err),console.log(raw);}
+      if(err){res.status(400).send(err),console.log(err);}
       res.send(label._id);
     });
   });

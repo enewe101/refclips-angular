@@ -44,16 +44,5 @@ uploader.controller('uploadercontroller', function(upload, $scope, $element, $ht
       function(response){console.log(response)}
     );
 
-    //upload({
-    //    url: '/upload',
-    //    method: 'POST',
-    //    data: {
-    //      anint: 123,
-    //      aFile: $element, // a jqLite type="file" element, upload() will extract all the files from the input and put them into the FormData object before sending.
-    //    }
-    //}).then(
-    //  function (response) {console.log(response.data);},
-    //  function (response) {console.error(response);}
-    //);
   }
 });

@@ -1,3 +1,4 @@
+
 labelpicker {
   display: inline-block;
 }
@@ -7,27 +8,18 @@ labelpicker .text-input {
   margin-left: 10px;
 }
 
-labelpicker .dropdown-toggle:hover {
-  text-decoration: underline;
-}
 labelpicker .dropdown-toggle {
   color: rgb(100, 165, 180);
+}
+
+labelpicker .toggler-text:hover {
+  text-decoration: underline;
 }
 
 labelpicker .protected {
   background: red;
 }
 
-labelpicker .drop {
-  display: none;
-  color: black;
-  position: absolute;
-  z-index: 1000;
-  background: white;
-  border: solid 1px rgb(220,220,220);
-  box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
-  border-radius: 6px;
-}
 
 labelpicker .drop-item-entry {
   padding: 4px;
@@ -37,21 +29,8 @@ labelpicker .message {
   width: 100%;
   padding: 6px;
 }
-labelpicker .drop-item:hover {
-  background: rgb(240, 240, 240);
-}
-labelpicker .drop-item {
-  padding: 6px;
-  width: 100%;
-  cursor: pointer;
-}
 labelpicker .drop-item.disabled {
   color: rgb(220,220,220);
-}
-labelpicker .drop-item-separator {
-  height: 1px;
-  width: 100%;
-  border-top: solid 1px rgb(220,220,220);
 }
 
 labelpicker label {

@@ -1,6 +1,7 @@
 body {
   padding: 51px 0 0 0;
   font-family: 'Open Sans', sans-serif;
+  background: rgb(253, 253, 252);
 }
 
 .bold {
@@ -23,10 +24,6 @@ body {
 }
 .view-selector a{
   color: white;
-}
-
-.mg-right {
-  margin-right: 4px;
 }
 
 .centering {

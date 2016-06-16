@@ -10,7 +10,6 @@ module.exports = function(app) {
     } else {
       query = {};
     }
-    console.log(query);
     Ref.find(query, function(err, refs){
       if (err) {res.status(500).send(err);}
       res.json(refs);
@@ -25,14 +24,153 @@ module.exports = function(app) {
     });
   });
 
-  // Add a new reference
-  app.post('/api/refs', function(req, res){
-    var ref = new Ref(req.body);
-    ref.save(function(err, ref){
-      if(err){res.status(400).send(err); console.log(err);}
-      res.json(ref);
+	// First we upload the file.  Then we make an entry in the files collection.
+	// Finally, we update the ref to which this file belongs, updating its files
+	// property.
+  app.post('/api/refs', function(req, res, next){
+
+    if(!req.busboy) {
+      next();
+    } else {
+
+  		// Start reading the data from busboy
+  		req.pipe(req.busboy);
+
+  		// When formData fields are seen, add them to the req.body
+  	  req.busboy.on('field', function(fieldname, val) {
+  	    req.body[fieldname] = val;
+  	  });
+
+  		// Handle saving the file
+      req.busboy.on('file', function(fieldname, file, filename) {
+          console.log(filename);
+  				// Separate out and lower-case the file extension
+  				let split_filename = filename.split('.');
+  				req.extension = split_filename.pop().toLowerCase();
+  				req.sent_name = split_filename.join('.') + '.' + req.extension
+
+  				let d = new Date();
+  				req.fpath = 'uploads/refs/';
+  				req.stored_name = (
+  					d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate()
+  					+ '-' + req.user.username + '-' + randomstring.generate(8)
+  					+ '.' + req.extension
+  				);
+          var fstream = fs.createWriteStream(req.fpath + req.stored_name);
+          file.pipe(fstream);
+      });
+
+      // Make an entry for the reference
+  	  req.busboy.on('finish', function(){
+
+        var ref = new Ref(req.body);
+        ref.save(function(err, ref){
+          if(err){
+            res.status(400).send(err); console.log(err);
+          } else {
+            req.ref = ref;
+            next();
+          }
+        });
+      });
+    }
+  },
+
+	// Make an entry in the files collection about this file
+  function(req, res) {
+
+		fobj = {
+			ref_id : req.ref._id,
+			username : req.user.username,
+			user_id : req.user._id,
+			stored_name: req.stored_name,
+			type: req.extension,
+			sent_name: req.sent_name
+		};
+		let f = new File(fobj);
+		f.save(function(err, f){
+			if(err) {
+				console.log(err);
+				res.status(500).send('There was a problem saving the file.');
+			} else {
+        req.ref.files = [f];
+        req.ref.save(function(err, ref){
+          if(err) {
+            console.log(err);
+            res.status(500).send('There was a problem saving the reference.');
+          } else {
+            res.json(ref);
+          }
+        });
+      }
     });
+
   });
+
+
+
+	// First we upload the file.  Then we make an entry in the files collection.
+	// Finally, we update the ref to which this file belongs, updating its files
+	// property.
+	app.post('/upload', function(req, res, next) {
+		// Start reading the data from busboy
+		req.pipe(req.busboy);
+
+		// When formData fields are seen, add them to the req.body (in this case
+		// ref_id is being passed).
+	  req.busboy.on('field', function(fieldname, val) {
+	    req.body[fieldname] = val;
+	  });
+
+		// Handle saving the file
+    req.busboy.on('file', function(fieldname, file, filename) {
+				// Separate out and lower-case the file extension
+				let split_filename = filename.split('.');
+				req.extension = split_filename.pop().toLowerCase();
+				req.sent_name = split_filename.join('.') + '.' + req.extension
+
+				let d = new Date();
+				req.fpath = 'uploads/refs/';
+				req.stored_name = (
+					d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate()
+					+ '-' + req.user.username + '-' + randomstring.generate(8)
+					+ '.' + req.extension
+				);
+        var fstream = fs.createWriteStream(req.fpath + req.stored_name);
+        file.pipe(fstream);
+    });
+
+		// Make an entry in the files collection about this file
+	  req.busboy.on('finish', function(){
+			fobj = {
+				ref_id : req.body.ref_id,
+				username : req.user.username,
+				user_id : req.user._id,
+				stored_name: req.stored_name,
+				type: req.extension,
+				sent_name: req.sent_name
+			};
+			let f = new File(fobj);
+			f.save(function(err, f){
+				if(err) {
+					console.log(err);
+					res.status(500).send('There was a problem saving the file.');
+				}
+				req.f = f;
+				next();
+			})
+	  });
+	},
+
+	// Finally, update the reference by adding the file description to its files list.
+	function(req, res){
+		Ref.findByIdAndUpdate(req.body.ref_id, {$push:{files:req.f}}, function(err, ref){
+			if(err) {
+					res.status(500).send('There was a problem saving the file.');
+			}
+			res.json(req.f);
+		});
+	});
 
   // Add severall new references at once
   app.post('/api/refs/add-many', function(req, res){
@@ -55,7 +193,6 @@ module.exports = function(app) {
     }
   });
   function continue_add_many(created_refs, errors, res) {
-    console.log('num errors:' + errors.length);
     if (errors.length) {
       var first_error = errors[0].error.errors;
       var err_field = Object.keys(first_error)[0];
@@ -91,13 +228,9 @@ module.exports = function(app) {
 
   // Udates a reference
   app.put('/api/refs', function(req, res){
-    Ref.findOne({'_id': req.body._id}, function(err, doc){
+    Ref.findByIdAndUpdate(req.body._id, req.body, function(err, ref){
       if(err){res.status(400).send(err); console.log(err);}
-      _.merge(doc, req.body);
-      doc.save(function(err, ref){
-        if(err){res.status(400).send(err); console.log(err)}
-        res.json(ref);
-      });
+      res.json(ref);
     });
   });
 
@@ -116,7 +249,7 @@ module.exports = function(app) {
     let _id = req.body._id;
     let label = req.body.label;
     Ref.findByIdAndUpdate(_id, {$pull: {labels: label }}, function(err, doc){
-      if(err){res.status(400).send(err);console.log('error!');}
+      if(err){res.status(400).send(err);console.log(err);}
       res.send(doc);
     });
   });
@@ -125,7 +258,7 @@ module.exports = function(app) {
   app.put('/api/refs/labels/remove-all', function(req, res){
     let label = req.body;
     Ref.update({}, {$pull: {labels: label }}, {multi:true}, function(err, raw){
-      if(err){res.status(400).send(err),console.log(raw);}
+      if(err){res.status(400).send(err),console.log(err);}
       res.send(label._id);
     });
   });

@@ -75,6 +75,15 @@ ref .notes:focus {
   border-bottom: solid 1px rgb(220,220,220);
 }
 
+ref .right-buttons button {
+  float: right;
+  width: 70px;
+}
+
+ref .right-buttons button:first-child {
+  margin-bottom: 4px;
+}
+
 .ref-middle {
   padding: 10px;
   border-bottom: solid 1px rgb(220,220,220);
@@ -87,6 +96,12 @@ ref .notes:focus {
 ref .label {
   display: inline-block;
   margin-right: 4px;
+  padding: 4px 4px 4px 4px;
+  font-size: 1em;
+}
+
+ref .right-buttons {
+  width: 80px;
 }
 
 ref filebunch {

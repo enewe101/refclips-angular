@@ -1,21 +1,44 @@
-<div ng-click="$ctrl.prevent_click_default($event)" class="add-ref">
-  <div class="retainer">
-    <form class="add-ref-manual">
-      <div><label>Title: </label><input ng-paste="$ctrl.check_manual_add_enabled_delay()" ng-keyup="$ctrl.check_manual_add_enabled()" type="text" ng-model="$ctrl.ref_to_add.title"></div>
-      <div><label>Authors: </label><input type="text" ng-model="$ctrl.ref_to_add.authors"></div>
-      <div><label>Date: </label><input type="text" ng-model="$ctrl.ref_to_add.date"></div>
-      <div><label>Url: </label><input type="text" ng-model="$ctrl.ref_to_add.url"></div>
-      <div><label>Notes: </label><textarea ng-model="$ctrl.ref_to_add.notes"></textarea></div>
-      <button ng-disabled="!$ctrl.manual_add_enabled" class="btn btn-sm btn-default centered" ng-click="$ctrl.manual_add_clicked()">add</button>
-    </form>
-    <div class="form-separator">
-      <div class="vertical-line"><div class="or">OR</div></div>
+<div ng-click="prevent_click_default($event)" class="add-ref">
+
+  <form class="add-ref-manual">
+    <div><label>ref type: </label>
+      <select ng-model="ref_to_add.ref_type">
+        <option selected value="article">article</option>
+        <option value="inproceedings">conference paper</option>
+        <option value="book">book</option>
+        <option value="inbook">book section</option>
+        <option value="techreport">technical report</option>
+        <option value="phdthesis">PhD thesis</option>
+        <option value="mastersthesis">Masters thesis</option>
+        <option value="proceedings">proceedings (entire)</option>
+        <option value="booklet">booklet</option>
+        <option value="incollection">in collection</option>
+        <option value="manual">manual</option>
+        <option value="unpublished">unpublished</option>
+        <option value="misc">misc</option>
+      </select>
     </div>
-    <form class="add-ref-bibtex">
-      <div><textarea ng-paste="$ctrl.check_bibtex_add_enabled_delay()" ng-keyup="$ctrl.check_bibtex_add_enabled()" class="bibtex-textarea" ng-model="$ctrl.ref_to_add_bibtex" placeholder="paste bibtex here"></textarea></div>
-      <button ng-disabled="!$ctrl.bibtex_add_enabled" class="btn btn-sm btn-default centered" ng-click="$ctrl.bibtex_add_clicked()">add</button>
-    </form>
-    <div class="clearfix"></div>
+    <div><label>title: </label><input ng-paste="check_manual_add_enabled_delay()" ng-keyup="check_manual_add_enabled()" type="text" ng-model="ref_to_add.title"></div>
+    <div><label>authors: </label><input type="text" ng-model="ref_to_add.author"></div>
+    <div><label>year: </label><input type="text" ng-model="ref_to_add.year"></div>
+    <div><label>url: </label><input type="text" ng-model="ref_to_add.url"></div>
+    <div><label>notes: </label><textarea ng-model="ref_to_add.notes"></textarea></div>
+
+    <div>
+      <label>files: </label>
+      <input type="file" name="files" file-model="myFile" file-input>
+    </div>
+
+    <button ng-disabled="!manual_add_enabled" class="manual-add-btn btn btn-sm btn-default" ng-click="manual_add_clicked()">add ref</button>
+  </form>
+  <div class="form-separator">
+    <div class="vertical-line"><div class="or">OR</div></div>
   </div>
+  <form class="add-ref-bibtex">
+    <div><textarea ng-paste="check_bibtex_add_enabled_delay()" ng-keyup="check_bibtex_add_enabled()" class="bibtex-textarea" ng-model="ref_to_add_bibtex" placeholder="paste bibtex here"></textarea></div>
+    <button ng-disabled="!bibtex_add_enabled" class="bibtex-add-btn btn btn-sm btn-default centered" ng-click="bibtex_add_clicked()">add ref</button>
+
+  </form>
+  <div class="clearfix"></div>
 
 </div>

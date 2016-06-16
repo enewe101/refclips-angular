@@ -1,35 +1,16 @@
 
 angular.module('labelpicker').controller('LabelPickerController', function($element, $scope, $http, labelservice) {
 
-    // The unique id should be provided as a binding.  It's needed to make
-    // unique references via html id's in the template
-    $scope._id = $scope._id || 1;
 
     $scope.label_filter = '';
     $scope.add_enabled = 'disabled';
 
+    $scope.apply_refresh_labels = function() {
+      $scope.$apply($scope.refresh_labels);
+    };
+
     $scope.refresh_labels = function() {
       $scope.labels = labelservice.labels;
-    }
-
-
-
-    //$scope.$on('documentclicked', function(event, target){
-    //  if(!$.contains($element.context, target)) {
-    //    $scope.$apply($scope.toggle);
-    //  } else {
-    //    console.log('ingoring');
-    //  }
-    //});
-
-    $scope.click_toggler = function() {
-      $scope.toggle();
-      return true;
-    }
-
-
-    $scope.toggle = function() {
-      $scope.refresh_labels();
     }
 
     // Removes a label from all references and deletes that label from the db.
@@ -146,9 +127,20 @@ angular.module('labelpicker').controller('LabelPickerController', function($elem
     // On clicking an option in the label picker, send a signal to update the
     // label using the labelchanged callback.  Whether it was changed to be
     // active or inactive is determined by the state in this.activelabels.
-    $scope.label_clicked = function(s) {
-      return function(label) {
-        s.labelchanged()(label, s.activelabels[label._id]);
+    $scope.toggle_label_keep_menu_open = function(s) {
+      return function(event, label) {
+        if (event.target.tagName.toLowerCase() === 'input') {
+          s.labelchanged()(label, s.activelabels[label._id]);
+        }
+      }
+    }($scope);
+    $scope.toggle_label_close_menu = function(s) {
+      return function(event, label) {
+        if (event.target.tagName.toLowerCase() === 'div') {
+          s.activelabels[label._id] = !s.activelabels[label._id];
+          s.labelchanged()(label, s.activelabels[label._id]);
+          s.$broadcast('dropmenu-close');
+        }
       }
     }($scope);
 
@@ -170,35 +162,8 @@ angular.module('labelpicker').directive('labelpicker', function() {
       $($element.context).attr('id', id);
       $scope.id = id;
 
-      $('#' + id).find('.drop-toggle').click(function(){
-        let elm = $('#' + id).find('.drop');
-        if(elm.css('display') == 'block') {
-          elm.css('display','none');
-        } else {
-          elm.css('display','block');
-        }
-        $(document).trigger('click', id);
-      })
-
-      $(document).click(function(e, clicked_id){
-        let container = $('#' + id);
-        let drop = $('#' + id).find('.drop');
-
-        if($.contains(container.get()[0], e.target) || clicked_id == id) {
-          //ignore
-        } else {
-          drop.css('display', 'none');
-        }
-      });
-
 
     }
 
   }
-});
-
-angular.module('labelpicker').run(function($rootScope){
-  angular.element(document).on('click', function(e){
-    $rootScope.$broadcast("documentclicked", e.target);
-  });
 });

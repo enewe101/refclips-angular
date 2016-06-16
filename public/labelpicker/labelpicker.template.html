@@ -1,10 +1,11 @@
-<div class="labelpicker">
+<dropmenu onopen="apply_refresh_labels">
 
-  <div ng-click="click_toggler()"
+  <div
     class="pointer drop-toggle"
     data-toggle="dropdown"
     aria-haspopup="true" aria-expanded="true">
-    labels &#x25BF;
+    <span class="toggler-text">labels</span>
+    &#x25BF;
   </div>
 
   <div class="drop">
@@ -21,11 +22,12 @@
     </div>
 
     <div class="drop-item"
-      ng-repeat="label in labels | filter:{name:label_filter}">
-      <label for="{{label.name}}.{{pickerid}}">
-        <input ng-model="activelabels[label._id]" ng-change="label_clicked(label)" class="checkbox" type="checkbox" id="{{label.name}}.{{pickerid}}">{{label.name}}
+      ng-repeat="label in labels | filter:{name:label_filter}"
+      ng-click="toggle_label_close_menu($event, label)"
+      >
+        <input ng-model="activelabels[label._id]" ng-click="toggle_label_keep_menu_open($event, label)" class="checkbox" type="checkbox" id="{{label.name}}.{{pickerid}}">
+        {{label.name}}
         <span ng-click="delete_label($event, label)" class="remove small glyphicon glyphicon-remove"></span>
-      </label>
     </div>
 
     <div class="drop-item-separator"></div>
@@ -34,4 +36,4 @@
 
   </div>
 
-</div>
+</dropmenu>

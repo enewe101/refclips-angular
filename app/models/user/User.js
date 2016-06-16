@@ -16,7 +16,6 @@ let user_schema = new mongoose.Schema({
 });
 
 user_schema.methods.authenticate = function(password) {
-	console.log('checking password: ' + this.username + ' ' + password);
 	return bcrypt.compareSync(password, this.hash);
 };
 
