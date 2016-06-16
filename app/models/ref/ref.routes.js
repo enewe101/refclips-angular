@@ -78,33 +78,36 @@ module.exports = function(app) {
 
 	// Make an entry in the files collection about this file
   function(req, res) {
+    if(!req.stored_name) {
+      res.json(req.ref);
+    } else {
 
-		fobj = {
-			ref_id : req.ref._id,
-			username : req.user.username,
-			user_id : req.user._id,
-			stored_name: req.stored_name,
-			type: req.extension,
-			sent_name: req.sent_name
-		};
-		let f = new File(fobj);
-		f.save(function(err, f){
-			if(err) {
-				console.log(err);
-				res.status(500).send('There was a problem saving the file.');
-			} else {
-        req.ref.files = [f];
-        req.ref.save(function(err, ref){
-          if(err) {
-            console.log(err);
-            res.status(500).send('There was a problem saving the reference.');
-          } else {
-            res.json(ref);
-          }
-        });
-      }
-    });
-
+  		fobj = {
+  			ref_id : req.ref._id,
+  			username : req.user.username,
+  			user_id : req.user._id,
+  			stored_name: req.stored_name,
+  			type: req.extension,
+  			sent_name: req.sent_name
+  		};
+  		let f = new File(fobj);
+  		f.save(function(err, f){
+  			if(err) {
+  				console.log(err);
+  				res.status(500).send('There was a problem saving the file.');
+  			} else {
+          req.ref.files = [f];
+          req.ref.save(function(err, ref){
+            if(err) {
+              console.log(err);
+              res.status(500).send('There was a problem saving the reference.');
+            } else {
+              res.json(ref);
+            }
+          });
+        }
+      });
+    }
   });
 
 

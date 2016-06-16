@@ -41,7 +41,9 @@ refs.controller('refscontroller', function($http, $timeout, $scope, reflistservi
       fd.append(fieldname, $scope.ref_to_add[fieldname]);
     }
 
-    fd.append('file', $scope.myFile[0]);
+    if($scope.myFile) {
+      fd.append('file', $scope.myFile[0]);
+    }
 
     $http.post('/api/refs', fd, {
         transformRequest: angular.identity,
