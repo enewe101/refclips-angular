@@ -16,8 +16,14 @@ ref .refs-ref {
   min-height: 318px;
 }
 
+ref textarea {
+  overflow: scroll;
+  min-height: 400px;
+}
+
 ref .retainer.retained {
   max-height: 300px;
+  min-height: 300px;
   overflow: hidden;
 }
 
@@ -56,7 +62,7 @@ ref .ref_type {
 
 ref .notes {
   width: calc(100% + 12px);
-  margin: -6px;
+  margin: -6px -6px 1px -6px;
   height: 100px;
   padding: 10px;
   border: none;
