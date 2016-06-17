@@ -84,7 +84,7 @@ refs.controller('refscontroller', function($http, $timeout, $scope, reflistservi
   $scope.bibtex_add_enabled = false;
   $scope.check_bibtex_add_enabled_delay = function() {
     $timeout(function(){
-      that.check_bibtex_add_enabled();
+      $scope.check_bibtex_add_enabled();
     }, 10);
   };
   $scope.check_bibtex_add_enabled = function() {
@@ -98,7 +98,7 @@ refs.controller('refscontroller', function($http, $timeout, $scope, reflistservi
   $scope.manual_add_enabled = false;
   $scope.check_manual_add_enabled_delay = function() {
     $timeout(function(){
-      that.check_manual_add_enabled();
+      $scope.check_manual_add_enabled();
     }, 10);
   };
   $scope.check_manual_add_enabled = function() {

@@ -59,7 +59,7 @@ angular.module('labelpicker').controller('LabelPickerController', function($elem
         function(response){
           // Reflect the removal of the label from the db in all the labelpickers through labelservice
           labelservice.refresh();
-          $scope.toggle();
+          $scope.$broadcast('dropmenu-close');
         },
         function(response){console.log(response);}
       )

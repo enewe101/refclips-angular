@@ -44,21 +44,7 @@ angular.module('refs').controller('refcontroller',
 
     // Temporary model for holding edits.  It's bound to the edit form.
     $scope.edited_ref = $.extend({},$scope.thisref);
-
     $scope.upload_data = [{refid: $scope.thisref}];
-
-    $scope.onUpload = function(){
-      console.log('upload started');
-    }
-    $scope.onComplete = function() {
-      console.log('upload complete');
-    }
-    $scope.onError = function() {
-      console.log('upload error');
-    }
-    $scope.onSuccess = function() {
-      console.log('upload success');
-    }
 
     $scope.save_ref = function() {
       console.log($scope.thisref);
@@ -105,7 +91,7 @@ angular.module('refs').controller('refcontroller',
     $scope.update_notes = function() {
       $http.put('/api/refs', $scope.thisref).then(
         function(response){$scope.flash_notes_saved()},
-        function(response){console.log('error updating notes')}
+        function(response){console.log(response);}
       )
     }
 
@@ -153,7 +139,7 @@ angular.module('refs').controller('refcontroller',
           $scope.thisref = $scope.edited_ref;
           $scope.editing = false;
         },
-        function(response){console.log('error updating notes')}
+        function(response){console.log(response);}
       );
     }
 
@@ -172,7 +158,7 @@ angular.module('refs').controller('refcontroller',
         '/api/refs/remove-label', {"_id":$scope.thisref._id, "label":label}
       ).then(
         function(response) {},
-        function(response) {console.log('there was an error: ' + error.toSource());}
+        function(response) {console.log(response);}
       );
     }
 
@@ -185,7 +171,7 @@ angular.module('refs').controller('refcontroller',
         '/api/refs/add-label',{"_id":$scope.thisref._id, "label":label}
       ).then(
         function(response) {},
-        function(response) {console.log('Error adding label to ref: ' + error.toSource());}
+        function(response) {response}
       );
     }
     $scope.add_label_locally = function(label) {

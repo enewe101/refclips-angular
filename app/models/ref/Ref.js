@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 // module.exports allows us to pass this to other files when it is called
 module.exports = mongoose.model('Ref', {
 	title: {type : String, required: true},
+	user_id: {type: String, required: true},
 	ref_type: {type: String},
 	citation_key: {type: String},
 	booktitle: {type: String},

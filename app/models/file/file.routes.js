@@ -1,11 +1,27 @@
 var _ = require('lodash');
 var File = require('./File');
 
+function authorize_file(file_id, user_id, res, next, fail) {
+  File.findById(file_id, function(err, file){
+    if(err){
+      res.status(500).send('There was a problem updating the file')
+    } else if(!file || file.user_id != user_id){
+      if(fail) {
+        fail();
+      } else {
+        res.status(403).send('Unauthorized');
+      }
+    } else {
+      next();
+    }
+  });
+}
+
 module.exports = function(app) {
 
   // Route to get all files
   app.get('/api/files', function(req, res){
-    File.find(function(err, files){
+    File.find({user_id: req.user._id}, function(err, files){
       if (err) {
         res.status(500).send(err);
       }
@@ -15,8 +31,8 @@ module.exports = function(app) {
 
   // Creates a new file defined in req.body
   app.post('/api/files', function(req, res){
-    console.log(req.body);
     var file = new File(req.body);
+    file.user_id = req.user._id;
     file.save(function(err, file){
       if(err){res.status(400).send(err); console.log(err)}
       res.json(file);
@@ -25,7 +41,9 @@ module.exports = function(app) {
 
   // Deletes the file identified by req.query._id
   app.delete('/api/files', function(req, res, next){
-    console.log(req.query);
+    authorize_file(req.query._id, req.user._id, res, next);
+  },
+  function(req, res) {
     // First get the file path and delete the actual file from the file system
     File.findById(req.query._id, function(err, f){
       if(err) {
@@ -58,7 +76,10 @@ module.exports = function(app) {
   });
 
   // Updates a file defined in req.body based on it's supplied _id
-  app.put('/api/files', function(req, res){
+  app.put('/api/files', function(req, res, next){
+    authorize_file(req.body._id, req.user._id, res, next);
+  },
+  function(req, res) {
     let file = req.body;
     File.findByIdAndUpdate(file._id, file, function(err, doc){
       if(err){res.status(400).send(err); console.log(err);}

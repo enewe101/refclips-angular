@@ -49,7 +49,7 @@
             <labelpicker labelchanged="update_label" pickerid="thisref._id" activelabels="activelabels"></labelpicker>
             <span class="label label-default" ng-repeat="label in thisref.labels track by label._id">{{label.name}}</span>
           </div>
-          <filebunch changed="save_ref" files="thisref.files" class="files" formdata="{thisref_id:thisref._id}"></filebunch>
+          <filebunch changed="save_ref" files="thisref.files" class="files" formdata="{ref_id:thisref._id}"></filebunch>
           <div class="clearfix"></div>
 
         </div>
