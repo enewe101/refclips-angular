@@ -1,7 +1,7 @@
 <div class="ref-list">
-  <ref ng-repeat="ref in $ctrl.reflistservice.recently_added_refs"
-      delete-callback="$ctrl.delete" ref='ref' id="{{ref._id}}"></ref>
-  <ref ng-repeat="ref in $ctrl.reflistservice.refs"
-    delete-callback="$ctrl.delete" ref='ref' id="{{ref._id}}"></ref>
+  <ref ng-repeat="aref in reflistservice.recently_added_refs"
+      delete-callback="delete" thisref='aref' id="{{aref._id}}"></ref>
+  <ref ng-repeat="aref in reflistservice.refs"
+    delete-callback="delete" thisref='aref' id="{{aref._id}}"></ref>
   <div class="clearfix"></div>
 </div>

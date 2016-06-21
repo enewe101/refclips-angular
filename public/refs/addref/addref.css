@@ -1,5 +1,5 @@
 addref .add-ref {
-  width: 770px;
+  width: 780px;
   padding: 30px 50px;
   cursor: default;
 
@@ -7,13 +7,14 @@ addref .add-ref {
 
 addref .add-ref-manual {
   float: left;
-  width: 300px;
+  width: 310px;
 
 }
 
 addref .add-ref-manual input[type=text] {
   width: 218px;
 }
+
 addref .add-ref-manual textarea {
   width: 218px;
 }

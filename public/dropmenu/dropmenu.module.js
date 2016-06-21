@@ -35,6 +35,29 @@ drop.controller('dropmenucontroller', function($element, $scope) {
         $scope.onclose();
         $scope.drop.css('display','none');
       } else {
+
+        console.log($scope.drop.hasClass('left'));
+        console.log($scope.left);
+
+        // adjust positioning of drop menu
+        let offset = $scope.container.position();
+        let height = $scope.container.outerHeight(true);
+        $scope.drop.css('top', offset.top + height);
+        if($scope.left) {
+
+          let offset_parent = $scope.container.offsetParent();
+          let parent_width = offset_parent.outerWidth();
+          let width = $scope.container.outerWidth(true);
+
+          let right = parent_width - (offset.left + width);
+          console.log('right:' + right);
+          $scope.drop.css('right', right);
+
+        } else {
+          $scope.drop.css('left', offset.left);
+        }
+
+        // display drop menu and fire callbacks
         $scope.ontoggle(true);
         $scope.onopen();
         $scope.drop.css('display','block');
@@ -65,9 +88,11 @@ drop.directive('dropmenu', function() {
       $($element.context).attr('id', id);
       $scope.id = id;
 
+      $scope.container = $('#' + id);
       $scope.container_html = $('#' + id).get()[0];
       $scope.drop_toggle = $('#' + id).find('.drop-toggle');
       $scope.drop = $('#' + id).find('.drop');
+      $scope.left = $scope.drop.hasClass('left');
 
       $('#' + id).find('.drop-toggle').click(function(){
         $scope.toggle();
@@ -75,10 +100,6 @@ drop.directive('dropmenu', function() {
       $('#' + id).find('.drop-item').click(function(){
         $scope.close();
       })
-
-      //$('#' + id).find('.drop-item').click(function () {
-      //  $scope.close();
-      //});
 
       $(document).click(function(e, clicked_id){
         if($.contains($scope.container_html, e.target) || clicked_id == id) {

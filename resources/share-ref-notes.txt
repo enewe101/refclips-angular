@@ -1,0 +1,54 @@
+When user shares a label:
+
+  (related: users can also *send* refs to eachother, which means that the recipient
+  gets their own copy that is unaffected by future changes made by the original
+  owner)
+
+  - all refs under that label get an entry in their shared-to field
+    (shared_to decides who can *see* the ref, and holds user-specific labels.
+
+    shared_to: [{
+      user_id: '23423',
+      can_edit: true|false,
+      shared_labels: ['2343', ...]
+    }, ... ]
+
+  - If the owner decides to let sharees edit it, then the can_edit field in
+    shared_to will be set to "true"
+    In that case:
+    - sharees can add their own labels (not visible to other sharees unless
+      those labels are themselves shared).
+    - sharees can make changes to the ref itself, which is reflected to all
+      sharees
+    - sharees can remove the shared label, but this only affects them, by
+      removing the label entry under the shared_labels field of their entry
+      in the ref's shared_to field.
+    - sharees can delete the ref, but this only removes their entry in then
+      shared_to field
+    - If the owner deletes the ref, the owner field will be marked null, but
+      sharees will be otherwise unafected.
+    - If the owner chooses to stop sharing the ref, then a copy of the ref will
+      be created for the owner, and the owner will then be removed from the
+      old ref.  Sharees can still see the old ref, but any new changes to the
+      ref made by the owner do not affect sharees.
+
+  - If the owner decides not to let sharees edit the ref, then:
+    - sharees cannot add their own labels
+    - sharees cannot make changes to the ref itself
+    - sharees can still remove the shared label, but as before, this only them,
+      by removing the entry in the shared_labels field of the shared_to entry.
+    - sharees can still delete the ref, but as before, this only removes their
+      entry in the shared_to field
+    - if the owner deletes the ref, the owner field will be marked null,
+      but sharees will be otherwise unaffected (and still unable to edit)
+
+  - sharees can make their own copy of a shared ref.  In that case, a copy of
+    the shared ref will be made, with the sharee as the owner, and the sharee
+    will be removed from the old ref.  The sharee's own copy is not being shared
+    so changes made to it are not visible to the old owner or other sharees,
+    nor are the changes made by the old owner or other sharees visible to the
+    new owner
+
+  - the owner of a ref that is shared sees a shared icon.  Sharees see a
+    shared-to icon.  Clicking the icon lets them take share-specific actions,
+    like stop-sharing and make-own-copy.

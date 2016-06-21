@@ -16,10 +16,19 @@ labelpicker .toggler-text:hover {
   text-decoration: underline;
 }
 
+labelpicker .label-container {
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
 labelpicker .protected {
   background: red;
 }
 
+labelpicker .inline-block {
+  display: inline-block;
+  width: 20px;
+}
 
 labelpicker .drop-item-entry {
   padding: 4px;
@@ -31,6 +40,16 @@ labelpicker .message {
 }
 labelpicker .drop-item.disabled {
   color: rgb(220,220,220);
+}
+
+labelpicker dropmenu .drop-item {
+  position: relative;
+  white-space: nowrap;
+}
+
+labelpicker .label-name {
+  margin-right: 20px;
+  padding-right: 40px;
 }
 
 labelpicker label {
@@ -47,7 +66,9 @@ labelpicker a.disabled {
 }
 
 labelpicker .remove {
-  float: right;
+  position: absolute;
+  right: 0;
+  top: 6px;
   color: rgb(220,220,220);
   margin: 2px 6px 0 0;
   padding: 4px;

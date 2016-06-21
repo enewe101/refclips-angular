@@ -2,21 +2,7 @@
 
   <form class="add-ref-manual">
     <div><label>ref type: </label>
-      <select ng-model="ref_to_add.ref_type">
-        <option selected value="article">article</option>
-        <option value="inproceedings">conference paper</option>
-        <option value="book">book</option>
-        <option value="inbook">book section</option>
-        <option value="techreport">technical report</option>
-        <option value="phdthesis">PhD thesis</option>
-        <option value="mastersthesis">Masters thesis</option>
-        <option value="proceedings">proceedings (entire)</option>
-        <option value="booklet">booklet</option>
-        <option value="incollection">in collection</option>
-        <option value="manual">manual</option>
-        <option value="unpublished">unpublished</option>
-        <option value="misc">misc</option>
-      </select>
+      <reftype model="ref_to_add.ref_type"></reftype>
     </div>
     <div><label>title: </label><input ng-paste="check_manual_add_enabled_delay()" ng-keyup="check_manual_add_enabled()" type="text" ng-model="ref_to_add.title"></div>
     <div><label>authors: </label><input type="text" ng-model="ref_to_add.author"></div>

@@ -41,7 +41,9 @@ refs.controller('refscontroller', function($http, $timeout, $scope, reflistservi
       fd.append(fieldname, $scope.ref_to_add[fieldname]);
     }
 
-    fd.append('file', $scope.myFile[0]);
+    if($scope.myFile) {
+      fd.append('file', $scope.myFile[0]);
+    }
 
     $http.post('/api/refs', fd, {
         transformRequest: angular.identity,
@@ -82,7 +84,7 @@ refs.controller('refscontroller', function($http, $timeout, $scope, reflistservi
   $scope.bibtex_add_enabled = false;
   $scope.check_bibtex_add_enabled_delay = function() {
     $timeout(function(){
-      that.check_bibtex_add_enabled();
+      $scope.check_bibtex_add_enabled();
     }, 10);
   };
   $scope.check_bibtex_add_enabled = function() {
@@ -96,7 +98,7 @@ refs.controller('refscontroller', function($http, $timeout, $scope, reflistservi
   $scope.manual_add_enabled = false;
   $scope.check_manual_add_enabled_delay = function() {
     $timeout(function(){
-      that.check_manual_add_enabled();
+      $scope.check_manual_add_enabled();
     }, 10);
   };
   $scope.check_manual_add_enabled = function() {
@@ -120,15 +122,16 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
   };
 
   var adjust_padding = function() {
-    let container_width = $('.ref-list').outerWidth();
-    let margin = 28;``
-    let refs = $('.ref-list').children();
-    if (refs.length) {
-      var item_width = $(refs[0]).outerWidth();
-    }
-    let num_in_row = Math.floor(container_width / (item_width + margin));
-    let space_left = container_width - (num_in_row * (item_width + margin));
-    $('.ref-list').css({'padding-left':space_left/2-1});
+    $rootScope.$broadcast('adjust-padding');
+    //let container_width = $('.ref-list').outerWidth();
+    //let margin = 28;
+    //let refs = $('.ref-list').children();
+    //if (refs.length) {
+    //  var item_width = $(refs[0]).outerWidth();
+    //}
+    //let num_in_row = Math.floor(container_width / (item_width + margin));
+    //let space_left = container_width - (num_in_row * (item_width + margin));
+    //$('.ref-list').css({'padding-left':space_left/2-1});
   };
 
   // Gets the references from the db
@@ -143,6 +146,8 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
           service.ref_lookup[ref._id] = {list: service.refs, idx: i}
         }
         setTimeout(adjust_padding, 10);
+        setTimeout(adjust_padding, 2000);
+        setTimeout(adjust_padding, 8000);
       },
       function(response) {$state.go('signedout');}
     );
@@ -201,6 +206,8 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
           }
 
           setTimeout(adjust_padding, 10);
+          setTimeout(adjust_padding, 2000);
+          setTimeout(adjust_padding, 8000);
           if (refs.length > 1) {
             notifyservice.add('success', 'Added ' + refs.length + ' references.');
           } else {

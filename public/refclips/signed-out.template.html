@@ -1,0 +1,50 @@
+<header></header>
+
+<div class="splash-banner">
+  <div class="vert-shim"></div>
+  <h1>refclips</h1>
+  <h2>manage your references</h2>
+  <div class="main-action">
+
+    <button ng-if="state=='arrived'" ng-click="get_started()" class="get-started btn btn-lg btn-huge btn-primary">
+      get started
+    </button>
+
+    <div class="getting-started-no-tour" ng-if="state=='get-started'">
+
+        <div class="registration">
+          <div class="filter-effect"></div>
+          <div class="registration-position">
+            <authentication state="auth_state"></authentication>
+          </div>
+        </div>
+
+    </div>
+
+    <!--div class="getting-started" ng-if="state=='get-started'">
+
+        <div class="registration">
+          <div class="filter-effect"></div>
+          <div class="registration-position">
+            <div class="centering signup-prompt">Choose a username and password:</div>
+            <authentication state="auth_state"></authentication>
+          </div>
+        </div>
+
+      <div class="form-separator">
+        <div class="vertical-line"><div class="or">OR</div></div>
+      </div>
+
+      <div class="skip-signup-wrapper">
+        <button ng-click="skip_signup()" class="btn btn-default btn-lg skip-signup">
+          guest tour
+        </button>
+      </div>
+
+      <div class="clearfix"></div>
+    </div-->
+
+  </div>
+</div>
+
+<footer></footer

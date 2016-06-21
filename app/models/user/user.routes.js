@@ -1,7 +1,20 @@
 var _ = require('lodash');
 var User = require('./User');
+var bcrypt = require('bcrypt');
+
+let DUP_KEY_ERR = 11000;
 
 module.exports = function(app) {
+
+	app.get('/api/users/check-if-signed-in', function(req,res) {
+		console.log('checking..')
+    if(req.isAuthenticated()) {
+	    res.json({authenticated: true, user:req.user});
+    } else {
+      res.json({authenticated:false, user:null});
+		}
+	});
+
 
 	// Route for signing in with google
 	app.post('/api/users/google-signin', function(req,respond){
@@ -42,14 +55,64 @@ module.exports = function(app) {
     });
   });
 
-  // Add a new users
-  app.post('/api/users', function(req, res){
+  // Register a new user
+	// Note "sapi" routes don't need authentication
+
+	let NUM_SALT_ROUNDS = 8;
+  app.post('/sapi/users', function(req, res, next){
     var user = new User(req.body);
-    user.save(function(err, user){
-      if(err){res.status(400).send(err); console.log(err);}
-      res.json(user);
+		var password = req.body.password;
+		bcrypt.hash(password, NUM_SALT_ROUNDS, function(err, hash){
+			if(err) {
+				console.log(err);
+				res.status(500).send('There was a problem with registration.');
+			} else {
+				user.hash = hash;
+				req.user = user;
+				next();
+			}
+		});
+	},
+	function(req, res) {
+    req.user.save(function(err, user){
+			console.log(err);
+			console.log(user);
+      if(err){
+				if(err.code == DUP_KEY_ERR) {
+					if (err.message.indexOf('email') > -1) {
+						res.json({sucess: false, reason:'dup_email', user: null});
+					} else if(err.message.indexOf('username') > -1) {
+						res.json({sucess: false, reason:'dup_username', user: null});
+					} else {
+						res.status(400).send(err);
+					}
+				} else {
+					res.status(400).send(err);
+				}
+			} else {
+				console.log('sending');
+	      res.json({success: true, reason: null, user: user});
+			}
     });
   });
+
+  // Check if a username is already taken
+	// Note "sapi" routes don't need authentication
+  app.get('/sapi/users/check-username', function(req, res){
+		let username = req.query.u;
+    User.findOne({username: username}, function(err, user){
+      if (err) {
+				res.status(500).send(err);
+			} else {
+				if (user) {
+		      res.json(true);
+				} else {
+					res.json(false);
+				}
+			}
+    });
+  });
+
 
 
   // Deletes the specified user

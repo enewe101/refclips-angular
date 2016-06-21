@@ -1,0 +1,20 @@
+<dropmenu>
+
+  <div
+    class="pointer drop-toggle"
+    data-toggle="dropdown"
+    aria-haspopup="true" aria-expanded="true">
+    <span class="toggler-text">{{user.username}}</span>
+    &#x25BF;
+  </div>
+
+  <div class="drop">
+    <div class="drop-item"
+      ng-click="toggle_label_close_menu($event, label)">
+        <input ng-model="activelabels[label._id]" ng-click="toggle_label_keep_menu_open($event, label)" class="checkbox" type="checkbox" id="{{label.name}}.{{pickerid}}">
+        {{label.name}}
+        <span ng-click="delete_label($event, label)" class="remove small glyphicon glyphicon-remove"></span>
+    </div>
+  </div>
+
+</dropmenu>
