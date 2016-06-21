@@ -1,3 +1,6 @@
+dropmenu {
+  display: inline-block;
+}
 
 dropmenu .drop-item-separator {
   height: 1px;

@@ -1,0 +1,9 @@
+<form ng-submit="send_forgot_password_link()">
+  <div class="prompt">Send yourself a link to reset your password.</div>
+  <div><label>email: </label><input type="text" ng-model="model"></div>
+  <label></label><input class="btn btn-sm btn-default" type="submit" value="submit">
+  <span class="alt-options">
+    (<a href="#" ng-click="login()">login</a>
+    | <a href="#" ng-click="registering()">register</a>)
+  </span>
+</form>

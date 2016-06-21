@@ -1,0 +1,8 @@
+<!--password-authenticate email="email"></password-authenticate>
+<password-register email="email"></password-register>
+<forgot-password model="email"></forgot-password-->
+
+<password-authenticate ng-if="state=='not-signed-in'" email="email" state="state"></password-authenticate>
+<password-register ng-if="state=='registering'" email="email" state="state"></password-register>
+<forgot-password ng-if="state=='forgot-password'" model="email" state="state"></forgot-password>
+<password-signout ng-if="state=='signed-in'"></password-signout>

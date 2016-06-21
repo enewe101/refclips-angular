@@ -1,8 +1,7 @@
 ref {
   display: block;
   width: 400px;
-  float: left;
-  margin: 14px;
+  margin: 0 14px 14px 14px;
   position: relative;
 }
 
@@ -65,7 +64,7 @@ ref .notes {
   margin: -6px -6px 1px -6px;
   height: 100px;
   padding: 10px;
-  border: none;
+  border: solid 1px transparent;
 }
 
 ref .notes:hover {
@@ -101,7 +100,7 @@ ref .right-buttons button:first-child {
 
 ref .label {
   display: inline-block;
-  margin-right: 4px;
+  margin: 2px;
   padding: 4px 4px 4px 4px;
   font-size: 1em;
 }
@@ -134,4 +133,15 @@ ref .fade {
 
 .fade.ng-leave.ng-leave-active {
   opacity:0;
+}
+
+ref .saved {
+  position: absolute;
+  left: calc(50% - 30px);
+  padding: 0px 4px;
+  background: white;
+  border: solid 1px blue;
+  border-radius: 2px;
+  top: 0;
+  box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
 }

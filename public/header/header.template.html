@@ -3,7 +3,7 @@
 
   <ul class="nav navbar-nav">
 
-    <li class="menu-item menu-item-hover" role="presentation" class="dropdown">
+    <li ng-if="$ctrl.userStatusService.user.username" class="menu-item menu-item-hover" role="presentation" class="dropdown">
       <a id="add-ref-dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
         add reference &#x25bf;
       </a>
@@ -12,24 +12,31 @@
       </ul>
     </li>
 
-    <li id="filter-wrapper" class="menu-item" role="presentation" class="dropdown">
+    <li ng-if="$ctrl.userStatusService.user.username" id="filter-wrapper" class="menu-item" role="presentation" class="dropdown">
           <filter></filter>
     </li>
 
   </ul>
   <ul class="nav navbar-nav navbar-right">
 
-    <li class="menu-item-hover" role="presentation" class="dropdown">
-      <a id="sign-in-dropdown" class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-        logged in as <span class="username">{{$ctrl.user.username}}</span> &#x25bf;
-      </a>
-      <ul class="dropdown-menu">
-        <li>
-          <a href="#"><passwordsignout>sign out</passwordsignout></a>
-        </li>
-      </ul>
-    </li>
+    <dropmenu class="login-menu">
+      <div
+        class="pointer drop-toggle"
+        data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="true">
+        <span ng-if="$ctrl.userStatusService.user" class="toggler-text">
+          logged in as <span class="username">{{$ctrl.userStatusService.user.username}}</span>
+        </span>
+        <span ng-if="!$ctrl.userStatusService.user" class="toggler-text">login</span>
+        &#x25BF;
+      </div>
 
+      <div ng-class="{signed_in: $ctrl.userStatusService.user, signed_out: !$ctrl.userStatusService.user}" class="drop left">
+        <div ng-click="$ctrl.capture_click($event)" ng-class="{'drop-item': $ctrl.userStatusService.user}">
+          <authentication state="user_state"></authentication>
+        </div>
+      </div>
+    </dropmenu>
 
   </ul>
 

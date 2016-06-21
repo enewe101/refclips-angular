@@ -5,10 +5,13 @@ var bcrypt = require('bcrypt');
 // define our nerd model
 // module.exports allows us to pass this to other files when it is called
 let user_schema = new mongoose.Schema({
-	username: {type : String, required: true},
+
+	// email and username have to be unique!
+	email : {type : String, index: {unique: true, dropDups: true}},
+	username: {type : String, required: true, index: {unique: true, dropDups: true}},
+
 	fname: {type: String},
 	lname: {type: Number},
-	email : {type : String},
 	email_validated: {type : Boolean},
 	sub: {type: String},
 	avatar_url: {type: String},
@@ -16,14 +19,18 @@ let user_schema = new mongoose.Schema({
 });
 
 user_schema.methods.authenticate = function(password) {
+	console.log('hash:' + this.hash);
+	console.log('password:' + password);
 	return bcrypt.compareSync(password, this.hash);
 };
 
-user_schema.set('toJson', {transform:function(user, ret, options){
+user_schema.set('toJSON', {transform:function(user, ret, options){
 	delete ret.hash;
+	return ret;
 }});
 user_schema.set('toObject', {transform:function(user, ret, options){
 	delete ret.hash;
+	return ret;
 }});
 
 user_schema.statics.create_user = function(username, password, then) {

@@ -2,29 +2,17 @@
 <html lang="en" ng-app="refclips">
 <head>
 	<meta charset="UTF-8">
-
-	<!-- begin signin related.  Ideally this should somehow be included by the signin directive's presense on the page...-->
-	<!--script >
-	  window.___gcfg = {
-	    lang: 'en-US',
-	    parsetags: 'explicit' //Configure to initialize explicitly
-	  };
-	</script-->
-  <!--meta name="google-signin-scope" content="profile email">
-  <meta name="google-signin-client_id" content="35293648472-m4vlfoq1h2h6nudsc4rlftkan7l5bvpj.apps.googleusercontent.com">
-  <script src="https://apis.google.com/js/platform.js" async defer></script-->
-	<!-- end signin related content -->
-
 	<base href="/">
 
 	<title>Starter Node and Angular</title>
 
 	<!-- Font -->
-	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+	<!--link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'-->
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/style.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="refclips/signed-out.css"> <!-- custom styles -->
 	<link rel="stylesheet" href="refs/refs.css"> <!-- custom styles -->
 	<link rel="stylesheet" href="refs/ref/ref.css"> <!-- custom styles -->
 	<link rel="stylesheet" href="refs/addref/addref.css"> <!-- custom styles -->
@@ -37,6 +25,11 @@
 	<link rel="stylesheet" href="files/file/file.css"> <!-- custom styles -->
 	<link rel="stylesheet" href="dropmenu/dropmenu.css"> <!-- custom styles -->
 	<link rel="stylesheet" href="libs/mine/autogrow.css"> <!-- custom styles -->
+	<link rel="stylesheet" type="text/css" href="password-authenticate/password-register/password-register.css">
+	<link rel="stylesheet" type="text/css" href="password-authenticate/password-authenticate/password-authenticate.css">
+	<link rel="stylesheet" type="text/css" href="password-authenticate/password-field/password-field.css">
+	<link rel="stylesheet" type="text/css" href="password-authenticate/forgot/forgot.css">
+	<link rel="stylesheet" type="text/css" href="footer/footer.css">
 	<!--link rel="stylesheet" href="google-signin/google-signin.css"-->
 
 	<!-- JS -->
@@ -56,9 +49,8 @@
 	<script src="libs/angular-upload/angular-upload.min.js"></script>
 	<script src="libs/mine/autogrow.js"></script>
 
-
 	<!-- ANGULAR CUSTOM -->
-	<script src="refclips.module.js"></script>
+	<script src="refclips/refclips.module.js"></script>
 	<script src="notify/notify.component.js"></script>
 	<script src="header/header.component.js"></script>
 	<script src="refs/refs.module.js"></script>
@@ -69,8 +61,15 @@
 	<script src="labelpicker/labelpicker.component.js"></script>
 	<!--script src="google-signin/google-signin.component.js"></script-->
 	<!--script src="google-signin/google-signout/google-signout.component.js"></script-->
-	<script src="password-signin/password-signin.module.js"></script>
-	<script src="password-signin/password-signout.component.js"></script>
+
+	<script src="password-authenticate/password-authenticate.module.js"></script>
+	<script src="password-authenticate/password-authenticate/password-authenticate.component.js"></script>
+	<script src="password-authenticate/password-signout/password-signout.component.js"></script>
+	<script src="password-authenticate/password-register/password-register.component.js"></script>
+	<script src="password-authenticate/password-field/password-field.component.js"></script>
+	<script src="password-authenticate/forgot/forgot.component.js"></script>
+	<script src="user-status/user-status.module.js"></script>
+
 	<script src="filter/filter.component.js"></script>
 	<script src="uploader/uploader-button.component.js"></script>
 	<script src="uploader/uploader.module.js"></script>

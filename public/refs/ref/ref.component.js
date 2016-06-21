@@ -107,10 +107,11 @@ angular.module('refs').controller('refcontroller',
     // Show a "saved" message when the ref notes were saved
     $scope.show_notes_saved = false;
     $scope.flash_notes_saved = function() {
-      $scope.show_notes_saved = true;
-      $timeout(function(){
-        $scope.show_notes_saved = false;
-      }, 2000);
+      $scope.flash_details_saved();
+      //$scope.show_notes_saved = true;
+      //$timeout(function(){
+      //  $scope.show_notes_saved = false;
+      //}, 2000);
     };
 
     // Ask user if they really want to delete.

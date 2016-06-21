@@ -1,0 +1,32 @@
+<html lang="en">
+  <head>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="35293648472-m4vlfoq1h2h6nudsc4rlftkan7l5bvpj.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js?onload=render" async defer></script>
+    <script src="libs/masonry/masonry.js"></script>
+  </head>
+  <body>
+    <div id="login_panel"></div>
+    <script>
+      function handleSuccess() {
+        console.log('success');
+      }
+      function handleFailure() {
+        console.log('failure');
+      }
+      let options  = {
+        'scope': 'email',
+        'width': 200,
+        'height': 50,
+        'longtitle': true,
+        'theme': 'dark',
+        'onsuccess': handleSuccess,
+        'onfailure': handleFailure
+      };
+      function render() {
+        console.log('rendering');
+        gapi.signin2.render('login_panel', options);
+      }
+    </script>
+  </body>
+</html>

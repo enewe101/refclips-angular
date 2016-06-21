@@ -12,15 +12,25 @@ angular.module('refs').controller('RefsController', function RefsController($htt
 
   $scope.adjust_padding = function() {
     let container_width = $('.ref-list').outerWidth();
-    let margin = 28;``
+    let margin = 28;
     let refs = $('.ref-list').children();
     if (refs.length) {
       var item_width = $(refs[0]).outerWidth();
     }
     let num_in_row = Math.floor(container_width / (item_width + margin));
+    $('.ref-list').css({
+      '-webkit-column-count': num_in_row,
+      '-moz-column-count': num_in_row,
+      'column-count': num_in_row
+    });
     let space_left = container_width - (num_in_row * (item_width + margin));
     $('.ref-list').css({'padding-left':space_left/2-1});
+    $('.ref-list').css({'padding-right':space_left/2-1});
+
   };
+
+  $scope.$on('adjust-padding', $scope.adjust_padding);
+
   $(window).resize($scope.adjust_padding);
 
   // These get bound to two lists of references that are displayed

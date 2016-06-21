@@ -6,6 +6,9 @@
 
         <div class="ref-top">
           <!-- Delete and edit buttons -->
+
+          <span class="saved fade" ng-if="show_details_saved">saved</span>
+
           <div class="centering pull-right right-buttons">
             <button ng-click="start_edit()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span> edit</button>
             <div class="clearfix"></div>
@@ -13,7 +16,6 @@
               <span class="glyphicon glyphicon-fire"></span> delete
             </button>
             <div class="clearfix"></div>
-            <span class="fade" ng-if="show_details_saved">saved</span>
           </div>
 
           <!-- Title -->

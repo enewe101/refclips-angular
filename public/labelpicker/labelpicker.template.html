@@ -21,13 +21,15 @@
       No labels yet! Create new labels using the text input.
     </div>
 
-    <div class="drop-item"
-      ng-repeat="label in labels | filter:{name:label_filter}"
-      ng-click="toggle_label_close_menu($event, label)"
-      >
-        <input ng-model="activelabels[label._id]" ng-click="toggle_label_keep_menu_open($event, label)" class="checkbox" type="checkbox" id="{{label.name}}.{{pickerid}}">
-        {{label.name}}
-        <span ng-click="delete_label($event, label)" class="remove small glyphicon glyphicon-remove"></span>
+    <div class="label-container">
+      <div class="drop-item"
+        ng-repeat="label in labels | filter:{name:label_filter}"
+        ng-click="toggle_label_close_menu($event, label)"
+        >
+          <input ng-model="activelabels[label._id]" ng-click="toggle_label_keep_menu_open($event, label)" class="checkbox" type="checkbox" id="{{label.name}}.{{pickerid}}">
+          <div class="label-name">{{label.name}}</div>
+          <span ng-click="delete_label($event, label)" class="remove small glyphicon glyphicon-remove"></span>
+      </div>
     </div>
 
     <div class="drop-item-separator"></div>

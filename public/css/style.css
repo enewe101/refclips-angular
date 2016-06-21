@@ -4,6 +4,10 @@ body {
   background: rgb(253, 253, 252);
 }
 
+a {
+  cursor: pointer;
+}
+
 .bold {
   font-weight: bold;
 }
@@ -36,4 +40,21 @@ body {
 
 .small {
   font-size: .7em;
+}
+
+label {
+  width: 74px;
+  text-align: right;
+  margin-right: 6px;
+}
+
+body input[type=text], body input[type=password] {
+  width: 200px;
+  border-radius: 2px;
+  border: solid 1px rgb(204, 204, 204);
+  padding: 4px;
+}
+
+form div {
+  padding-bottom: 2px;
 }

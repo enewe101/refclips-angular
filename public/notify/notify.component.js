@@ -15,7 +15,7 @@ notify.factory('notifyservice', function($timeout){
     service.notifications[_id] = {type: type, message: message, _id: _id};
     $timeout(function(){
       service.remove(_id);
-    }, 60000);
+    }, 10000);
   };
   service.remove = function(_id) {
     console.log('deleting');
