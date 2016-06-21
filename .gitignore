@@ -21,3 +21,5 @@ public/libs
 .DS_Store
 
 uploads
+
+dump*

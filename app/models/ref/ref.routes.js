@@ -259,6 +259,9 @@ module.exports = function(app) {
   }
 
 
+  app.post('/api/refs/import-bibtex', function(req, res, next){
+    res.send(req.body.bibtex);
+  });
 
   // Deletes the specified reference
   app.delete('/api/refs', function(req, res, next){
