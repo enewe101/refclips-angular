@@ -12,7 +12,7 @@ angular.module('refs').controller('RefsController', function RefsController($htt
 
   $scope.adjust_padding = function() {
     let container_width = $('.ref-list').outerWidth();
-    let margin = 28;
+    let margin = 34;
     let refs = $('.ref-list').children();
     if (refs.length) {
       var item_width = $(refs[0]).outerWidth();

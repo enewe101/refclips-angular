@@ -12,3 +12,8 @@ refs .ref-list {
 refs label {
   width: 80px;
 }
+
+refs ref {
+	-webkit-column-break-inside: avoid;
+	break-inside: avoid;
+}
