@@ -182,8 +182,9 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
   // Creates a new in the db
   service.add_many = function(refs_to_add) {
       // Create the ref in the database
-      console.log('adding many');
+
       $http.post('/api/refs/add-many', refs_to_add).then(
+
         // Then add it locally
         function(response){
           let refs = response.data;
@@ -218,12 +219,8 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
         function(response){
           console.log(response);
           if (response.status == 400) {
-            let error_idx = response.data.index + 1;
-            notifyservice.add('danger',
-              'There was a problem with reference '
-              + error_idx + ': ' + response.data.field + ': '
-              + response.data.type
-            );
+            error_message = response.data.message;
+            notifyservice.add('danger', error_message);
           } else if (response.status == 500) {
             notifyservice.add('danger',
              'Something went wrong.  The reference(s) could not be added.'

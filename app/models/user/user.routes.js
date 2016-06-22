@@ -7,7 +7,6 @@ let DUP_KEY_ERR = 11000;
 module.exports = function(app) {
 
 	app.get('/api/users/check-if-signed-in', function(req,res) {
-		console.log('checking..')
     if(req.isAuthenticated()) {
 	    res.json({authenticated: true, user:req.user});
     } else {
