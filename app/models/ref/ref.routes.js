@@ -1,5 +1,7 @@
 var _ = require('lodash');
 var Ref = require('./Ref');
+var rfr = require('rfr');
+let bibtexParse = rfr('public/libs/bibtex-parse-js/bibtexParse.js');
 
 function authorize_ref(ref_id, user_id, res, next, fail) {
   Ref.findById(ref_id, function(err, ref){
@@ -213,55 +215,99 @@ module.exports = function(app) {
 		});
 	});
 
-  // Add severall new references at once
-  app.post('/api/refs/add-many', function(req, res){
+  let validate_multiple_refs = function(req, res, next){
     let refs = req.body;
-    let created_refs = [];
-    let errors = [];
+    req.created_refs = [];
+    req.errors = [];
     for (let i = 0; i < refs.length; i++) {
       let ref = refs[i];
       ref.user_id = req.user._id;
       let created_ref = new Ref(ref);
-      created_refs.push(created_ref);
+      req.created_refs.push(created_ref);
       created_ref.validate(function(err){
         if(err) {
-          errors.push({index: i, error: err});
-        }
-        // If we've validated them all, proceed to the next step
-        if (i == refs.length - 1) {
-          continue_add_many(created_refs, errors, res);
+          req.errors.push({index: i, error: err});
         }
       });
+      if (i + 1 === refs.length) {
+        next();
+      }
     }
-  });
-  function continue_add_many(created_refs, errors, res) {
-    if (errors.length) {
-      var first_error = errors[0].error.errors;
-      var err_field = Object.keys(first_error)[0];
+  };
+
+  function continue_add_many(req, res, next) {
+
+    if (req.errors.length) {
+
+      var first_error = req.errors[0].error.errors;
+      var err_field = Object.keys(first_error)[0] + 1; // make it 1-indexed for the user
       var err_type = first_error[err_field].kind
-      var err_index = errors[0].index;
-      err = {index: err_index, type: err_type, field: err_field};
-      res.status(400).json(err);
+      var err_index = req.errors[0].index;
+      message = (
+        'There was a problem with reference '
+        + err_index + ': ' + err_field + ': ' + err_type + '.'
+      )
+      res.status(400).json({message:message});
+
     } else {
+
       let saved_refs = [];
-      for (let i = 0; i< created_refs.length; i++) {
-        created_refs[i].save(function(err, ref) {
+      for (let i = 0; i< req.created_refs.length; i++) {
+        req.created_refs[i].save(function(err, ref) {
           if(err) {
             res.status(400).json(err);
+          } else {
+            saved_refs.push(ref);
+            if (i == req.created_refs.length - 1) {
+              res.json(saved_refs);
+            }
           }
-          saved_refs.push(ref);
-          if (i == created_refs.length - 1) {
-            res.json(saved_refs);
-          }
-        })
+        });
       }
+
     }
   }
 
+  // Add severall new references at once
+  app.post('/api/refs/add-many', validate_multiple_refs, continue_add_many);
 
-  app.post('/api/refs/import-bibtex', function(req, res, next){
-    res.send(req.body.bibtex);
-  });
+  let parse_bibtex = function(req, res, next) {
+
+    // First try to parse and act on errors
+    console.log(req.bibtex);
+    try {
+      var parsed = bibtexParse.toJSON(req.bibtex);
+    } catch (e) {
+      console.log(e);
+      res.status(400).json({'message':e});
+
+    }
+    //finally {
+    //  // Now nowrmalize the references before passing on to validation
+    //  console.log(parsed);
+    //  res.send('stop');
+    //  //let refs_to_add = [];
+    //  //let keys = Object.keys(parsed);
+    //  //for (let i = 0; i < keys.length; i++) {
+    //  //  let ref = {}
+    //  //  for (let j in parsed[i].entryTags) {
+    //  //    ref[j.toLowerCase()] = parsed[i].entryTags[j];
+    //  //  }
+    //  //  ref.ref_type = parsed[i].entryType.toLowerCase();
+    //  //  if(parsed[i].citationKey) {
+    //  //    ref.citation_key = parsed[i].citationKey;
+    //  //  }
+    //  //  console.log(ref);
+    //  //  refs_to_add.push(ref);
+    //  //  if(i+1 == keys.length) {
+    //  //    req.body = refs_to_add;
+    //  //    next();
+    //  //  }
+    //  //}
+    //}
+  }
+
+  app.post('/sapi/refs/import-bibtex', parse_bibtex);//, validate_multiple_refs, continue_add_many);
 
   // Deletes the specified reference
   app.delete('/api/refs', function(req, res, next){
