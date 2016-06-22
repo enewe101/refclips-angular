@@ -6,7 +6,7 @@ refs .ref-list {
   -webkit-column-count: 3;
   -moz-column-count: 3;
   column-count: 3;
-  min-height: 300px;
+  min-height: 900px;
 }
 
 refs label {
