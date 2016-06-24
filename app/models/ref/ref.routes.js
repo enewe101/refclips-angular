@@ -217,8 +217,8 @@ module.exports = function(app) {
 
   let validate_multiple_refs = function(req, res, next){
     let refs = req.body;
-	console.log('validation beginning:');
-	console.log(refs);
+  	console.log('validation beginning:');
+  	console.log(refs);
     req.created_refs = [];
     req.errors = [];
     for (let i = 0; i < refs.length; i++) {
@@ -239,6 +239,8 @@ module.exports = function(app) {
 
   function continue_add_many(req, res, next) {
 
+    console.log('adding');
+    
     if (req.errors.length) {
 
       var first_error = req.errors[0].error.errors;
@@ -276,6 +278,7 @@ module.exports = function(app) {
   let parse_bibtex = function(req, res, next) {
 
     // First try to parse and act on errors
+    console.log('parsing');
     try {
       var parsed = bibtexParse.toJSON(req.body.bibtex);
     } catch (e) {
