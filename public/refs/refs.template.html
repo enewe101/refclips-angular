@@ -1,5 +1,5 @@
 <div class="ref-list">
-  <ref ng-repeat="aref in reflistservice.recently_added_refs"
+  <ref class="recently-added-ref" ng-repeat="aref in reflistservice.recently_added_refs"
       delete-callback="delete" thisref='aref' id="{{aref._id}}"></ref>
   <ref ng-repeat="aref in reflistservice.refs"
     delete-callback="delete" thisref='aref' id="{{aref._id}}"></ref>

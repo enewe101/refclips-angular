@@ -1,0 +1,7 @@
+paginate .page {
+  width: 30px;
+}
+
+paginate label {
+  width: auto;
+}

@@ -1,0 +1,6 @@
+<span ng-click="prev()" class="btn btn-xs btn-default prev">&lt; prev</span>
+<label>page: </label>
+<input ng-keyup="go($event)" class="page" ng-model="page">
+of
+<span class="total-pages">{{reflistservice.max_page}}</span>
+<span ng-click="next()" class="btn btn-xs btn-default next">next &gt;</span>

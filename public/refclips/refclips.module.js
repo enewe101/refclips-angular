@@ -2,7 +2,7 @@
 
 var app = angular.module('refclips',[
   'ngAnimate', 'ui.router', 'refs', 'labelpicker', 'header', 'notify',
-  'passwordauthenticate', 'userStatus'
+  'passwordauthenticate', 'userStatus', 'paginator'
 ]);
 
 app.controller('signedincontroller', function($rootScope, $scope, reflistservice){

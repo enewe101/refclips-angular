@@ -15,6 +15,11 @@ ref .refs-ref {
   min-height: 318px;
 }
 
+ref.recently-added-ref .refs-ref {
+  border: solid 1px rgb(200,200,255);
+  box-shadow: 0px 0px 4px rgba(0,0,255,0.3);
+}
+
 ref textarea {
   overflow: scroll;
   min-height: 400px;
