@@ -8,33 +8,15 @@ angular.module('refs').directive('ref', function(){
     },
     controller: 'refcontroller',
     link: function(scope, element){
-
-      // We're going to do a one-time adjustment of the text areas to fit
-      // their contents, or to expand to the available space (whichever is
-      // larger).  We need to do it in a timeout to give the content time to
-      // finish rendering.
+      // Now make the reference element itself (not the textarea) expand if
+      // the user types in a textarea that is partially hidden.
       let textarea = element.find('textarea');
       let retainer = element.find('.retainer');
       let expander = element.find('.expander');
-      let ref = element.closest('ref');
-      setTimeout(function(){
-          let ref_offset = ref.offset().top;
-          let text_offset = textarea.offset().top;
-          let text_relative_offset = text_offset - ref_offset;
-          let padding = 18;
-          let available_space = ref.height() - text_relative_offset - padding;
-          textarea.css({'min-height': available_space});
-          autogrow(textarea[0]);
-        }, 3000
-      );
-
-      // Now make the reference element itself (not the textarea) expand if
-      // the user types in a textarea that is partially hidden.
-      textarea.on('keydown', function(){
-        if(expander.height() > retainer.height()){
-          scope.retained = false;
-        }
+      textarea.on('keyup', function(){
+        scope.$apply(function(){scope.retained = false;});
       });
+
     }
   };
 });

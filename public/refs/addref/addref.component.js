@@ -117,7 +117,7 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
 
   let service = {
     labels: [],
-    limit: 50,
+    limit: 200,
     page: 0,
     num_refs: 100,
     max_page: 10,
@@ -156,8 +156,7 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
           // Note where this ref is stored for reverse lookup of by its _id
           service.ref_lookup[ref._id] = {list: service.refs, idx: i}
         }
-        setTimeout(adjust_padding, 10);
-        setTimeout(adjust_padding, 2000);
+        setTimeout(adjust_padding, 200);
         setTimeout(adjust_padding, 8000);
       },
       function(response) {$state.go('signedout');}
