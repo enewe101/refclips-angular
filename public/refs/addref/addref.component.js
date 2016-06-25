@@ -117,7 +117,7 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
 
   let service = {
     labels: [],
-    limit: 200,
+    limit: 20,
     page: 0,
     num_refs: 100,
     max_page: 10,

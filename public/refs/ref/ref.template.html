@@ -2,7 +2,7 @@
   <div ng-class="{retained:retained}" class="retainer">
     <div class="expander">
 
-      <div ng-if="!editing">
+      <div ng-hide="editing">
 
         <div class="ref-top">
           <!-- Delete and edit buttons -->
@@ -19,24 +19,24 @@
           </div>
 
           <!-- Title -->
-          <span class="title">{{thisref.title}}</span>
-          <span class="ref_type">{{thisref.ref_type}}</span>
+          <span class="show-title">{{::thisref.title}}</span>
+          <span class="show-ref_type">{{::thisref.ref_type}}</span>
           <div class="clearfix"></div>
         </div>
 
         <div class="ref-middle">
 
           <!-- Most other details -->
-          <span class="author">{{thisref.author}}</span>
-          <span class="booktitle">{{thisref.booktitle}}</span>
-          <span class="year">{{thisref.year}}</span>
-          <span class="citation_key">{{thisref.citation_key}}</span>
-          <span class="url"><a target="_blank" href="{{thisref.url}}">{{thisref.url}}</a></span>
+          <span class="show-author">{{::thisref.author}}</span>
+          <span class="show-booktitle">{{::thisref.booktitle}}</span>
+          <span class="show-year">{{::thisref.year}}</span>
+          <span class="show-citation_key">{{::thisref.citation_key}}</span>
+          <span class="show-url"><a target="_blank" href="{{::thisref.url}}">{{::thisref.url}}</a></span>
 
           <!-- Labels -->
           <div class="labels-wrapper">
             <labelpicker labelchanged="update_label" pickerid="thisref._id" activelabels="activelabels"></labelpicker>
-            <span class="label label-default" ng-repeat="label in thisref.labels track by label._id">{{label.name}}</span>
+            <span class="label label-default" ng-repeat="label in thisref.labels track by label._id">{{::label.name}}</span>
           </div>
           <filebunch changed="save_ref" files="thisref.files" class="files" formdata="{ref_id:thisref._id}"></filebunch>
           <div class="clearfix"></div>
@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div ng-if="editing">
+      <div ng-show="editing">
         <div class="ref-top">
           <div class="pull-right right-buttons">
             <button ng-click="cancel_edit()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-chevron-left"></span> cancel</button>
@@ -52,19 +52,19 @@
             <div class="clearfix"></div>
             <span class="fade" ng-if="show_details_saved">saved</span>
           </div>
-          <div><label class="form">title: </label><input ng-model="edited_ref.title"></div>
-          <div><label class="form">ref type: </label><reftype model="edited_ref.ref_type"></reftype></div>
+          <div><label class="form">title: </label><input class="form-title" ></div>
+          <div><label class="form">ref type: </label><reftype ></reftype></div>
 
           <div class="clearfix"></div>
         </div>
 
         <div class="ref-middle">
 
-          <div><label class="form">author: </label><input ng-model="edited_ref.author"></div>
-          <div><label class="form">booktitle: </label><input ng-model="edited_ref.booktitle"></div>
-          <div><label class="form">year: </label><input ng-model="edited_ref.year"></div>
-          <div><label class="form">cite key: </label><input ng-model="edited_ref.citation_key"></div>
-          <div><label class="form">url: </label><input ng-model="edited_ref.url"></div>
+          <div><label class="form">author: </label><input class="form-author"></div>
+          <div><label class="form">book title: </label><input class="form-booktitle"></div>
+          <div><label class="form">year: </label><input class="form-year"></div>
+          <div><label class="form">cite key: </label><input class="form-citation_key"></div>
+          <div><label class="form">url: </label><input class="form-url"></div>
 
         </div>
 
@@ -73,7 +73,7 @@
 
       <div class="ref-bottom">
         <span class="pull-right fade" ng-if="show_notes_saved">saved</span>
-        <textarea class="autogrow notes" ng-keyup="notes_changed()" ng-model="thisref.notes" placeholder="your notes"></textarea>
+        <textarea class="autogrow notes" ng-keyup="notes_changed()" value="{{::thisref.notes}}" placeholder="your notes"></textarea>
       </div>
 
     </div><!-- end of expander -->

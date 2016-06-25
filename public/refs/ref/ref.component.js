@@ -22,11 +22,10 @@ angular.module('refs').directive('ref', function(){
 });
 
 angular.module('refs').controller('refcontroller',
-  function RefsController($http, $timeout, $scope) {
+  function RefsController($http, $timeout, $scope, $element) {
 
     // Temporary model for holding edits.  It's bound to the edit form.
     $scope.edited_ref = $.extend({},$scope.thisref);
-    $scope.upload_data = [{refid: $scope.thisref}];
 
     $scope.save_ref = function() {
       console.log($scope.thisref);
@@ -109,17 +108,47 @@ angular.module('refs').controller('refcontroller',
     $scope.editing = false;
     $scope.start_edit = function(){
       $scope.editing = true;
+      $element.find('.form-title').val($scope.thisref.title);
+      $element.find('reftype select').val($scope.thisref.ref_type);
+      $element.find('.form-author').val($scope.thisref.author);
+      $element.find('.form-year').val($scope.thisref.year);
+      $element.find('.form-booktitle').val($scope.thisref.booktitle);
+      $element.find('.form-url').val($scope.thisref.url);
+      $element.find('.form-citation_key').val($scope.thisref.citation_key);
     };
     $scope.cancel_edit = function(){
       $scope.editing = false;
-      $scope.edited_ref = $.extend({}, $scope.thisref);
     };
 
     $scope.save_edit = function() {
-      $http.put('/api/refs', $scope.edited_ref).then(
+
+      $scope.thisref.title = $element.find('.form-title').val();
+      $scope.thisref.reftype = $element.find('reftype select').val();
+      $scope.thisref.author = $element.find('.form-author').val();
+      $scope.thisref.year = $element.find('.form-year').val();
+      $scope.thisref.booktitle = $element.find('.form-booktitle').val();
+      $scope.thisref.url = $element.find('.form-url').val();
+      $scope.thisref.citation_key = $element.find('.form-citation_key').val();
+
+      $element.find('.show-title').text($scope.thisref.title);
+      $element.find('.show-ref_type').text($scope.thisref.ref_type);
+      $element.find('.show-author').text($scope.thisref.author);
+      $element.find('.show-year').text($scope.thisref.year);
+      $element.find('.show-booktitle').text($scope.thisref.booktitle);
+      $element.find('.show-url').text($scope.thisref.url);
+      $element.find('.show-citation_key').text($scope.thisref.citation_key);
+
+      $http.put('/api/refs', $scope.thisref).then(
         function(response){
           $scope.flash_details_saved();
           $scope.thisref = $scope.edited_ref;
+          $element.find('.show-title').text($scope.thisref.title);
+          $element.find('.show-ref_type').text($scope.thisref.ref_type);
+          $element.find('.show-author').text($scope.thisref.author);
+          $element.find('.show-year').text($scope.thisref.year);
+          $element.find('.show-booktitle').text($scope.thisref.booktitle);
+          $element.find('.show-url').text($scope.thisref.url);
+          $element.find('.show-citation_key').text($scope.thisref.citation_key);
           $scope.editing = false;
         },
         function(response){console.log(response);}

@@ -54,12 +54,12 @@ ref .flipped {
   margin-left: -6px;
 }
 
-ref .title {
+ref .show-title {
   font-size: 1.3em;
   font-weight: bold;
 }
 
-ref .ref_type {
+ref .show-ref_type {
   color: orange;
   font-size: 1.0em;
 }
