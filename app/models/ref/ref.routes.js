@@ -323,8 +323,23 @@ module.exports = function(app) {
   },
   // Now make the update
   function(req, res) {
-    Ref.findByIdAndUpdate(req.body._id, req.body, function(err, ref){
-      if(err){res.status(400).send(err); console.log(err);}
+	//Ref.findById(req.body._id, function(err, ref){
+	//	console.log('original id: ' + ref._id);
+	//	console.log('update id: ' + req.body._id);
+	//	res.send('debug');
+	//});
+
+	console.log(req.body);
+	let _id = req.body._id;
+	delete req.body._id;
+    Ref.findByIdAndUpdate(_id, req.body, function(err, ref){
+      if(err){
+		  console.log('error:');
+		  console.log(err);
+		  res.status(400).send(err); 
+	  }
+	  console.log('new ref');
+	  console.log(ref);
       res.json(ref);
     });
   });
