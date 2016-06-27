@@ -1,4 +1,4 @@
-let uploader = angular.module('uploader', ['lr.upload'])
+let uploader = angular.module('uploader', []);
 
 uploader.directive('uploader', function($parse) {
   return {

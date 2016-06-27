@@ -1,4 +1,4 @@
-angular.module('refs').directive('ref', function(){
+angular.module('refs').directive('ref', function($http){
   return {
     templateUrl: 'refs/ref/ref.template.html',
     restrict: 'E',
@@ -9,55 +9,173 @@ angular.module('refs').directive('ref', function(){
     controller: 'refcontroller',
     link: function(scope, element){
 
-      // We're going to do a one-time adjustment of the text areas to fit
-      // their contents, or to expand to the available space (whichever is
-      // larger).  We need to do it in a timeout to give the content time to
-      // finish rendering.
-      let textarea = element.find('textarea');
-      let retainer = element.find('.retainer');
-      let expander = element.find('.expander');
-      let ref = element.closest('ref');
-      setTimeout(function(){
-          let ref_offset = ref.offset().top;
-          let text_offset = textarea.offset().top;
-          let text_relative_offset = text_offset - ref_offset;
-          let padding = 18;
-          let available_space = ref.height() - text_relative_offset - padding;
-          textarea.css({'min-height': available_space});
-          autogrow(textarea[0]);
-        }, 3000
-      );
+      // Behavior for the expansion of the ref when clicking on the small
+      // downward-pointing arrow or writin in the text area is set up in the
+      // link function for the reflist (refs.module.js) (note "refs" is plural)
 
-      // Now make the reference element itself (not the textarea) expand if
-      // the user types in a textarea that is partially hidden.
-      textarea.on('keydown', function(){
-        if(expander.height() > retainer.height()){
-          scope.retained = false;
-        }
+      // Bind a reference to the dom elements needed to sync edit form and model
+      let form_title = element.find('.form-title')
+      let reftype_select = element.find('reftype select')
+      let form_author = element.find('.form-author')
+      let form_year = element.find('.form-year')
+      let form_booktitle = element.find('.form-booktitle')
+      let form_url = element.find('.form-url')
+      let form_citation_key = element.find('.form-citation_key')
+
+      // Bind reference to DOM elm's needed to sync non-editable display and model
+      let show_title = element.find('.show-title');
+      let show_ref_type = element.find('.show-ref_type');
+      let show_author = element.find('.show-author');
+      let show_year = element.find('.show-year');
+      let show_booktitle = element.find('.show-booktitle');
+      let show_url = element.find('.show-url');
+      let show_citation_key = element.find('.show-citation_key');
+
+      // Bind reference to DOM elm's for syncing ref's notes
+      let form_notes = element.find('.notes');
+
+      // Syncs: form gets model's values
+      let copy_form_to_model = function(){
+        form_title.val(scope.thisref.title);
+        reftype_select.val(scope.thisref.reftype);
+        form_author.val(scope.thisref.author);
+        form_year.val(scope.thisref.year);
+        form_booktitle.val(scope.thisref.booktitle);
+        form_url.val(scope.thisref.form_url);
+        form_citation_key.val(scope.thisref.citation_key);
+      };
+
+      // Syncs: model gets form's values
+      let copy_model_to_form = function(){
+        scope.thisref.title = form_title.val();
+        scope.thisref.reftype = reftype_select.val();
+        scope.thisref.author = form_author.val();
+        scope.thisref.year = form_year.val();
+        scope.thisref.booktitle = form_booktitle.val();
+        scope.thisref.form_url = form_url.val();
+        scope.thisref.citation_key = form_citation_key.val();
+      };
+
+      // Syncs: display gets model's values
+      let copy_display_to_model = function() {
+        show_title.text(scope.thisref.title);
+        show_ref_type.text(scope.thisref.ref_type);
+        show_author.text(scope.thisref.author);
+        show_year.text(scope.thisref.year);
+        show_booktitle.text(scope.thisref.booktitle);
+        show_url.text(scope.thisref.url);
+        show_citation_key.text(scope.thisref.citation_key);
+      }
+
+      let copy_notes_to_model = function() {
+        scope.thisref.notes = form_notes.val();
+      }
+
+      // Bind a reference to dom elements needed to show/hide edit form
+      let ref_details = element.find('.show-ref-details');
+      let ref_form = element.find('.ref-form')
+
+      // Shows the form to edit the ref's details
+      let show_form = function(){
+        ref_details.css('display', 'none');
+        ref_form.css('display', 'block');
+      };
+
+      // Hides the form to edit ref; shows non-editable view
+      let hide_form = function(){
+        ref_details.css('display', 'block');
+        ref_form.css('display', 'none');
+      };
+
+      // When "edit" button clicked, show a form for editing ref's details
+      element.find('.click-start-edit').on('click', function(){
+        // Make sure the form reflects the current state of the model
+        copy_form_to_model();
+        // Display the form for editing ref's details
+        show_form();
       });
-    }
-  };
-});
+
+      // When "cancel" button clicked, hide edit form
+      element.find('.click-cancel-edit').on('click', function(){
+        // Display the edit form
+        hide_form();
+      });
+
+      // When "save" button clicked do the following:
+      //  - copy form's values onto model
+      //  - then update the database,
+      //  - hide the edit form
+      element.find('.click-save-edit').on('click', function() {
+        // Copy the form values to the model
+        copy_model_to_form();
+        // Update the database entry for this ref
+        $http.put('/api/refs', scope.thisref).then(
+          // On successful db update, hide form, make regular dislay reflect
+          // model, and flash a "saved" message.
+          function(response){
+            hide_form();
+            copy_display_to_model();
+            flash_saved();
+          },
+          // On error during db update, log the response to the console
+          function(response){console.log(response);}
+        );
+      });
+
+      // Responsible for responding to the event that notes were changed.
+      // After a timeout, initiates updating of notes in db.
+      element.find('.notes').on('keyup', function(){
+        console.log('notes changed');
+        if (typeof notes_changed_timer !== 'undefined') {
+          clearTimeout(notes_changed_timer);
+        }
+        notes_changed_timer = setTimeout(function(){
+          update_notes();
+        }, 2000);
+      });
+
+      // Send updated notes for the reference
+      let update_notes = function() {
+        copy_notes_to_model();
+        console.log('updating notes');
+        $http.put('/api/refs', scope.thisref).then(
+          function(response){
+            flash_saved()
+            console.log('success');
+          },
+          function(response){console.log(response);}
+        )
+      }
+
+      // bind elm's needed to display a "saved" message
+      let show_saved = element.find('.show-saved');
+
+      // Show a "saved" message on the ref for a couple seconds
+      let flash_saved = function() {
+        console.log('flashing saved');
+        console.log(show_saved);
+        show_saved.css('display', 'block');
+        setTimeout(function(){
+          show_saved.css('display', 'none');
+        }, 2000);
+      };
+
+      scope.$on('removeLabelNow', function(){
+        console.log('Remove label');
+      });
+
+    } // end of link function
+  }; // end of directive definition object
+}); // end of directive creation function
 
 angular.module('refs').controller('refcontroller',
-  function RefsController($http, $timeout, $scope) {
-
-    // Temporary model for holding edits.  It's bound to the edit form.
-    $scope.edited_ref = $.extend({},$scope.thisref);
-    $scope.upload_data = [{refid: $scope.thisref}];
+  function RefsController($http, $timeout, $scope, $element) {
 
     $scope.save_ref = function() {
-      console.log($scope.thisref);
       $http.put('/api/refs', $scope.thisref).then(
         function(response){console.log(response);},
         function(response){console.log(response);}
       )
-    }
-
-    // used to constrain the height of the refs
-    $scope.retained = true;
-    $scope.toggle_retained = function() {
-      $scope.retained = !$scope.retained;
     }
 
     // Listen for the signal to remove given labels when the the label is
@@ -76,44 +194,6 @@ angular.module('refs').controller('refcontroller',
       $scope.activelabels[_id] = true;
     }
 
-    // Responsible for responding to the event that notes were changed.
-    // After a timeout, initiates updating of notes in db.
-    $scope.notes_changed = function() {
-      if ($scope.notes_changed_timer) {
-        clearTimeout($scope.notes_changed_timer);
-      }
-      $scope.notes_changed_timer = setTimeout(function(){
-        $scope.update_notes();
-      }, 2000);
-    }
-
-    // Send updated notes for the reference
-    $scope.update_notes = function() {
-      $http.put('/api/refs', $scope.thisref).then(
-        function(response){$scope.flash_notes_saved()},
-        function(response){console.log(response);}
-      )
-    }
-
-    // Show a "saved" message when the ref details were saved
-    $scope.show_details_saved = false;
-    $scope.flash_details_saved = function() {
-      $scope.show_details_saved = true;
-      $timeout(function(){
-        $scope.show_details_saved = false;
-      }, 2000);
-    };
-
-    // Show a "saved" message when the ref notes were saved
-    $scope.show_notes_saved = false;
-    $scope.flash_notes_saved = function() {
-      $scope.flash_details_saved();
-      //$scope.show_notes_saved = true;
-      //$timeout(function(){
-      //  $scope.show_notes_saved = false;
-      //}, 2000);
-    };
-
     // Ask user if they really want to delete.
     // If so call the parent controllers' delete callback (a binding)
     $scope.confirm_delete = function() {
@@ -121,29 +201,6 @@ angular.module('refs').controller('refcontroller',
         $scope.deleteCallback()($scope.thisref._id);
       }
     };
-
-    // Manage the editing state of reference.
-    // Template responds by either displaying editable or uneditable content.
-    $scope.editing = false;
-    $scope.start_edit = function(){
-      $scope.editing = true;
-    };
-    $scope.cancel_edit = function(){
-      $scope.editing = false;
-      $scope.edited_ref = $.extend({}, $scope.thisref);
-    };
-
-    $scope.save_edit = function() {
-      $http.put('/api/refs', $scope.edited_ref).then(
-        function(response){
-          $scope.flash_details_saved();
-          $scope.thisref = $scope.edited_ref;
-          $scope.editing = false;
-        },
-        function(response){console.log(response);}
-      );
-    }
-
 
     $scope.remove_label = function(label) {
       $scope.remove_label_remotely(label);

@@ -20,19 +20,13 @@ filter.controller('filtercontroller', function(reflistservice){
     }
 
     this.update_reflist = function() {
-      if(this.labels) {
-        let query = {};
-        if (this.labels.length) {
-          let statements = [];
-          for(let i = 0; i<this.labels.length; i++) {
-            statements.push({'labels.name': this.labels[i].name});
-          }
-          query = {'$and':statements}
-        }
-        reflistservice.get_refs(query);
-      } else {
-        reflistservice.get_refs();
+      reflistservice.labels = [];
+      // We also set the page back to zero whenever the filter changes
+      reflistservice.reset_page();
+      for(let i = 0; i<this.labels.length; i++) {
+        reflistservice.labels.push({'labels.name': this.labels[i].name});
       }
+      reflistservice.get_refs();
     }
 
     this.remove_label = function(label) {

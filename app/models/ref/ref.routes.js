@@ -23,17 +23,38 @@ module.exports = function(app) {
 
   // Route to get all refs
   app.post('/api/search-refs', function(req, res){
-    if(req.body) {
-      query = req.body;
-    } else {
-      query = {};
-    }
-    query.user_id = req.user._id;
-    Ref.find(query, function(err, refs){
+
+    // Get the query parameters, applying appropriate defaults
+    console.log(req.body);
+    let match = req.body.match ? req.body.match : {};
+    let skip = req.body.skip ? req.body.skip : 0;
+    let limit = req.body.limit ? req.body.limit : 20;
+
+    // Add the logged-in user's id to the query
+    match.user_id = req.user._id;
+
+    Ref.find(match).sort({createdAt:-1}).skip(skip).limit(limit).exec(function(err, refs){
       if (err) {res.status(500).send(err);}
       res.json(refs);
     });
   });
+
+  // Route to count the number of refs for a given query
+  app.post('/api/num-refs', function(req, res){
+
+    // Get the query parameters, applying appropriate defaults
+    console.log(req.body);
+    let match = req.body.match ? req.body.match : {};
+
+    // Add the logged-in user's id to the query
+    match.user_id = req.user._id;
+
+    Ref.find(match).count().exec(function(err, num){
+      if (err) {res.status(500).send(err);}
+      res.json(num);
+    });
+  });
+
 
   // Route to get all refs
   //app.get('/api/refs', function(req, res){
@@ -217,8 +238,8 @@ module.exports = function(app) {
 
   let validate_multiple_refs = function(req, res, next){
     let refs = req.body;
-	console.log('validation beginning:');
-	console.log(refs);
+  	console.log('validation beginning:');
+  	console.log(refs);
     req.created_refs = [];
     req.errors = [];
     for (let i = 0; i < refs.length; i++) {
@@ -238,6 +259,8 @@ module.exports = function(app) {
   };
 
   function continue_add_many(req, res, next) {
+
+    console.log('adding');
 
     if (req.errors.length) {
 
@@ -276,6 +299,7 @@ module.exports = function(app) {
   let parse_bibtex = function(req, res, next) {
 
     // First try to parse and act on errors
+    console.log('parsing');
     try {
       var parsed = bibtexParse.toJSON(req.body.bibtex);
     } catch (e) {

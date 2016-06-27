@@ -4,7 +4,14 @@ function autogrow(element) {
 }
 
 $(document).ready(function(){
-  $(document).delegate('.autogrow', 'keyup', function() {
-    autogrow(this);
+  let delegate_timeout = null;
+  $(document).on('keyup', '.autogrow', function() {
+      let that = this;
+      if(delegate_timeout == null) {
+        delegate_timeout = setTimeout(function() {
+          autogrow(that);
+          delegate_timeout = null;
+        }, 1000);
+      }
   });
 });

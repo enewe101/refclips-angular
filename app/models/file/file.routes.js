@@ -43,7 +43,7 @@ module.exports = function(app) {
   app.delete('/api/files', function(req, res, next){
     authorize_file(req.query._id, req.user._id, res, next);
   },
-  function(req, res) {
+  function(req, res, next) {
     // First get the file path and delete the actual file from the file system
     File.findById(req.query._id, function(err, f){
       if(err) {

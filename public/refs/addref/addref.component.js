@@ -116,6 +116,11 @@ refs.controller('refscontroller', function($http, $timeout, $scope, reflistservi
 refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice) {
 
   let service = {
+    labels: [],
+    limit: 20,
+    page: 0,
+    num_refs: 100,
+    max_page: 10,
     refs: [],
     recently_added_refs: [],
     ref_lookup: {},
@@ -123,20 +128,26 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
 
   var adjust_padding = function() {
     $rootScope.$broadcast('adjust-padding');
-    //let container_width = $('.ref-list').outerWidth();
-    //let margin = 28;
-    //let refs = $('.ref-list').children();
-    //if (refs.length) {
-    //  var item_width = $(refs[0]).outerWidth();
-    //}
-    //let num_in_row = Math.floor(container_width / (item_width + margin));
-    //let space_left = container_width - (num_in_row * (item_width + margin));
-    //$('.ref-list').css({'padding-left':space_left/2-1});
   };
 
+  service.reset_page = function() {
+    service.page = 0;
+    $rootScope.$broadcast('reset-page');
+  }
   // Gets the references from the db
-  service.get_refs = function(query) {
-    query = query || {};
+  service.get_refs = function(match) {
+
+    let query = {
+      match: match || {},
+      skip: service.page * service.limit,
+      limit: service.limit
+    }
+
+    // Add the labels to the query
+    if (service.labels.length) {
+      query.match['$and'] = service.labels;
+    }
+
     $http.post('/api/search-refs', query).then(
       function(response) {
         service.refs = response.data;
@@ -145,11 +156,19 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
           // Note where this ref is stored for reverse lookup of by its _id
           service.ref_lookup[ref._id] = {list: service.refs, idx: i}
         }
-        setTimeout(adjust_padding, 10);
-        setTimeout(adjust_padding, 2000);
+        setTimeout(adjust_padding, 200);
         setTimeout(adjust_padding, 8000);
       },
       function(response) {$state.go('signedout');}
+    );
+
+    // After satisfying the post, update the number of pages that can be shown
+    $http.post('/api/num-refs', query).then(
+      function(response){
+        service.num_refs = response.data;
+        service.max_page = Math.ceil(service.num_refs / service.limit);
+      },
+      function(response){console.log(response)}
     );
   }
 
