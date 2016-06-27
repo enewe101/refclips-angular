@@ -14,13 +14,13 @@ angular.module('refs').directive('ref', function($http){
       // link function for the reflist (refs.module.js) (note "refs" is plural)
 
       // Bind a reference to the dom elements needed to sync edit form and model
-      let form_title = element.find('.form-title')
-      let reftype_select = element.find('reftype select')
-      let form_author = element.find('.form-author')
-      let form_year = element.find('.form-year')
-      let form_booktitle = element.find('.form-booktitle')
-      let form_url = element.find('.form-url')
-      let form_citation_key = element.find('.form-citation_key')
+      let form_title = element.find('.form-title');
+      let reftype_select = element.find('reftype select');
+      let form_author = element.find('.form-author');
+      let form_year = element.find('.form-year');
+      let form_booktitle = element.find('.form-booktitle');
+      let form_url = element.find('.form-url');
+      let form_citation_key = element.find('.form-citation_key');
 
       // Bind reference to DOM elm's needed to sync non-editable display and model
       let show_title = element.find('.show-title');
@@ -35,35 +35,37 @@ angular.module('refs').directive('ref', function($http){
       let form_notes = element.find('.notes');
 
       // Syncs: form gets model's values
-      let copy_form_to_model = function(){
+      let copy_model_to_form = function(){
         form_title.val(scope.thisref.title);
         reftype_select.val(scope.thisref.reftype);
         form_author.val(scope.thisref.author);
         form_year.val(scope.thisref.year);
         form_booktitle.val(scope.thisref.booktitle);
-        form_url.val(scope.thisref.form_url);
+        form_url.val(scope.thisref.url);
         form_citation_key.val(scope.thisref.citation_key);
       };
 
       // Syncs: model gets form's values
-      let copy_model_to_form = function(){
+      let copy_form_to_model = function(){
         scope.thisref.title = form_title.val();
         scope.thisref.reftype = reftype_select.val();
         scope.thisref.author = form_author.val();
         scope.thisref.year = form_year.val();
         scope.thisref.booktitle = form_booktitle.val();
-        scope.thisref.form_url = form_url.val();
+        scope.thisref.url = form_url.val();
         scope.thisref.citation_key = form_citation_key.val();
       };
 
       // Syncs: display gets model's values
-      let copy_display_to_model = function() {
+      let copy_model_to_display = function() {
         show_title.text(scope.thisref.title);
         show_ref_type.text(scope.thisref.ref_type);
         show_author.text(scope.thisref.author);
         show_year.text(scope.thisref.year);
         show_booktitle.text(scope.thisref.booktitle);
-        show_url.text(scope.thisref.url);
+        let link = $('<a>').attr({target: '_blank', href: scope.thisref.url}).text(scope.thisref.url);
+        show_url.empty();
+        show_url.append(link);
         show_citation_key.text(scope.thisref.citation_key);
       }
 
@@ -90,7 +92,7 @@ angular.module('refs').directive('ref', function($http){
       // When "edit" button clicked, show a form for editing ref's details
       element.find('.click-start-edit').on('click', function(){
         // Make sure the form reflects the current state of the model
-        copy_form_to_model();
+        copy_model_to_form();
         // Display the form for editing ref's details
         show_form();
       });
@@ -107,14 +109,14 @@ angular.module('refs').directive('ref', function($http){
       //  - hide the edit form
       element.find('.click-save-edit').on('click', function() {
         // Copy the form values to the model
-        copy_model_to_form();
+        copy_form_to_model();
         // Update the database entry for this ref
         $http.put('/api/refs', scope.thisref).then(
           // On successful db update, hide form, make regular dislay reflect
           // model, and flash a "saved" message.
           function(response){
             hide_form();
-            copy_display_to_model();
+            copy_model_to_display();
             flash_saved();
           },
           // On error during db update, log the response to the console
