@@ -15,6 +15,10 @@ ref .refs-ref {
   min-height: 318px;
 }
 
+ref .ref-form {
+  display: none;
+}
+
 ref.recently-added-ref .refs-ref {
   border: solid 1px rgb(200,200,255);
   box-shadow: 0px 0px 4px rgba(0,0,255,0.3);
@@ -126,21 +130,8 @@ ref labelpicker {
   min-width: 80px;
 }
 
-ref .fade {
-  opacity:1;
-  color: rgb(80,80,255);
-}
-
-.fade.ng-leave {
-  transition:0.5s linear all;
-  opacity:1;
-}
-
-.fade.ng-leave.ng-leave-active {
-  opacity:0;
-}
-
-ref .saved {
+ref .show-saved {
+  display: none;
   position: absolute;
   left: calc(50% - 30px);
   padding: 0px 4px;

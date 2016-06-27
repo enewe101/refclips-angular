@@ -165,7 +165,6 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
     // After satisfying the post, update the number of pages that can be shown
     $http.post('/api/num-refs', query).then(
       function(response){
-        console.log(response);
         service.num_refs = response.data;
         service.max_page = Math.ceil(service.num_refs / service.limit);
       },

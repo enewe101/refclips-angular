@@ -5,13 +5,14 @@ var app = angular.module('refclips',[
   'passwordauthenticate', 'userStatus', 'paginator'
 ]);
 
-app.controller('signedincontroller', function($rootScope, $scope, reflistservice){
-  $scope.$on('$viewContentLoaded', function(){
-    reflistservice.get_refs();
-  });
-});
 
-app.config(function($stateProvider, $urlRouterProvider) {
+app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
+
+  // Supposed to speed loading time by grouping together template loads into
+  // small batches that then trigger only one digest cycle.
+  // see https://docs.angularjs.org/api/ng/provider/$httpProvider
+  $httpProvider.useApplyAsync(true);
+
   $stateProvider
     .state('signedout', {
       templateUrl: 'refclips/signed-out.template.html',
@@ -27,6 +28,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: 'refclips/signed-in.template.html',
       controller: 'signedincontroller'
     });
+});
+
+
+app.controller('signedincontroller', function($rootScope, $scope, reflistservice){
+  $scope.$on('$viewContentLoaded', function(){
+    reflistservice.get_refs();
+  });
 });
 
 app.controller('refclipscontroller', function($rootScope, reflistservice){

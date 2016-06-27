@@ -1,16 +1,16 @@
 <div class="refs-ref">
-  <div ng-class="{retained:retained}" class="retainer">
+  <div class="retainer retained">
     <div class="expander">
 
-      <div ng-hide="editing">
+      <div class="show-ref-details">
 
         <div class="ref-top">
           <!-- Delete and edit buttons -->
 
-          <span class="saved fade" ng-if="show_details_saved">saved</span>
+          <span class="show-saved">saved</span>
 
           <div class="centering pull-right right-buttons">
-            <button ng-click="start_edit()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span> edit</button>
+            <button class="click-start-edit btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span> edit</button>
             <div class="clearfix"></div>
             <button ng-click="confirm_delete()" class="btn btn-default btn-xs pull-right">
               <span class="glyphicon glyphicon-fire"></span> delete
@@ -44,13 +44,12 @@
         </div>
       </div>
 
-      <div ng-show="editing">
+      <div class="ref-form">
         <div class="ref-top">
           <div class="pull-right right-buttons">
-            <button ng-click="cancel_edit()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-chevron-left"></span> cancel</button>
-            <button ng-click="save_edit()" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-save"></span> save</button>
+            <button class="click-cancel-edit btn btn-default btn-xs"><span class="glyphicon glyphicon-chevron-left"></span> cancel</button>
+            <button class="click-save-edit btn btn-default btn-xs"><span class="glyphicon glyphicon-save"></span> save</button>
             <div class="clearfix"></div>
-            <span class="fade" ng-if="show_details_saved">saved</span>
           </div>
           <div><label class="form">title: </label><input class="form-title" ></div>
           <div><label class="form">ref type: </label><reftype ></reftype></div>
@@ -72,14 +71,13 @@
 
 
       <div class="ref-bottom">
-        <span class="pull-right fade" ng-if="show_notes_saved">saved</span>
-        <textarea class="autogrow notes" ng-keyup="notes_changed()" value="{{::thisref.notes}}" placeholder="your notes"></textarea>
+        <textarea class="autogrow notes" ng-keyup="notes_changed()" placeholder="your notes">{{::thisref.notes}}</textarea>
       </div>
 
     </div><!-- end of expander -->
 
-    <div ng-click="toggle_retained()" class="expand">
-      <span ng-class="{flipped:!retained}">&#x25BF;</span>
+    <div class="expand click-toggle-retained">
+      <span class="retain-glyph">&#x25BF;</span>
     </div>
 
   </div><!-- endo of retainer -->
