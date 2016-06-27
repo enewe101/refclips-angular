@@ -81,6 +81,7 @@ module.exports = function(app) {
   },
   function(req, res) {
     let file = req.body;
+	delete file._id;
     File.findByIdAndUpdate(file._id, file, function(err, doc){
       if(err){res.status(400).send(err); console.log(err);}
       res.json(file);

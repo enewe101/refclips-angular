@@ -353,9 +353,12 @@ module.exports = function(app) {
 	//	res.send('debug');
 	//});
 
-	console.log(req.body);
 	let _id = req.body._id;
 	delete req.body._id;
+	delete req.body.createdAt;
+	delete req.body.updatedAt;
+	console.log('here');
+	console.log(req.body);
     Ref.findByIdAndUpdate(_id, req.body, function(err, ref){
       if(err){
 		  console.log('error:');
