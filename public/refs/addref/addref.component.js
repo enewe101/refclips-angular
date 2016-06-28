@@ -165,7 +165,11 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
         setTimeout(adjust_padding, 200);
         setTimeout(adjust_padding, 8000);
       },
-      function(response) {$state.go('signedout');}
+      function(response) {
+        if(response.status === 403) {
+          $state.go('signedout');
+        }
+      }
     );
 
     // After satisfying the post, update the number of pages that can be shown
