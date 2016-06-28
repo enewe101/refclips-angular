@@ -18,4 +18,9 @@ let ref_schema = new mongoose.Schema({
 }, {
 	timestamps: true
 });
+
+// Provide a full-text index
+ref_schema.index({'$**': 'text'});
+//ref_schema.index({title: 'text', citation_key: 'text', booktitle: 'text', author: 'text', year: 'text', url: 'text', labels});
+
 module.exports = mongoose.model('Ref', ref_schema);

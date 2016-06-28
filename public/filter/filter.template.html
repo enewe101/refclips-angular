@@ -1,4 +1,4 @@
-<labelpicker labelchanged="$ctrl.update_label" pickerid="filter" activelabels="$ctrl.activelabels"></labelpicker>
+<labelpicker labelchanged="update_label" pickerid="filter" activelabels="activelabels" toggletext="toggletext()"></labelpicker>
 <div class="labels-wrapper">
-  <span class="label label-default" ng-repeat="label in $ctrl.labels track by label._id">{{label.name}}</span>
+  <span class="label label-default" ng-repeat="label in labels track by label._id">{{label.name}}</span>
 </div>

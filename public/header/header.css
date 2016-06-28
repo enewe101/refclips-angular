@@ -80,3 +80,7 @@ header authentication password-signout span {
 .login-menu .drop {
   min-width: 200px;
 }
+
+header text-search {
+  margin-top: 10px;
+}

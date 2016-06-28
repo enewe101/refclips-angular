@@ -1,4 +1,4 @@
-angular.module('header', ['filter', 'lr.upload', 'userStatus']);
+angular.module('header', ['filter', 'lr.upload', 'userStatus', 'textsearch']);
 
 angular.module('header').component('header', {
   templateUrl: 'header/header.template.html',

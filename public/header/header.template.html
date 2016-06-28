@@ -12,13 +12,15 @@
       </ul>
     </li>
 
-    <li ng-if="$ctrl.userStatusService.user.username" id="filter-wrapper" class="menu-item" role="presentation" class="dropdown">
-          <filter></filter>
-    </li>
-
   </ul>
   <ul class="nav navbar-nav navbar-right">
 
+    <li ng-if="$ctrl.userStatusService.user.username" id="filter-wrapper" class="menu-item" role="presentation" class="dropdown">
+          <filter toggletext="'label-filter'"></filter>
+    </li>
+
+    <text-search ng-if="$ctrl.userStatusService.user.username"></text-search>
+    
     <dropmenu class="login-menu">
       <div
         class="pointer drop-toggle"

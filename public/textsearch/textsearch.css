@@ -1,0 +1,36 @@
+text-search {
+  display: inline-block;
+}
+text-search input {
+  color: black;
+  width: 450px;
+  height: 30px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+text-search .buttons {
+  margin-left: -32px;
+  display: inline-block;
+}
+
+text-search .search-icon, text-search .cancel-icon {
+  display: inline-block;
+  color: black;
+  padding: 6px;
+  cursor: pointer;
+}
+
+text-search button {
+  background: white;
+  border: none;
+}
+
+text-search button span {
+  background: white;
+  color: black;
+}
+
+text-search .hide {
+  display: none;
+}

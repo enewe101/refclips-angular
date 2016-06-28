@@ -150,6 +150,7 @@ angular.module('labelpicker').directive('labelpicker', function() {
   return {
     templateUrl: 'labelpicker/labelpicker.template.html',
     scope: {
+      toggletext: '&?',
       pickerid: '=',
       labelchanged: '&',
       activelabels: '='
@@ -161,6 +162,10 @@ angular.module('labelpicker').directive('labelpicker', function() {
       let id = random_chars(8);
       $($element.context).attr('id', id);
       $scope.id = id;
+
+      if($scope.toggletext) {
+        $element.find('.toggler-text').text($scope.toggletext());
+      }
 
 
     }

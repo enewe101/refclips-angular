@@ -116,6 +116,7 @@ refs.controller('refscontroller', function($http, $timeout, $scope, reflistservi
 refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice) {
 
   let service = {
+    text: '',
     labels: [],
     limit: 20,
     page: 0,
@@ -134,6 +135,7 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
     service.page = 0;
     $rootScope.$broadcast('reset-page');
   }
+
   // Gets the references from the db
   service.get_refs = function(match) {
 
@@ -146,6 +148,10 @@ refs.factory('reflistservice', function($rootScope, $state, $http, notifyservice
     // Add the labels to the query
     if (service.labels.length) {
       query.match['$and'] = service.labels;
+    }
+
+    if(service.text.trim()) {
+      query.match['$text'] = {'$search':service.text.trim()};
     }
 
     $http.post('/api/search-refs', query).then(
