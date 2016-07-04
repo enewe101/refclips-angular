@@ -29,6 +29,21 @@ refs filter {
   display: inline-block;
   margin-right: 24px;
 }
+refs labelpicker .labelpicker-container {
+  display: inline-block;
+}
+refs labelpicker .labels-wrapper {
+  display: inline-block;
+}
+
+refs labelpicker .label {
+  display: inline-block;
+  margin: 2px;
+  padding: 4px 4px 4px 4px;
+  font-size: 1em;
+}
+
+}
 
 refs text-search {
   display: inline-block;

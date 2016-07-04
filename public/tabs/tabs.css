@@ -5,6 +5,33 @@ tabs {
   height: 28px;
 }
 
+tabs .tabs-wrapper {
+  float: left;
+}
+
+tabs .add-tab {
+  display: inline-block;
+  position: relative;
+  height: 28px;
+  width: 36px;
+  display: inline-block;
+  background: rgb(200, 200, 200);
+  color: black;
+  z-index: 0;
+  margin-left: 2px;
+  cursor: pointer;
+  background: url('/images/add-tab.png') 0 0 no-repeat;
+}
+tabs .add-tab.active {
+  background: url('/images/add-tab-active.png') 0 0 no-repeat;
+}
+tabs .add-tab:hover {
+  background: url('/images/add-tab-hover.png') 0 0 no-repeat;
+}
+tabs .add-tab.active:hover {
+  background: url('/images/add-tab-active.png') 0 0 no-repeat;
+}
+
 tabs .tab {
   position: relative;
   padding: 0 20px 0 20px;

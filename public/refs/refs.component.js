@@ -2,6 +2,7 @@ angular.module('refs').directive('refs', function(){
   return {
     scope: {
       tabName: '&',
+      tabId: '&',
       viewsetName: '&'
     },
     restrict: 'E',
@@ -62,7 +63,8 @@ angular.module('refs').directive('refs', function(){
 angular.module('refs').controller('RefsController', function RefsController($compile, $element, $scope, reflistservice, tabservice) {
 
   $scope.initNumResults = 12;
-  let tab_id = $scope.tabName();
+  let tab_id = $scope.tabId();
+  let tab_name = $scope.tabName();
   let viewset_name = $scope.viewsetName();
 
   let query_model = {
@@ -79,7 +81,7 @@ angular.module('refs').controller('RefsController', function RefsController($com
   let update_tab_name = function() {
     new_tab_name = []
     if(!query_model.labels.length && !query_model.text) {
-      new_tab_name.push(tab_id);
+      new_tab_name.push(tab_name);
     }
     if (query_model.labels.length) {
       new_tab_name.push('<span class="glyphicon glyphicon-tag"></span> ' + truncate(20, query_model.labels[0].name));

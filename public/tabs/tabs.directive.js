@@ -4,6 +4,7 @@ angular.module('tabs').directive('tabs', function(tabservice){
       tabset: '&',
       inittab: '&'
     },
+    template: '<div class="tabs-wrapper"></div><div class="add-tab"></div>',
     controller: 'tabsController',
     link: function(scope, element){
 
@@ -12,9 +13,10 @@ angular.module('tabs').directive('tabs', function(tabservice){
 
       let tab_elms = {};
 
-      let activate_tab = function(tabname) {
+      let activate_tab = function(tab_id) {
+        console.log('activating ' + tab_id);
         for(let t in tab_elms) {
-          if (t === tabname) {
+          if (t == tab_id) {
             tab_elms[t].addClass('active');
           } else {
             tab_elms[t].removeClass('active');
@@ -22,20 +24,30 @@ angular.module('tabs').directive('tabs', function(tabservice){
         }
       };
 
+      let add_tab_elm = element.find('.add-tab');
+      add_tab_elm.on('mousedown', function(){add_tab_elm.addClass('active');})
+      add_tab_elm.on('mouseup', function(){add_tab_elm.removeClass('active');})
+      add_tab_elm.on('mouseout', function(){add_tab_elm.removeClass('active');})
+      add_tab_elm.on('click', function(){
+        tabservice.add_view(tabsetname);
+      })
+
       // TODO: we need a remove tab function too
-      let add_tab = function(tabname, do_activate, activate_view_callback) {
+      let tabs_wrapper = element.find('.tabs-wrapper');
+      let add_tab = function(tab_id, tabname, do_activate, activate_view_callback) {
         let new_tab_content = $('<div class="tab-content"></div>').text(tabname);
         let new_tab = $('<div class="tab"></div>');
         new_tab.append(new_tab_content);
         new_tab.on('click', function(){
-          activate_tab(tabname);
-          activate_view_callback(tabname);
+          activate_tab(tab_id);
+          activate_view_callback(tab_id);
         });
 
-        element.append(new_tab);
-        tab_elms[tabname] = new_tab;
+        tabs_wrapper.append(new_tab);
+        tab_elms[tab_id] = new_tab;
         if(do_activate) {
-          activate_tab(tabname);
+          activate_tab(tab_id);
+          activate_view_callback(tab_id);
         }
       }
 
