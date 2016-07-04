@@ -1,41 +1,12 @@
-<dropmenu onopen="apply_refresh_labels">
+<div class="labelpicker-container">
 
   <div
-    class="pointer drop-toggle"
-    data-toggle="dropdown"
-    aria-haspopup="true" aria-expanded="true">
-    <span class="toggler-text">labels</span>
+    class="pointer drop-toggle labelpicker-toggler">
+    <span class="labelpicker-toggler toggler-text">labels</span>
     &#x25BF;
   </div>
 
-  <div class="drop">
+  <div class="menu-target"></div>
 
-    <div class="drop-item-entry" ><input ng-keyup="check_add_label_enabled($event)"
-      ng-keypress="check_key($event)"
-      class="text-input" ng-model="label_filter">
-    </div>
-
-    <div class="drop-item-separator"></div>
-
-    <div ng-if="!labels.length" class="message">
-      No labels yet! Create new labels using the text input.
-    </div>
-
-    <div class="label-container">
-      <div class="drop-item"
-        ng-repeat="label in labels | filter:{name:label_filter}"
-        ng-click="toggle_label_close_menu($event, label)"
-        >
-          <input ng-model="activelabels[label._id]" ng-click="toggle_label_keep_menu_open($event, label)" class="checkbox" type="checkbox" id="{{label.name}}.{{pickerid}}">
-          <div class="label-name">{{label.name}}</div>
-          <span ng-click="delete_label($event, label)" class="remove small glyphicon glyphicon-remove"></span>
-      </div>
-    </div>
-
-    <div class="drop-item-separator"></div>
-
-    <div ng-class="add_enabled" class="centering drop-item" ng-click="add_new_label()">Add as new label</div>
-
-  </div>
-
-</dropmenu>
+</div>
+<div class="labels-wrapper"></div>

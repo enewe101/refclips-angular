@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" ng-app="refclips">
+<head>
+	<meta charset="UTF-8">
+	<base href="/">
+
+	<title>Starter Node and Angular</title>
+
+	<!-- Font -->
+	<!--link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'-->
+
+	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="refs/refs.css">
+	<link rel="stylesheet" type="text/css" href="refs/ref/ref.css">
+	<link rel="stylesheet" type="text/css" href="refs/addref/addref.css">
+	<link rel="stylesheet" type="text/css" href="labelpicker/labelpicker.css">
+	<!--link rel="stylesheet" type="text/css" href="header/app-header/header.css"-->
+	<link rel="stylesheet" type="text/css" href="header/header.css">
+	<link rel="stylesheet" type="text/css" href="notify/notify.css">
+	<link rel="stylesheet" type="text/css" href="libs/angular-upload/src/directives/btnupload.min.css">
+	<link rel="stylesheet" type="text/css" href="uploader/uploader.css">
+	<link rel="stylesheet" type="text/css" href="files/files.css">
+	<link rel="stylesheet" type="text/css" href="files/file/file.css">
+	<link rel="stylesheet" type="text/css" href="dropmenu/dropmenu.css">
+	<link rel="stylesheet" type="text/css" href="libs/mine/autogrow.css">
+	<link rel="stylesheet" type="text/css" href="password-authenticate/authentication.css">
+	<link rel="stylesheet" type="text/css" href="footer/footer.css">
+	<link rel="stylesheet" type="text/css" href="paginator/paginator.css">
+	<link rel="stylesheet" type="text/css" href="textsearch/textsearch.css">
+	<link rel="stylesheet" type="text/css" href="tabs/tabs.css">
+	<!--link rel="stylesheet" type="text/css" href="google-signin/google-signin.css"-->
+
+	<!-- JS -->
+	<script>
+		var user = {{{user}}};
+		var authenticated = {{authenticated}};
+	</script>
+
+	<script src="libs/random-chars/random-chars.js"></script>
+	<script src="libs/jquery/dist/jquery.min.js"></script>
+	<script src="libs/bootstrap/js/dropdown.js"></script>
+	<script src="libs/bibtex-parse-js/bibtexParse.js"></script>
+
+	<script src="libs/angular/angular.min.js"></script>
+	<script src="libs/angular-animate/angular-animate.min.js"></script>
+	<script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="libs/angular-upload/angular-upload.min.js"></script>
+	<script src="libs/mine/autogrow.js"></script>
+
+	<!-- ANGULAR CUSTOM -->
+	<script src="refclips/refclips.module.js"></script>
+	<script src="notify/notify.component.js"></script>
+	<script src="header/app-header/header.component.js"></script>
+	<script src="refs/refs.module.js"></script>
+	<script src="refs/refs.component.js"></script>
+	<script src="refs/ref/ref.component.js"></script>
+	<script src="refs/addref/addref.component.js"></script>
+	<script src="labelpicker/labelpicker.module.js"></script>
+	<script src="labelpicker/labelpicker.component.js"></script>
+	<!--script src="google-signin/google-signin.component.js"></script-->
+	<!--script src="google-signin/google-signout/google-signout.component.js"></script-->
+
+	<script src="password-authenticate/password-authenticate.module.js"></script>
+	<script src="password-authenticate/password-field/password-field.component.js"></script>
+	<script src="user-status/user-status.module.js"></script>
+
+	<script src="filter/filter.component.js"></script>
+	<script src="uploader/uploader-button.component.js"></script>
+	<script src="uploader/uploader.module.js"></script>
+	<script src="files/files.module.js"></script>
+	<script src="files/file/file.component.js"></script>
+	<script src="dropmenu/dropmenu.module.js"></script>
+	<script src="file-input/file-input.module.js"></script>
+	<script src="refs/reftype/reftype.component.js"></script>
+	<script src="paginator/paginator.module.js"></script>
+
+	<script src="textsearch/textsearch.module.js"></script>
+	<script src="tabs/tabs.module.js"></script>
+	<script src="tabs/tabs.directive.js"></script>
+
+</head>
+
+<body app>
+
+  <header></header>
+  <notifycomponent></notifycomponent>
+	<div class="ref-pages-container"></div>
+  <footer></footer>
+
+</body>
+
+</html>

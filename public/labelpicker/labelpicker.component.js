@@ -1,172 +1,99 @@
 
 angular.module('labelpicker').controller('LabelPickerController', function($element, $scope, $http, labelservice) {
 
-
-    $scope.label_filter = '';
-    $scope.add_enabled = 'disabled';
-
-    $scope.apply_refresh_labels = function() {
-      $scope.$apply($scope.refresh_labels);
-    };
-
-    $scope.refresh_labels = function() {
-      $scope.labels = labelservice.labels;
-    }
-
-    // Removes a label from all references and deletes that label from the db.
-    // This has several steps.  We need to remove the label from all references
-    // in the db (which is done using a single request here), as well as have
-    // all views of references locally reflect that in the ui (which is handled)
-    // by each ref in response to an event we emit here.
-    // We also need to actually remove the label from the db (the request for
-    // that is made here), as well as make sure that all the label pickers
-    // remove that label from teh list of options (this is done by asking the
-    // label service to refresh itself).
-    $scope.delete_label = function($event, label) {
-
-      // Don't respond to the click on the x as being a normal click on the
-      // option which would *add* the label
-      $event.preventDefault();
-
-      // This is a pretty severe operation.  Confirm first!
-      let confirmed = confirm(
-        "Are you sure you want to delete the label "
-        + '\n\n\t"' + label.name + '"\n\n'
-        + "and remove it from all references?\n(This can't be undone!)"
-      );
-      if(!confirmed) {
-        return false;
-      }
-
-      // Send an event that this label is to be removed.
-      // This notifies all the refs to update their ui by removing the label.
-      // They don't make any actual changes in the db though, which is handled
-      // in a centralized way here.
-      $scope.$emit('notifyRemoveLabel', label)
-
-      // Request the removal of the label from all references in the db.
-      $http.put('/api/refs/labels/remove-all', label).then(
-        function(response){},
-        function(response){console.log(response);}
-      );
-
-      // Request removal of the label itself
-      $http({
-        url: '/api/labels',
-        method: 'DELETE',
-        params: {_id: label._id}
-      }).then(
-        function(response){
-          // Reflect the removal of the label from the db in all the labelpickers through labelservice
-          labelservice.refresh();
-          $scope.$broadcast('dropmenu-close');
-        },
-        function(response){console.log(response);}
-      )
-    }
-
-
-    // check if the enter key was hit, in which case we want to add a new
-    // label.
-    $scope.check_key = function($event) {
-      if ($event.keyCode === 13) {
-        $scope.add_new_label();
-      }
-    };
-
-    // change the styling of the 'Add as new label' element (to show if it's
-    // enabled)
-    $scope.check_add_label_enabled = function() {
-      if ($.trim($scope.label_filter.length)>0) {
-        $scope.add_enabled = 'enabled';
-      } else {
-        $scope.add_enabled = 'disabled';
-      }
-    }
-
-    $scope.add_new_label = function() {
-      // First check if we already have a label with that name.  If so, just
-      // activate it.
-      for (i in labelservice.labels) {
-        if (labelservice.labels[i].name == $scope.label_filter) {
-          let label_to_activate = labelservice.labels[i];
-          if(!$scope.activelabels[label_to_activate._id]) {
-            // Mark the label checked in the picker
-            $scope.activelabels[label_to_activate._id] = true;
-            // Add the label to the ref
-            $scope.labelchanged()(label_to_activate, $scope.activelabels[label_to_activate._id]);
-            // Clear the text in the label picker's input
-            $scope.label_filter = '';
-          }
-          return;
-        }
-      }
-
-      // Otherwise, proceed with creating the new label.
-      let new_label = $scope.label_filter;
-      $http.post('/api/labels', {name:new_label}).then(
-
-        // Notify the ref to add this label to its rendered model
-        function(response){
-          label = response.data;
-          $scope.labelchanged()(label, true);
-
-          // Notify all labelpickers to include the label in their options
-          labelservice.refresh(function() {
-            $scope.refresh_labels();
-          });
-
-          // Clear the label filter and mark that label active in the picker
-          $scope.label_filter = '';
-          $scope.activelabels[label._id] = true;
-        },
-        function(response){console.log(response)}
-      );
-    }
-
-    // On clicking an option in the label picker, send a signal to update the
-    // label using the labelchanged callback.  Whether it was changed to be
-    // active or inactive is determined by the state in this.activelabels.
-    $scope.toggle_label_keep_menu_open = function(s) {
-      return function(event, label) {
-        if (event.target.tagName.toLowerCase() === 'input') {
-          s.labelchanged()(label, s.activelabels[label._id]);
-        }
-      }
-    }($scope);
-    $scope.toggle_label_close_menu = function(s) {
-      return function(event, label) {
-        if (event.target.tagName.toLowerCase() === 'div') {
-          s.activelabels[label._id] = !s.activelabels[label._id];
-          s.labelchanged()(label, s.activelabels[label._id]);
-          s.$broadcast('dropmenu-close');
-        }
-      }
-    }($scope);
-
 });
 
-angular.module('labelpicker').directive('labelpicker', function() {
+angular.module('labelpicker').directive('labelpicker', function(labelservice) {
   return {
     templateUrl: 'labelpicker/labelpicker.template.html',
     scope: {
-      toggletext: '&?',
-      pickerid: '=',
-      labelchanged: '&',
-      activelabels: '='
+      labelchanged: '&?',
+      toggleText: '&?',
+      initLabels: '&?'
     },
     controller: 'LabelPickerController',
 
-    link: function($scope, $element) {
+    link: function(scope, element) {
 
+      // Unpack the labelchanged 1-time binding
+      let labelchanged = scope.labelchanged? scope.labelchanged() : function(){};
+      let toggle_text = scope.toggleText? scope.toggleText() : 'labels';
+      let theselabels = scope.initLabels? scope.initLabels() : [];
+      element.find('.toggler-text').text(toggle_text);
+
+      // We need a unique id to allow registering and unregistering callbacks
+      // to the labelservice
       let id = random_chars(8);
-      $($element.context).attr('id', id);
-      $scope.id = id;
+      scope.id = id;
 
-      if($scope.toggletext) {
-        $element.find('.toggler-text').text($scope.toggletext());
+      // This bit of procedure runs when the component is first compiled.
+      // Works out what labels are initially active in this ref.
+      let activelabels = {}
+      for (let i in theselabels) {
+        let _id = theselabels[i]._id;
+        activelabels[_id] = true;
       }
 
+      let remove_label = function(label) {
+        theselabels = theselabels.filter(function(x) {
+          return x._id !== label._id;
+        });
+        sync_labels();
+      }
+
+      let add_label = function(label) {
+        theselabels.push(label);
+        sync_labels();
+      }
+
+      let label_target = element.find('.labels-wrapper');
+      let sync_labels = function() {
+        label_target.empty();
+        for (let i = 0; i < theselabels.length; i++) {
+          label_target.append(make_label(theselabels[i]));
+        }
+      }
+      let make_label = function(label) {
+        return $('<span class="label label-default"></span>').text(label.name);
+      }
+
+      // When a label is selected or unselected, we do two things, achieved
+      // by the callback function defined below.  First, we remove the visual
+      // representation of the label from the label_wrapper.  Second, we call
+      // another callback (the one bound to this scope during compilation).
+      let label_change_handler = function(changed_label, is_checked) {
+        // Handle the label change locally
+        activelabels[changed_label._id] = is_checked;
+        if(is_checked) {
+          add_label(changed_label);
+        } else {
+          remove_label(changed_label);
+        }
+        // Call the bound callback so the parent scope can handle label change
+        labelchanged(changed_label, is_checked);
+      };
+
+      // Arm the labelpicker to show a dropdown menu full of labels.
+      // The dropdown is actually a singleton DOM subtree which gets transplanted
+      // into menu_target by the labelservice.
+      let labelpicker = element.find('.labelpicker-container');
+      let menu_target = element.find('.menu-target');
+      labelpicker.on('click', function(){
+        labelservice.toggle_menu(menu_target, activelabels, label_change_handler, id);
+      })
+
+      // Respond to the deletion of a label type, by removing that label
+      // (if any).
+      labelservice.subscribe_label_removed(id, remove_label);
+
+      // Remove callbacks on the labelservice if the picker is destroyed
+      // to prevent memory leaks.
+      scope.$on('$destroy', function(){
+        labelservice.unsubscribe_label_change_handler(id)
+        labelservice.unsubscribe_label_removed(id);
+      });
+
+      sync_labels();
 
     }
 

@@ -126,6 +126,14 @@ ref labelpicker {
   margin-top: 8px;
 }
 
+ref labelpicker .labelpicker-container {
+  display: inline-block;
+}
+
+ref labelpicker .labels-wrapper {
+  display: inline-block;
+}
+
 .refs-ref label.form {
   min-width: 80px;
 }

@@ -12,27 +12,8 @@ userStatus.controller('userStatusIndicatorController', function($scope, userStat
 });
 
 userStatus.factory('userStatusService', function($http, $rootScope){
-
   let service = {
-    user: null
+    user: user
   }
-
-  // Update user data and broadcast 'user-updated'
-  service.update = function(new_user) {
-    let old_user = service.user;
-    service.user = new_user;
-    $rootScope.$broadcast('user-updated', [new_user, old_user]);
-  }
-
-  service.check_status = function() {
-    $http.get('/api/users/check-if-signed-in').then(
-      function(response){
-        service.update(response.data.user);
-      },
-      function(response){console.log(response);}
-    )
-  }
-
-  service.check_status();
   return service
 })

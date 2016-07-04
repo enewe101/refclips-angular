@@ -32,9 +32,14 @@ module.exports = function(app) {
 	});
 
 	// Route for login
-	app.post('/login', passport.authenticate('local-signin'), function(req,res){
-		res.send(req.user);
-	});
+	app.post('/login',
+		function(req, res, next){
+			console.log('yo');
+			next();
+		},
+		passport.authenticate('local-signin'),
+		function(req,res){res.send(req.user);}
+	);
 
 	// Route for testing google-sign-in
 	app.get('/google-sign-in-test', function(req,res){
@@ -99,25 +104,49 @@ module.exports = function(app) {
 	});
 
 	// Route to get the app on first request (or any undefined request)
-	app.get('*', function(req, res) {
-    fs.readFile('./public/_index.html', 'utf-8', function(err, text){
-      if(err) {console.log(err); res.status(500).send('There was an error');}
-      let template = handlebars.compile(text);
-      let data = {};
-      if(req.isAuthenticated()) {
-        // Don't pass the hash to the client
-        let user = req.user;
-        user.hash = null;
-        // Do pass the rest of the user's details to the client
-        data.user = JSON.stringify(user)
-        data.authenticated = 'true';
-      } else {
-        data.user = 'null';
-        data.authenticated = 'false';
-      }
-      let html = template(data);
-      res.send(html);
-    });
-	});
+	app.get('*', function(req, res, next) {
+
+		// If the user is signed in, read in the body corresponding to the main app
+		if(req.isAuthenticated()) {
+	    fs.readFile('./public/index-app.html', 'utf-8', function(err, text){
+	      if(err) {console.log(err); res.status(500).send('There was an error');}
+				req.html = text;
+				next();
+			});
+
+		// If the user is not signed in, read in the body corresponding to the welcome screen
+		} else {
+	    fs.readFile('./public/index-welcome.html', 'utf-8', function(err, text){
+	      if(err) {console.log(err); res.status(500).send('There was an error');}
+				req.html = text;
+				next();
+			});
+		}
+
+	}, function(req, res, next) {
+
+		// Get and serialize the user data
+    req.user_data = {};
+    if(req.isAuthenticated()) {
+      req.user_data.user = req.user;
+      req.user_data.hash = null; // Don't pass the hash to the client
+      req.user_data.user = JSON.stringify(req.user_data.user)
+      req.user_data.authenticated = 'true';
+    } else {
+      req.user_data.user = 'null';
+      req.user_data.authenticated = 'false';
+    }
+		next();
+
+	}, function(req, res, next) {
+
+		// Combine the index head and body and the user data, and return the page
+    let template = handlebars.compile(req.html);
+    let html = template({
+			user: req.user_data.user,
+			authenticated: req.user_data.authenticated
+		})
+    res.send(html);
+  });
 
 };

@@ -1,0 +1,63 @@
+authentication {
+  display: block;
+}
+
+authentication formlike {
+  padding: 20px 10px 20px 20px;
+  width: 450px;
+  display: block;
+}
+
+authentication .forgot,
+authentication .authenticate,
+authentication .register,
+authentication .logout {
+  display: none;
+}
+
+authentication .icon-bad {
+  display: none;
+  color: brown;
+}
+authentication .icon-ok {
+  display: none;
+  color: green;
+}
+
+authentication .username-message {
+  display: inline-block;
+}
+
+authentication .formline {
+  margin: 10px 0 10px 0;
+}
+
+authentication input[type="text"],
+authentication input[type="password"] {
+  padding: 10px;
+  width: 280px;
+}
+
+authentication .prompt {
+  text-align: center;
+  margin: 10px 0 20px 0px;
+  font-size: 1.3em;
+}
+
+authentication input.bad {
+  border: solid 1px brown;
+}
+
+authentication label {
+  width: 80px;
+}
+
+
+authentication .form-message {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+authentication .alt-options {
+  margin-left: 10px;
+}

@@ -1,19 +1,23 @@
 angular.module('passwordauthenticate').directive('password', function(){
   return {
+    scope: false,
     templateUrl: 'password-authenticate/password-field/password-field.template.html',
-    scope: {
-      model: '='
-    },
-    controller: function($scope){
-      $scope.type = 'password';
-      $scope.toggle = function() {
-        if($scope.is_text) {
-          $scope.type = 'password';
+    link: function(scope, element){
+      let input = element.find('input');
+      let toggle = element.find('.toggle');
+      let is_password = true;
+      element.find('.toggle').on('click', function(){
+        if(is_password){
+          toggle.addClass('glyphicon-eye-close');
+          toggle.removeClass('glyphicon-eye-open');
+          input.attr('type', 'text');
         } else {
-          $scope.type = 'text';
+          toggle.addClass('glyphicon-eye-open');
+          toggle.removeClass('glyphicon-eye-close');
+          input.attr('type', 'password');
         }
-        $scope.is_text = !$scope.is_text;
-      }
+        is_password = !is_password;
+      });
     }
   };
 });

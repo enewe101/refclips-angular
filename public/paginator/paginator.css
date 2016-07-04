@@ -1,7 +1,33 @@
-paginate .page {
+paginator .page-indicator {
   width: 30px;
+  text-align: center;
 }
 
-paginate label {
+paginator label {
   width: auto;
+}
+
+paginator .page::before {
+  content: 'page';
+}
+
+paginator .of::before {
+  content: 'of';
+}
+
+paginator .showing::before {
+  content: 'showing';
+}
+
+paginator .per-page::before {
+  content: 'per page'
+}
+
+paginator .next {
+  margin-right: 24px;
+}
+
+paginator .num-results-indicator {
+  width: 40px;
+  text-align: center;
 }

@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var User = require('./User');
 var bcrypt = require('bcrypt');
+var email_is_valid = require('mine/validate-email');
 
 let DUP_KEY_ERR = 11000;
 
@@ -13,7 +14,6 @@ module.exports = function(app) {
       res.json({authenticated:false, user:null});
 		}
 	});
-
 
 	// Route for signing in with google
 	app.post('/api/users/google-signin', function(req,respond){
@@ -56,22 +56,60 @@ module.exports = function(app) {
 
   // Register a new user
 	// Note "sapi" routes don't need authentication
-
 	let NUM_SALT_ROUNDS = 8;
-  app.post('/sapi/users', function(req, res, next){
-    var user = new User(req.body);
-		var password = req.body.password;
+  app.post('/sapi/users',
+
+	// First we do some basic validaton on the new-user data
+	function(req, res, next){
+    req.user = new User(req.body);
+		let password = req.body.password;
+		let errors = [];
+
+		// validate the username. (but we'll check it's uniqueness later)
+		if(!(typeof req.user.username === 'string')){
+			errors.push('bad-username');
+		} else if(req.user.username.trim() === '') {
+			errors.push('bad-username');
+		}
+
+		// validate the password
+		if(!(typeof password === 'string')){
+			errors.push('bad-password');
+		} else if(password.length < 8) {
+			errors.push('short-password');
+		}
+
+		// validate the email. (we'll check its uniqueness later)
+		if(!(typeof req.user.email === 'string')){
+			errors.push('bad-email');
+		} else if(!email_is_valid(req.user.email)) {
+			errors.push('bad-email');
+		}
+
+		// If we had errors, send them back to the client, otherwise, go to next step
+		if(errors.length) {
+			res.send({success: false, reason: errors});
+		} else {
+			next();
+		}
+	},
+
+	// Now we take the users password and make a hash for them using bcrypt
+	function(req, res, next) {
+		let password = req.body.password;
 		bcrypt.hash(password, NUM_SALT_ROUNDS, function(err, hash){
 			if(err) {
 				console.log(err);
 				res.status(500).send('There was a problem with registration.');
 			} else {
-				user.hash = hash;
-				req.user = user;
+				req.user.hash = hash;
 				next();
 			}
 		});
 	},
+
+	// Now we're ready to try creating the new user.  At this point we'll catch
+	// non-unique email or non-unique username issues.
 	function(req, res) {
     req.user.save(function(err, user){
 			console.log(err);
@@ -79,9 +117,9 @@ module.exports = function(app) {
       if(err){
 				if(err.code == DUP_KEY_ERR) {
 					if (err.message.indexOf('email') > -1) {
-						res.json({sucess: false, reason:'dup_email', user: null});
+						res.json({sucess: false, reason:['dup_email'], user: null});
 					} else if(err.message.indexOf('username') > -1) {
-						res.json({sucess: false, reason:'dup_username', user: null});
+						res.json({sucess: false, reason:['dup_username'], user: null});
 					} else {
 						res.status(400).send(err);
 					}
@@ -111,8 +149,6 @@ module.exports = function(app) {
 			}
     });
   });
-
-
 
   // Deletes the specified user
   app.delete('/api/users', function(req, res){

@@ -1,0 +1,46 @@
+<nav>
+  <a class="brand" href="/">refclips</a>
+
+  <div class="nav-left">
+
+    <dropmenu class="nav-item">
+      <div class="pointer drop-toggle">
+        <span class="toggler-text">
+        add reference</span>
+        &#x25bf;
+      </div>
+      <div class="drop">
+        <addref onaddmanual="$ctrl.onaddmanual()" onaddbibtex="$ctrl.onaddbibtex()"></addref>
+      </div>
+    </div>
+
+  </div>
+
+  <tabs tabset="'refpages'" inittab="'all-refs'"></tabs>
+
+  <div class="nav navbar-nav navbar-right">
+
+    <!--div id="filter-wrapper" class="nav-link" role="presentation" class="dropdown">
+          <filter toggletext="'label-filter'"></filter>
+    </div>
+
+    <text-search></text-search-->
+
+    <dropmenu class="nav-item login-menu">
+      <div class="pointer drop-toggle">
+        <span class="toggler-text">
+          logged in as <span class="username">{{$ctrl.userStatusService.user.username}}</span>
+        </span>
+        &#x25BF;
+      </div>
+
+      <div class="signed_in drop left">
+        <div ng-click="$ctrl.capture_click($event)" class="drop-item">
+          <authentication state="user_state"></authentication>
+        </div>
+      </div>
+    </dropmenu>
+
+  </div>
+
+</nav>

@@ -1,0 +1,86 @@
+.navbar {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+signin {
+  padding: 20px;
+}
+
+header nav.navbar {
+  background: rgb(40,40,40);
+}
+
+header .username {
+  font-weight: bold;
+  color: white;
+}
+header filter .labels-wrapper {
+  display: inline-block;
+}
+
+
+header filter .labels-wrapper .label {
+  margin-left: 4px;
+}
+
+
+header dropmenu {
+  margin-top: 15px;
+}
+
+header .drop-toggle:hover {
+  color: white;
+}
+header .drop-toggle {
+  color: rgb(140,140,140);
+}
+
+header .navbar-right {
+  margin-right: 0;
+}
+
+
+
+header {
+  background: rgb(80,80,80);
+  color: white;
+}
+
+header .submenu {
+  color: black;
+  padding: 20px;
+}
+
+header .dropdown-menu {
+  padding: 0;
+  color: black;
+}
+
+header .menu-item {
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 10px;
+  float: left;
+}
+
+header .menu-item-hover:hover {
+  text-decoration: underline;
+}
+
+header .menu-item.active {
+  background: rgb(240,240,240);
+  color: black;
+}
+
+header authentication password-signout span {
+  width: 100%;
+}
+
+.login-menu .drop {
+  min-width: 200px;
+}
+
+header text-search {
+  margin-top: 10px;
+}

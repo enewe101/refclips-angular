@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" ng-app="welcome">
+<head>
+	<meta charset="UTF-8">
+	<base href="/">
+
+	<title>Starter Node and Angular</title>
+
+	<!-- Font -->
+	<!--link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'-->
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="refclips/welcome.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="refs/refs.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="refs/ref/ref.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="refs/addref/addref.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="labelpicker/labelpicker.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="header/header.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="notify/notify.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="libs/angular-upload/src/directives/btnupload.min.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="uploader/uploader.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="files/files.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="files/file/file.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="dropmenu/dropmenu.css"> <!-- custom styles -->
+	<link rel="stylesheet" href="libs/mine/autogrow.css"> <!-- custom styles -->
+	<link rel="stylesheet" type="text/css" href="password-authenticate/authentication.css">
+	<link rel="stylesheet" type="text/css" href="password-authenticate/password-register/password-register.css">
+	<link rel="stylesheet" type="text/css" href="password-authenticate/password-authenticate/password-authenticate.css">
+	<link rel="stylesheet" type="text/css" href="password-authenticate/password-field/password-field.css">
+	<link rel="stylesheet" type="text/css" href="password-authenticate/forgot/forgot.css">
+	<link rel="stylesheet" type="text/css" href="footer/footer.css">
+	<link rel="stylesheet" type="text/css" href="paginator/paginator.css">
+	<link rel="stylesheet" type="text/css" href="textsearch/textsearch.css">
+	<!--link rel="stylesheet" href="google-signin/google-signin.css"-->
+
+	<!-- JS -->
+	<script>
+		var user = {{{user}}};
+		var authenticated = {{authenticated}};
+	</script>
+
+	<script src="libs/random-chars/random-chars.js"></script>
+	<script src="libs/jquery/dist/jquery.min.js"></script>
+	<script src="libs/bootstrap/js/dropdown.js"></script>
+	<script src="libs/bibtex-parse-js/bibtexParse.js"></script>
+
+	<script src="libs/angular/angular.min.js"></script>
+	<script src="libs/angular-animate/angular-animate.min.js"></script>
+	<script src="libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="libs/angular-upload/angular-upload.min.js"></script>
+	<script src="libs/mine/autogrow.js"></script>
+
+	<!-- ANGULAR CUSTOM -->
+	<script src="libs/mine/validate-email.js"></script>
+	<script src="refclips/welcome.module.js"></script>
+	<script src="notify/notify.component.js"></script>
+	<script src="header/welcome-header/header.component.js"></script>
+	<script src="refs/refs.module.js"></script>
+	<script src="refs/refs.component.js"></script>
+	<script src="refs/ref/ref.component.js"></script>
+	<script src="refs/addref/addref.component.js"></script>
+	<script src="labelpicker/labelpicker.module.js"></script>
+	<script src="labelpicker/labelpicker.component.js"></script>
+
+	<script src="password-authenticate/password-authenticate.module.js"></script>
+	<script src="password-authenticate/password-field/password-field.component.js"></script>
+	<script src="user-status/user-status.module.js"></script>
+
+	<script src="filter/filter.component.js"></script>
+	<script src="uploader/uploader-button.component.js"></script>
+	<script src="uploader/uploader.module.js"></script>
+	<script src="files/files.module.js"></script>
+	<script src="files/file/file.component.js"></script>
+	<script src="dropmenu/dropmenu.module.js"></script>
+	<script src="file-input/file-input.module.js"></script>
+	<script src="refs/reftype/reftype.component.js"></script>
+	<script src="paginator/paginator.module.js"></script>
+
+	<script src="textsearch/textsearch.module.js"></script>
+
+</head>
+
+<body welcome>
+
+  <welcome-header></welcome-header>
+
+  <div class="splash-banner">
+    <div class="vert-shim"></div>
+    <h1>refclips</h1>
+    <h2>manage your references</h2>
+    <div class="main-action">
+
+	    <button class="get-started btn btn-lg btn-huge btn-primary">
+	      get started
+	    </button>
+
+      <div class="registration">
+        <div class="filter-effect"></div>
+        <div class="registration-position">
+          <authentication initial-state="'register'"></authentication>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer></footer>
+
+</body>
+
+</html>

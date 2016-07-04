@@ -5,22 +5,22 @@ filter.directive('filter', function(){
     templateUrl: '/filter/filter.template.html',
     controller: 'filtercontroller',
     scope: {
-      toggletext: '&?'
+      onchange: '&?'
+    },
+    link: function(scope, element) {
+
     }
   };
 });
 
 filter.controller('filtercontroller', function($scope, reflistservice){
 
+    $scope.toggle_text = 'label-filter';
+    let onchange = $scope.onchange? $scope.onchange() : function(){};
+
     // This bit of procedure runs when the component is first compiled.
     // Works out what labels are initially active in this.
-    $scope.activelabels = {}
     $scope.labels = [];
-
-    for (let i in $scope.labels) {
-      let _id = $scope.labels[i]._id;
-      $scope.activelabels[_id] = true;
-    }
 
     $scope.update_reflist = function() {
       reflistservice.labels = [];
@@ -34,7 +34,7 @@ filter.controller('filtercontroller', function($scope, reflistservice){
 
     $scope.remove_label = function(label) {
       $scope.remove_label_locally(label);
-      $scope.update_reflist();
+      onchange($scope.labels);
     };
     $scope.remove_label_locally = function(label) {
         $scope.labels = $scope.labels.filter(function(x) {
@@ -44,7 +44,7 @@ filter.controller('filtercontroller', function($scope, reflistservice){
 
     $scope.add_label = function(label) {
       $scope.add_label_locally(label);
-      $scope.update_reflist();
+      onchange($scope.labels);
     }
     $scope.add_label_locally = function(label) {
         $scope.labels.push({_id:label._id, name:label.name});

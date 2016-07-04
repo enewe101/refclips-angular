@@ -7,7 +7,7 @@ var bcrypt = require('bcrypt');
 let user_schema = new mongoose.Schema({
 
 	// email and username have to be unique!
-	email : {type : String, index: {unique: true, dropDups: true}},
+	email : {type : String, required: true, index: {unique: true, dropDups: true}},
 	username: {type : String, required: true, index: {unique: true, dropDups: true}},
 
 	fname: {type: String},

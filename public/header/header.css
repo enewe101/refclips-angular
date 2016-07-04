@@ -1,79 +1,130 @@
-.navbar {
+nav {
+  display: block;
+  width: 100%;
+  position: fixed;
+  height: 32px;
+  background: black;
+  z-index: 9999;
   padding-left: 30px;
   padding-right: 30px;
+  top:0;
+  left:0;
 }
 
-signin {
-  padding: 20px;
+header::after,
+welcome-header::after {
+  content: '';
+  height: 32px;
+  display: block;
 }
 
-header nav.navbar {
-  background: rgb(40,40,40);
+.nav-left {
+  float: left;
+  margin-left: 12px;
+  margin-right: 12px;
 }
 
-header .username {
-  font-weight: bold;
-  color: white;
-}
-header filter .labels-wrapper {
+.nav-item {
   display: inline-block;
+  color: rgb(140,140,140);
+  margin-right: 4px;
+  padding-top: 6px;
 }
-
-
-header filter .labels-wrapper .label {
-  margin-left: 4px;
-}
-
-
-header dropmenu {
-  margin-top: 15px;
-}
-
-header .drop-toggle:hover {
+.nav-item:hover {
   color: white;
 }
-header .drop-toggle {
+
+a.nav-item-color:hover, a.nav-item-color:visited, a.nav-item-color:active {
+  color: white;
+}
+a.nav-item-color {
   color: rgb(140,140,140);
 }
 
+welcome-header .nav-link,
+header .nav-link {
+  display: inline-block;
+  margin-top: 7px;
+  color: rgb(160,160,160);
+}
+welcome-header .nav-link:hover,
+header .nav-link {
+  margin-top: 7px;
+  color: white;
+}
+
+welcome-header nav.navbar,
+header nav.navbar {
+  background: rgb(40,40,40);
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+welcome-header .brand,
+header .brand {
+  float: left;
+  font-size: 1.6em;
+  color: rgb(160,160,160);
+  padding-top: 0;
+}
+
+welcome-header .brand:hover,
+header .brand:hover {
+  color: white;
+}
+
+welcome-header .navbar-right,
 header .navbar-right {
   margin-right: 0;
 }
 
+header .username,
+welcome-header .username {
+  font-weight: bold;
+  color: white;
+}
 
+header filter .labels-wrapper .label,
+welcome-header filter .labels-wrapper .label {
+  margin-left: 4px;
+}
 
-header {
+header .drop-toggle:hover,
+welcome-header .drop-toggle:hover {
+  color: white;
+}
+header .drop-toggle,
+welcome-header .drop-toggle {
+  color: rgb(140,140,140);
+}
+
+header,
+welcome-header {
   background: rgb(80,80,80);
   color: white;
 }
 
-header .submenu {
-  color: black;
-  padding: 20px;
-}
-
-header .dropdown-menu {
-  padding: 0;
-  color: black;
-}
-
-header .menu-item {
+header .menu-item,
+welcome-header .menu-item {
   cursor: pointer;
   margin-left: 10px;
   margin-right: 10px;
   float: left;
 }
 
-header .menu-item-hover:hover {
+header .menu-item-hover:hover,
+welcome-header .menu-item-hover:hover {
   text-decoration: underline;
 }
 
-header .menu-item.active {
+header .menu-item.active,
+welcome-header .menu-item.active {
   background: rgb(240,240,240);
   color: black;
 }
 
-header authentication password-signout span {
+header authentication password-signout span,
+welcome-header authentication password-signout span {
   width: 100%;
 }
 
@@ -81,6 +132,11 @@ header authentication password-signout span {
   min-width: 200px;
 }
 
-header text-search {
+header text-search,
+welcome-header text-search {
   margin-top: 10px;
+}
+
+header, welcome-header {
+  position: relative;
 }

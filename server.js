@@ -60,6 +60,7 @@ passport.use('local-signin', new LocalStrategy({
     passwordField: 'password'
   },
   function(email, password, done) {
+    console.log('authenticating');
     User.findOne({ email: email }, function (err, user) {
       if (err) { return done(err); }
       if (!user) {

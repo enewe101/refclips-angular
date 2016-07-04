@@ -25,7 +25,6 @@ module.exports = function(app) {
   app.post('/api/search-refs', function(req, res){
 
     // Get the query parameters, applying appropriate defaults
-    console.log(req.body);
     let match = req.body.match ? req.body.match : {};
     let skip = req.body.skip ? req.body.skip : 0;
     let limit = req.body.limit ? req.body.limit : 20;
@@ -33,8 +32,10 @@ module.exports = function(app) {
     // Add the logged-in user's id to the query
     match.user_id = req.user._id;
 
+    console.log(match);
     Ref.find(match).sort({createdAt:-1}).skip(skip).limit(limit).exec(function(err, refs){
-      if (err) {res.status(500).send(err);}
+      if (err) {console.log(err); res.status(500).send(err);}
+      console.log(refs);
       res.json(refs);
     });
   });
@@ -335,7 +336,7 @@ module.exports = function(app) {
   function(req, res) {
     Ref.remove({'_id': req.query._id}, function(err, doc){
       if(err){res.status(400).send(err); console.log(err);}
-      res.send(req.query._id);
+      res.json({_id:req.query._id});
     });
   });
 
@@ -363,7 +364,7 @@ module.exports = function(app) {
       if(err){
 		  console.log('error:');
 		  console.log(err);
-		  res.status(400).send(err); 
+		  res.status(400).send(err);
 	  }
 	  console.log('new ref');
 	  console.log(ref);
@@ -389,6 +390,8 @@ module.exports = function(app) {
     authorize_ref(req.body._id, req.user._id, res, next);
   },
   function(req, res) {
+    console.log('removing');
+    console.log(req.body);
     let _id = req.body._id;
     let label = req.body.label;
     Ref.findByIdAndUpdate(_id, {$pull: {labels: label }}, function(err, doc){

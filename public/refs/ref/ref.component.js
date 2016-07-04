@@ -1,17 +1,73 @@
-angular.module('refs').directive('ref', function($http){
+angular.module('refs').directive('ref', function($http, labelservice){
   return {
     templateUrl: 'refs/ref/ref.template.html',
     restrict: 'E',
     scope: {
-      'thisref': '=',
-      'deleteCallback': '&'
+      'bindRef': '&',
+      'deleteCallback': '&',
+      'tabId': '&'
     },
     controller: 'refcontroller',
     link: function(scope, element){
 
-      // Behavior for the expansion of the ref when clicking on the small
-      // downward-pointing arrow or writin in the text area is set up in the
-      // link function for the reflist (refs.module.js) (note "refs" is plural)
+      let tabId = scope.tabId();
+      scope.ref = scope.bindRef();
+      let delete_callback = scope.deleteCallback();
+
+      scope.save_ref = function() {
+        $http.put('/api/refs', scope.ref).then(
+          function(response){},
+          function(response){console.log(response);}
+        )
+      }
+
+      // Ask user if they really want to delete.
+      // If so call the parent controllers' delete callback (a binding)
+      scope.confirm_delete = function() {
+        if(confirm('delete "' + scope.ref.title + '"?')) {
+          delete_callback(scope.ref._id);
+        }
+      };
+
+      // Handle adding and removing label.  If state is true, add, else remove.
+      scope.update_label = function(label, state) {
+        if (state) {
+          scope.add_label(label);
+        } else {
+          scope.remove_label(label);
+        }
+      };
+
+      // Copy the labels from the scope so that we don't need to modify the scope
+      let theselabels = [];
+      scope.ref.labels.forEach(function(label){
+        let copy = $.extend({},label);
+        theselabels.push(copy);
+      });
+
+      scope.remove_label = function(label) {
+        $.ajax({
+          url: '/api/refs/remove-label',
+          method: 'PUT',
+          data: JSON.stringify({"_id":scope.ref._id, "label":label}),
+          contentType: 'application/json',
+          success: function(response) {},
+          error: function(response) {console.log(response);}
+        });
+      }
+
+      scope.add_label = function(label) {
+
+        $.ajax({
+          url: '/api/refs/add-label',
+          method: 'PUT',
+          data: JSON.stringify({"_id":scope.ref._id, "label":label}),
+          contentType: 'application/json',
+          success: function(response) {},
+          error: function(response) {console.log(response);}
+        });
+
+      }
 
       // Bind a reference to the dom elements needed to sync edit form and model
       let form_title = element.find('.form-title');
@@ -36,41 +92,41 @@ angular.module('refs').directive('ref', function($http){
 
       // Syncs: form gets model's values
       let copy_model_to_form = function(){
-        form_title.val(scope.thisref.title);
-        reftype_select.val(scope.thisref.reftype);
-        form_author.val(scope.thisref.author);
-        form_year.val(scope.thisref.year);
-        form_booktitle.val(scope.thisref.booktitle);
-        form_url.val(scope.thisref.url);
-        form_citation_key.val(scope.thisref.citation_key);
+        form_title.val(scope.ref.title);
+        reftype_select.val(scope.ref.reftype);
+        form_author.val(scope.ref.author);
+        form_year.val(scope.ref.year);
+        form_booktitle.val(scope.ref.booktitle);
+        form_url.val(scope.ref.url);
+        form_citation_key.val(scope.ref.citation_key);
       };
 
       // Syncs: model gets form's values
       let copy_form_to_model = function(){
-        scope.thisref.title = form_title.val();
-        scope.thisref.reftype = reftype_select.val();
-        scope.thisref.author = form_author.val();
-        scope.thisref.year = form_year.val();
-        scope.thisref.booktitle = form_booktitle.val();
-        scope.thisref.url = form_url.val();
-        scope.thisref.citation_key = form_citation_key.val();
+        scope.ref.title = form_title.val();
+        scope.ref.reftype = reftype_select.val();
+        scope.ref.author = form_author.val();
+        scope.ref.year = form_year.val();
+        scope.ref.booktitle = form_booktitle.val();
+        scope.ref.url = form_url.val();
+        scope.ref.citation_key = form_citation_key.val();
       };
 
       // Syncs: display gets model's values
       let copy_model_to_display = function() {
-        show_title.text(scope.thisref.title);
-        show_ref_type.text(scope.thisref.ref_type);
-        show_author.text(scope.thisref.author);
-        show_year.text(scope.thisref.year);
-        show_booktitle.text(scope.thisref.booktitle);
-        let link = $('<a>').attr({target: '_blank', href: scope.thisref.url}).text(scope.thisref.url);
+        show_title.text(scope.ref.title);
+        show_ref_type.text(scope.ref.ref_type);
+        show_author.text(scope.ref.author);
+        show_year.text(scope.ref.year);
+        show_booktitle.text(scope.ref.booktitle);
+        let link = $('<a>').attr({target: '_blank', href: scope.ref.url}).text(scope.ref.url);
         show_url.empty();
         show_url.append(link);
-        show_citation_key.text(scope.thisref.citation_key);
+        show_citation_key.text(scope.ref.citation_key);
       }
 
       let copy_notes_to_model = function() {
-        scope.thisref.notes = form_notes.val();
+        scope.ref.notes = form_notes.val();
       }
 
       // Bind a reference to dom elements needed to show/hide edit form
@@ -111,7 +167,7 @@ angular.module('refs').directive('ref', function($http){
         // Copy the form values to the model
         copy_form_to_model();
         // Update the database entry for this ref
-        $http.put('/api/refs', scope.thisref).then(
+        $http.put('/api/refs', scope.ref).then(
           // On successful db update, hide form, make regular dislay reflect
           // model, and flash a "saved" message.
           function(response){
@@ -139,14 +195,15 @@ angular.module('refs').directive('ref', function($http){
       // Send updated notes for the reference
       let update_notes = function() {
         copy_notes_to_model();
-        console.log('updating notes');
-        $http.put('/api/refs', scope.thisref).then(
-          function(response){
-            flash_saved()
-            console.log('success');
-          },
-          function(response){console.log(response);}
-        )
+        $.ajax({
+          url: '/api/refs',
+          method: 'PUT',
+          data: JSON.stringify(scope.ref),
+          dataType: 'json',
+          contentType: 'application/json',
+          success: flash_saved,
+          error: function(response){console.log(response);}
+        });
       }
 
       // bind elm's needed to display a "saved" message
@@ -154,8 +211,6 @@ angular.module('refs').directive('ref', function($http){
 
       // Show a "saved" message on the ref for a couple seconds
       let flash_saved = function() {
-        console.log('flashing saved');
-        console.log(show_saved);
         show_saved.css('display', 'block');
         setTimeout(function(){
           show_saved.css('display', 'none');
@@ -173,78 +228,5 @@ angular.module('refs').directive('ref', function($http){
 angular.module('refs').controller('refcontroller',
   function RefsController($http, $timeout, $scope, $element) {
 
-    $scope.save_ref = function() {
-      $http.put('/api/refs', $scope.thisref).then(
-        function(response){console.log(response);},
-        function(response){console.log(response);}
-      )
-    }
-
-    // Listen for the signal to remove given labels when the the label is
-    // being deleted outright.  Note that for this event, deleting the label
-    // from the db was handled elsewhere.  We just need to remove it locally.
-    $scope.$on('removeLabelNow', function(event, data) {
-      let label = data;
-      $scope.remove_label_locally(label);
-    });
-
-    // This bit of procedure runs when the component is first compiled.
-    // Works out what labels are initially active in this ref.
-    $scope.activelabels = {}
-    for (let i in $scope.thisref.labels) {
-      let _id = $scope.thisref.labels[i]._id;
-      $scope.activelabels[_id] = true;
-    }
-
-    // Ask user if they really want to delete.
-    // If so call the parent controllers' delete callback (a binding)
-    $scope.confirm_delete = function() {
-      if(confirm('delete "' + $scope.thisref.title + '"?')) {
-        $scope.deleteCallback()($scope.thisref._id);
-      }
-    };
-
-    $scope.remove_label = function(label) {
-      $scope.remove_label_remotely(label);
-      $scope.remove_label_locally(label);
-    };
-    $scope.remove_label_locally = function(label) {
-        $scope.thisref.labels = $scope.thisref.labels.filter(function(x) {
-          return x._id !== label._id;
-        });
-    }
-    $scope.remove_label_remotely = function(label) {
-      $http.put(
-        '/api/refs/remove-label', {"_id":$scope.thisref._id, "label":label}
-      ).then(
-        function(response) {},
-        function(response) {console.log(response);}
-      );
-    }
-
-    $scope.add_label = function(label) {
-      $scope.add_label_remotely(label);
-      $scope.add_label_locally(label);
-    }
-    $scope.add_label_remotely = function(label) {
-      $http.put(
-        '/api/refs/add-label',{"_id":$scope.thisref._id, "label":label}
-      ).then(
-        function(response) {},
-        function(response) {response}
-      );
-    }
-    $scope.add_label_locally = function(label) {
-        $scope.thisref.labels.push(label);
-    }
-
-    // Handle adding and removing label.  If state is true, add, else remove.
-    $scope.update_label = function(label, state) {
-      if (state) {
-        $scope.add_label(label);
-      } else {
-        $scope.remove_label(label);
-      }
-    };
 
   });

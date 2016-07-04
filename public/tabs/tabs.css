@@ -1,0 +1,35 @@
+tabs {
+  display: inline-block;
+  position: relative;
+  top: 4px;
+  height: 28px;
+}
+
+tabs .tab {
+  position: relative;
+  padding: 0 20px 0 20px;
+  height: 28px;
+  display: inline-block;
+  background: rgb(200, 200, 200);
+  color: black;
+  z-index: 0;
+  margin-left: -10px;
+  margin-right: -10px;
+  cursor: pointer;
+  background: url('/images/tab-left-inactive.png') 0 0 no-repeat, url('/images/tab-right-inactive.png') 100% 0 no-repeat;
+}
+
+tabs .tab-content {
+  padding-top: 5px;
+  background: 0 0 url('/images/tab-mid-inactive.png') repeat-x;
+  height: 28px;
+}
+
+tabs .tab.active .tab-content {
+  background: 0 0 url('/images/tab-mid-active.png') repeat-x;
+}
+tabs .tab.active {
+  background: white;
+  z-index: 10;
+  background: url('/images/tab-left-active.png') 0 0 no-repeat, url('/images/tab-right-active.png') 100% 0 no-repeat;
+}

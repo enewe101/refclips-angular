@@ -19,26 +19,25 @@
           </div>
 
           <!-- Title -->
-          <span class="show-title">{{::thisref.title}}</span>
-          <span class="show-ref_type">{{::thisref.ref_type}}</span>
+          <span class="show-title">{{::ref.title}}</span>
+          <span class="show-ref_type">{{::ref.ref_type}}</span>
           <div class="clearfix"></div>
         </div>
 
         <div class="ref-middle">
 
           <!-- Most other details -->
-          <span class="show-author">{{::thisref.author}}</span>
-          <span class="show-booktitle">{{::thisref.booktitle}}</span>
-          <span class="show-year">{{::thisref.year}}</span>
-          <span class="show-citation_key">{{::thisref.citation_key}}</span>
-          <span class="show-url"><a target="_blank" href="{{::thisref.url}}">{{::thisref.url}}</a></span>
+          <span class="show-author">{{::ref.author}}</span>
+          <span class="show-booktitle">{{::ref.booktitle}}</span>
+          <span class="show-year">{{::ref.year}}</span>
+          <span class="show-citation_key">{{::ref.citation_key}}</span>
+          <span class="show-url"><a target="_blank" href="{{::ref.url}}">{{::ref.url}}</a></span>
 
           <!-- Labels -->
-          <div class="labels-wrapper">
-            <labelpicker labelchanged="update_label" pickerid="thisref._id" activelabels="activelabels"></labelpicker>
-            <span class="label label-default" ng-repeat="label in thisref.labels track by label._id">{{::label.name}}</span>
+          <div>
+            <labelpicker labelchanged="update_label" init-labels="ref.labels" activelabels="activelabels"></labelpicker>
+            <filebunch changed="save_ref" files="ref.files" class="files" formdata="{ref_id:ref._id}"></filebunch>
           </div>
-          <filebunch changed="save_ref" files="thisref.files" class="files" formdata="{ref_id:thisref._id}"></filebunch>
           <div class="clearfix"></div>
 
         </div>
@@ -71,7 +70,7 @@
 
 
       <div class="ref-bottom">
-        <textarea class="autogrow notes" ng-keyup="notes_changed()" placeholder="your notes">{{::thisref.notes}}</textarea>
+        <textarea class="autogrow notes" ng-keyup="notes_changed()" placeholder="your notes">{{::ref.notes}}</textarea>
       </div>
 
     </div><!-- end of expander -->

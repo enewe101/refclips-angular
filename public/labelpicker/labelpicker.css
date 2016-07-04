@@ -1,3 +1,66 @@
+labelpicker .labelpicker-container {
+
+}
+
+labelpicker .add-new-label {
+  color: rgb(200, 200, 200);
+}
+labelpicker .add-new-label.enabled {
+  color: black;
+}
+
+labelpicker {
+  display: inline-block;
+}
+
+labelpicker .drop-item-separator {
+  height: 1px;
+  width: 100%;
+  border-top: solid 1px rgb(220,220,220);
+}
+
+labelpicker .drop-item:hover {
+  background: rgb(240, 240, 240);
+}
+
+labelpicker .drop-item {
+  padding: 6px;
+  width: 100%;
+  cursor: pointer;
+  display: block;
+}
+
+labelpicker .no-padding {
+  padding: 0;
+}
+labelpicker .drop-menu-styling {
+  padding: 6px;
+  width: 100%;
+  cursor: pointer;
+}
+
+labelpicker .drop {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  display: block;
+  color: black;
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  border: solid 1px rgb(220,220,220);
+  box-shadow: 0px 0px 4px rgba(0,0,0,0.1);
+  border-radius: 6px;
+}
+
+
+
+
+
+
+
+/************/
+
+
 
 labelpicker {
   display: inline-block;
@@ -42,7 +105,7 @@ labelpicker .drop-item.disabled {
   color: rgb(220,220,220);
 }
 
-labelpicker dropmenu .drop-item {
+labelpicker .drop-item {
   position: relative;
   white-space: nowrap;
 }
@@ -56,13 +119,6 @@ labelpicker label {
   width: 100%;
   font-weight: normal;
   cursor: pointer;
-}
-
-labelpicker a.enabled {
-  color: black;
-}
-labelpicker a.disabled {
-  color: rgb(200, 200, 200);
 }
 
 labelpicker .remove {

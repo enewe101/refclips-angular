@@ -36,9 +36,6 @@ drop.controller('dropmenucontroller', function($element, $scope) {
         $scope.drop.css('display','none');
       } else {
 
-        console.log($scope.drop.hasClass('left'));
-        console.log($scope.left);
-
         // adjust positioning of drop menu
         let offset = $scope.container.position();
         let height = $scope.container.outerHeight(true);
@@ -50,7 +47,6 @@ drop.controller('dropmenucontroller', function($element, $scope) {
           let width = $scope.container.outerWidth(true);
 
           let right = parent_width - (offset.left + width);
-          console.log('right:' + right);
           $scope.drop.css('right', right);
 
         } else {

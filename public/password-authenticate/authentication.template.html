@@ -1,8 +1,45 @@
-<!--password-authenticate email="email"></password-authenticate>
-<password-register email="email"></password-register>
-<forgot-password model="email"></forgot-password-->
+<formlike class="forgot">
+  <div class="prompt">Send yourself a link to reset your password.</div>
+  <div class="formline"><label>email: </label><input class="email" type="text"></div>
+  <label></label><input class="submit btn btn-sm btn-default" type="submit" value="submit">
+  <span class="alt-options">
+    (<a class="login-link">login</a>
+    | <a class="register-link">register</a>)
+  </span>
+</formlike>
 
-<password-authenticate ng-if="state=='not-signed-in'" email="email" state="state"></password-authenticate>
-<password-register ng-if="state=='registering'" email="email" state="state"></password-register>
-<forgot-password ng-if="state=='forgot-password'" model="email" state="state"></forgot-password>
-<password-signout ng-if="state=='signed-in'"></password-signout>
+<formlike class="authenticate">
+  <div class="form-message"></div>
+  <div class="formline"><label>email: </label><input class="email" type="text"></div>
+  <div class="formline"><label>password: </label><password></password></div>
+  <label></label><input class="submit btn btn-sm btn-default" type="submit" value="submit">
+  <span class="alt-options">
+    (<a class="forgot-link">forgot</a>
+    | <a class="register-link">register</a>)
+  </span>
+</formlike>
+
+<formlike class="register">
+  <div class="prompt">
+    choose a username and password
+  </div>
+  <div class="form-message"></div>
+
+  <div class="formline"><label>email: </label><input class="email" type="text">
+    <span class="email-ok icon-ok glyphicon glyphicon-ok"></span>
+    <span class="email-bad icon-bad glyphicon glyphicon-remove"></span>
+  </div>
+  <div class="formline"><label>username: </label><input class="username" type="text">
+    <span class="username-ok icon-ok glyphicon glyphicon-ok"></span>
+    <span class="username-bad icon-bad glyphicon glyphicon-remove"></span>
+    <div class="username-message"></div>
+  </div>
+  <div class="formline"><label>password: </label><password></password>
+    <span class="password-ok icon-ok glyphicon glyphicon-ok"></span>
+    <span class="password-bad icon-bad glyphicon glyphicon-remove"></span>
+  </div>
+  <label></label><input class="submit btn btn-sm btn-default" type="submit" value="submit"></button>
+  <span class="alt-options">(<a class="login-link">login</a>)</span>
+</formlike>
+
+<div class="logout">log out</div>

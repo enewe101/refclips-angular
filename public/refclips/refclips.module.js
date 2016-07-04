@@ -2,54 +2,60 @@
 
 var app = angular.module('refclips',[
   'ngAnimate', 'ui.router', 'refs', 'labelpicker', 'header', 'notify',
-  'passwordauthenticate', 'userStatus', 'paginator'
-]);
+  'passwordauthenticate', 'userStatus', 'paginator', 'tabs'
+], function($rootScopeProvider){
+  $rootScopeProvider.digestTtl(45);
+});
 
 
-app.config(function($httpProvider, $stateProvider, $urlRouterProvider) {
-
+app.config(function($httpProvider) {
   // Supposed to speed loading time by grouping together template loads into
   // small batches that then trigger only one digest cycle.
   // see https://docs.angularjs.org/api/ng/provider/$httpProvider
   $httpProvider.useApplyAsync(true);
+});
 
-  $stateProvider
-    .state('signedout', {
-      templateUrl: 'refclips/signed-out.template.html',
-      controller: function($scope) {
-        $scope.state = 'arrived';
-        $scope.auth_state = 'registering';
-        $scope.get_started = function(){
-          $scope.state = 'get-started';
+app.directive('app', function($compile, tabservice) {
+  return {
+    link: function(scope, element){
+      let refpages_container = element.find('.ref-pages-container');
+      let recent_refs = element.find('.recent-refs');
+      let all_refs = element.find('.all-refs');
+      let viewset_name = 'refpages'
+      let viewset = tabservice.new_viewset(viewset_name);
+
+      let template = '<refs viewset-name="viewset_name" tab-name="tab_name"></refs>'
+      let tabs = ['recently added', 'all references'];
+      for(let i = 0; i < tabs.length; i++) {
+        let tab_name = tabs[i];
+        let new_scope = scope.$new(true);
+        new_scope.tab_name = tab_name;
+        new_scope.viewset_name = viewset_name;
+        let new_refs = $compile(template)(new_scope);
+        refpages_container.append(new_refs);
+
+        // The first tab will be active
+        let is_active = (i === 1);
+        if(is_active) {
+          new_refs.css('display', 'block');
         }
+
+        viewset.register_view(tab_name, function(){
+          console.log('activating ' + tab_name);
+          new_refs.css('display', 'block');
+        }, function() {
+          new_refs.css('display', 'none');
+        }, is_active);
       }
-    })
-    .state('signedin', {
-      templateUrl: 'refclips/signed-in.template.html',
-      controller: 'signedincontroller'
-    });
-});
 
-
-app.controller('signedincontroller', function($rootScope, $scope, reflistservice){
-  $scope.$on('$viewContentLoaded', function(){
-    reflistservice.get_refs();
-  });
-});
-
-app.controller('refclipscontroller', function($rootScope, reflistservice){
-  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options){
-    if(toState.name == 'signedout') {
-      reflistservice.flush_refs();
+    },
+    controller: function($rootScope){
+      var nbDigest = 0;
+      $rootScope.$watch(function() {
+        nbDigest++;
+        console.log('digest-' + nbDigest);
+      })
     }
-  });
-});
 
-// Ensure the default state is signed out.
-app.run(['$state', function($state) {
-  if(user) {
-    $state.go('signedin');
-  } else {
-    $state.go('signedout');
-  }
-}]);
+  };
+});

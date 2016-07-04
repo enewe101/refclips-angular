@@ -1,23 +1,68 @@
-refs .ref-list {
+refs {
+  display: none;
+  /*
+    by default only the refs in the active tab are visible, which is
+    handled programmatically when tabs are created
+  */
 }
 
-refs .refpage {
-  border: dashed 2px green;
-  padding-top: 14px;
-  -webkit-column-gap: 28px;
-  -moz-column-gap: 28px;
-  column-gap: 28px;
-  -webkit-column-count: 3;
-  -moz-column-count: 3;
-  column-count: 3;
+refs .refs-container-outer {
+  position: relative;
+}
+
+refs .refs-container {
+  display: block;
   min-height: 900px;
+}
+
+refs .refs-container.behind {
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 
 refs label {
   width: 80px;
 }
 
-refs ref {
-	-webkit-column-break-inside: avoid;
-	break-inside: avoid;
+refs filter {
+  display: inline-block;
+  margin-right: 24px;
+}
+
+refs text-search {
+  display: inline-block;
+}
+
+refs .subheader {
+  width: 100%;
+  background: rgb(253,253,252);
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+refs .subheader-left {
+  float: left;
+  padding-left: 30px
+}
+refs .subheader-right {
+  float: right;
+  padding-right: 30px;
+}
+
+refs paginator {
+  margin-right: 24px;
+}
+
+refs filter labelpicker .labels-wrapper {
+  display: inline-block;
+}
+
+refs paginator input {
+  border-radius: 2px;
+  border: solid 1px rgb(204, 204, 204);
+  padding: 4px;
+}
+
+refs .ref-col {
+  float: left;
 }

@@ -1,0 +1,119 @@
+.splash-banner {
+  background: 50% 0 no-repeat url('/images/splash-bg.png');
+  height: 740px;
+}
+
+.main-action {
+  width: 800px;
+  margin: auto;
+  padding-top: 20px;
+  text-align: center;
+}
+
+.splash-banner .vert-shim {
+  height: 100px;
+}
+
+.splash-banner h1 {
+  text-align: center;
+  font-size: 8em;
+  margin: 0;
+  color: rgb(40,40,40);
+}
+
+.splash-banner h2 {
+  font-size: 2.55em;
+  text-align: center;
+  margin-top: -6px;
+  color: rgb(140,140,140);
+}
+
+.btn-huge {
+  font-size: 1.5em;
+  padding: 25px 40px;
+}
+
+.getting-started {
+  text-align: left;
+}
+
+.getting-started-no-tour {
+  margin: auto;
+  width: 350px;
+}
+
+.registration-position {
+  position: relative;
+  z-index: 9999;
+}
+
+.get-started {
+  margin-top: 50px;
+}
+
+.registration {
+  margin: auto;
+  margin-top: 40px;
+  width: 460px;
+  text-align: left;
+  color: black;
+  position: relative;
+  display: none;
+  border: solid 1px rgb(180,180,180);
+  border-radius: 4px;
+}
+
+.getting-started-no-tour .registration {
+  margin: 0;
+}
+
+.filter-effect {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: rgba(255,255,255,0.8);
+  /*filter: blur(10px);*/
+  border-radius: 4px;
+  z-index: 0;
+}
+
+.registration input[type=text], input[type=password] {
+  background: rgba(255,255,255,0.7);
+}
+
+.skip-signup-wrapper {
+  float: left;
+  margin-top: 113px;
+  margin-left: 40px;
+}
+
+
+.main-action .form-separator {
+  float: left;
+  width: 80px;
+  margin-top: 30px;
+  margin-left: 20px;
+  maring-rignt: -20px;
+  padding: 10px;
+  text-align: center;
+}
+
+.main-action .vertical-line {
+  height: 160px;
+  width: 0px;
+  margin: auto;
+  margin-top: 16px;
+  text-align: center;
+  border: solid 1px black;
+}
+
+.main-action .or {
+  background: white;
+  width: 24px;
+  text-align: center;
+  margin: auto;
+  position: relative;
+  top: 70px;
+  left: -12px;
+}

@@ -1,11 +1,17 @@
-<div class="ref-list">
-  <ref class="recently-added-ref" ng-repeat="aref in reflistservice.recently_added_refs"
-      delete-callback="delete" thisref='aref' id="{{aref._id}}"></ref>
+<div class="subheader">
 
-  <div class="refpage" ng-repeat="page in pages">
-    <ref ng-repeat="aref in reflistservice.refs"
-      delete-callback="delete" thisref='aref' id="{{aref._id}}"></ref>
-    <div class="clearfix"></div>
+  <div class="subheader-left">
+    <paginator paginate="paginate" get-num-results="get_num_results" init-num-results="initNumResults"></paginator>
   </div>
 
+  <div class="subheader-right">
+    <labelpicker labelchanged="apply_label_filter" toggle-text="'label-filter'"></labelpicker>
+    <text-search do-search="apply_text_search"></text-search>
+  </div>
+
+  <div class="clearfix"></div>
+</div>
+<div class="refs-container-outer">
+  <div class="refs-container"></div>
+  <div class="clearfix"></div>
 </div>

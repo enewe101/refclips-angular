@@ -2,6 +2,10 @@ dropmenu {
   display: inline-block;
 }
 
+dropmenu .drop-toggle {
+  cursor: pointer;
+}
+
 dropmenu .drop-item-separator {
   height: 1px;
   width: 100%;
