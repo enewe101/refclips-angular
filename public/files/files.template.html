@@ -1,4 +1,4 @@
-<file deleted="$ctrl.delete_file" changed="$ctrl.relay_onchange" ng-repeat="f in $ctrl.files" file="f"></file>
+<file deleted="$ctrl.delete_file" changed="$ctrl.relay_onchange" ng-repeat="f in $ctrl.files track by f._id" file="f"></file>
 <div class="shim"></div>
 <div class="file_upload_wrapper">
   <uploadbutton onupload="$ctrl.add_file" class="filebunch" formdata="$ctrl.formdata"></uploadbutton>

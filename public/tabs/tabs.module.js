@@ -7,7 +7,8 @@ tabs.factory('tabservice', function(){
   // tabs.
   let service = {
     viewsets: {},
-    tabsets: {}
+    tabsets: {},
+    add_view_callbacks: {}
   };
 
   // Creates a new viewset.  Returns a callable that can be used to add views.
@@ -17,9 +18,8 @@ tabs.factory('tabservice', function(){
     if(service.viewsets.hasOwnProperty(viewset_name)){
       throw 'tabs: the viewset ' + viewset_name + ' already exists!';
     }
-    service.viewsets[viewset_name] = {
-      __add_view_callback: add_view_callback || function(){}
-    };
+    service.viewsets[viewset_name] = {};
+    service.add_view_callbacks[viewset_name] = add_view_callback || function(){};
 
     // Return a "viewset object" with the viewset_name already bound to it,
     // which provides more convenient registering of new views (because you
@@ -30,7 +30,7 @@ tabs.factory('tabservice', function(){
   };
 
   service.add_view = function(viewset_name) {
-    service.viewsets[viewset_name].__add_view_callback();
+    service.add_view_callbacks[viewset_name]();
   }
 
   // Creates a new tabset.  If there is already a corresponding viewset, then
@@ -50,17 +50,16 @@ tabs.factory('tabservice', function(){
     // then add tabs for all of the existing views.
     if (service.viewsets.hasOwnProperty(tabset_name)) {
       for(let view_id in service.viewsets[tabset_name]) {
-        if(view_id == '__add_view_callback') {
-          continue;
-        }
         let do_activate = service.viewsets[tabset_name][view_id].do_activate;
         let view_name = service.viewsets[tabset_name][view_id].name;
 
         // Make a callback that binds the viewset and view to activate the
         // corresponding view when this tab is clicked
-        let activate_view_callback = function() {
-          service.activate_view(tabset_name, view_id);
-        }
+        let activate_view_callback = function(v) {
+          return function() {
+            service.activate_view(tabset_name, v);
+          }
+        }(view_id);
         add_tab_callback(view_id, view_name, do_activate, activate_view_callback);
       }
     }
@@ -71,9 +70,6 @@ tabs.factory('tabservice', function(){
   service.activate_view = function(viewset_name, view_id) {
     let viewset = service.viewsets[viewset_name];
     for(let v in viewset) {
-      if(v == '__add_view_callback') {
-        continue;
-      }
       if(v == view_id) {
         viewset[v].show_callback();
       } else {
@@ -96,9 +92,11 @@ tabs.factory('tabservice', function(){
     // Then add a tab for this view.
     if (service.tabsets.hasOwnProperty(viewset_name)) {
 
-      let activate_view_callback = function() {
-        service.activate_view(viewset_name, view_spec.id);
-      }
+      let activate_view_callback = function(v) {
+        return function() {
+          service.activate_view(viewset_name, v);
+        };
+      }(view_spec.id);
       service.tabsets[viewset_name].add_tab_callback(view_spec.id, view_spec.name, view_spec.do_activate, activate_view_callback);
     }
   }
